@@ -1,0 +1,672 @@
+/**
+ *  Armadillo Workflow Platform v2.0 - Online
+ *  A simple pipeline system for phylogenetic analysis
+ *  
+ *  Copyright (C) 2009-2013  Etienne Lord
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+
+
+////////////////////////////////////////////////////////////////////////////////
+//--GUI VARIABLE
+public workflow_image filedata=new workflow_image(); //Hold all the icon
+PImage workflow_thumb=null;				 // Holder to save part of the workflow
+PImage workflow_background=null;         // Background workflow image created in draw
+PImage splash_screen=null;
+public Workflow workflow;                // Workflow object
+PFont smallfont, smallfont_obj,font,boldfont;           // Fonts
+PShape armadillo;                        // Logo Armadillo 0.1
+PGraphics bufConnectorEdge;              // Back buffer for Arrow selection
+PGraphics buffers;                      // drawing buffers
+private int hashCount=0;                 // Unique number if we need a hashcode
+public static int count=0;
+public int click_x=0;                   //--Clicked x position (needed for input )
+public int click_y=0;                   //--Clicked y postion
+public int maxheight=0;					//--Max workflow draw area
+public int maxwidth=0;					//--Max workflow draw area
+public int zoom_window_start_x=0;		//--Zoom window start x int start_x=maxwidth-200;
+public int zoom_window_start_y=0;  	    //--Zoom window start y	int start_y=maxheight-150;
+public int zoom_factor=3;				//--zoom factor
+public int factor_x=0;					//
+public int factor_y=0;
+
+public int images_counter=0;            //--Counter for the image snapshot
+public int lastKeycode=0;				//--Last key code to detect Ctrl-X...
+
+////////////////////////////////////////////////////////////////////////////////
+//--Flag
+public Boolean small_editor_mode=false;
+public Boolean name_displayed=false;
+public Boolean debug=false;      // Debug version (true or false)
+public Boolean force_redraw=true;// Might be needed if we need to redraw
+public Boolean force_nodraw=false;// Might be needed if we nned
+public Boolean save_image=false;  // To save the current workflow as an image
+public Boolean save_image_pdf=false;  // To save the current workflow as an pdf
+public Boolean draw_grid=false;      // Do we draw a grid?
+public Boolean simplegraph=false;   // Do we draw as simple graph
+
+////////////////////////////////////////////////////////////////////////////////
+/// Workflow changed
+public Boolean initialized=false;   // Flag to know if we have run setup (graphic mode) or not(text mode)
+private Boolean changed=false;
+public Boolean moving=false;
+public Boolean movingFlag=false;
+public Boolean double_click=false;
+
+////////////////////////////////////////////////////////////////////////////////
+/// JavaScript Functions 
+/// (from http://processingjs.org/articles/PomaxGuide.html#sketchtojs)
+	
+	 	
+	 interface JavaScript {
+			//--This hold the pjs interface
+			void showDialog(workflow_properties tmp, int x, int y);	
+			void setEditButton(Boolean mode);	
+			void setDeleteButton(Boolean mode);	
+			void showProperties(workflow_properties tmp);
+			void showPopup(String t);	
+   }
+  
+  JavaScript javascript;
+  
+    public void bindJavascriptPjs(JavaScript js) {
+      javascript = js;
+    }
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// SETUP
+//--Test
+//workflow_object w=new workflow_object(new workflow_properties("data/properties/HGT32.properties"));
+public void setup() {
+   //--Splash
+ 
+  //--Initialize visual components
+  //--Warning: Must be factor 10 number (ex. 240, 320...)
+  //--Note: We use JAVA 2D for the higher graphics quality
+if( jQuery(document).height() > jQuery(window).height() )
+    setupHeight = jQuery(document).height()-100;
+else
+    setupHeight = jQuery(window).height()-100;
+jQuery('canvas').width(jQuery(window).width());
+jQuery('canvas').height(setupHeight);
+size(jQuery(window).width(), setupHeight);
+ // splash_screen=filedata.get("splash1.png");
+ // image(splash_screen,width/2-splash_screen.width/2,height/2-splash_screen.height/2);
+  
+   
+//  size(1200,600);
+ bufConnectorEdge=createGraphics(jQuery(window).width(), setupHeight);
+buffers=createGraphics(jQuery(window).width(), setupHeight);
+ //bufConnectorEdge=createGraphics(1200, 600);
+	
+	//--Constant for workflow
+	maxheight=(height%10==0?height-10:height-10-(height%10));
+    maxwidth=(width%10==0?width-10:width-10-(width%10));
+	//--Zoom window start
+	zoom_window_start_x=maxwidth-200;
+	zoom_window_start_y=maxheight-150;
+
+	factor_x=int((maxwidth*zoom_factor)/200); //--200 pixel * 4 size
+	factor_y=int((maxheight*zoom_factor)/150); //-- 150 * 4 size 	
+	
+ float font_adjuster=1.2; //config.getInt("font_size_adjuster");
+      
+  smallfont=createFont("data/Calibri",10+font_adjuster);
+  smallfont_obj=createFont("data/Calibri",9+font_adjuster);
+  //--12 normaly
+  font=createFont("data/Calibri",12+font_adjuster);
+  boldfont=createFont("data/Calibri-Bold",14+font_adjuster);
+  armadillo=loadShape("data/logo.final.svg");
+  textAlign(CENTER);
+  textFont(boldfont);
+  
+  //--4 January 2011 - test without smooth, not good!
+  //smooth();
+  //noLoop();
+   initialized=true;
+   //noLoop();
+   //w.getProperties().Outputed();
+   //noLoop();   
+  
+   frameRate(1);
+   //--Test
+   //fill(0);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// Main drawing functions
+
+public void draw() {
+	
+	if (!filedata.loaded) return;
+	
+  if (workflow==null) {
+	workflow =new Workflow();    
+	//workflow.loadWorkflow("data/HGT_workflow.txt");	
+	//workflow.loadWorkflow("data/workflow_figure9.txt");	
+	//workflow.loadWorkflow("data/foreach.workflow");
+	workflow.loadWorkflow("data/all.txt");
+	//workflow.loadWorkflow("data/foreach_if");
+	//workflow.loadWorkflow("data/conditionnal_sequence_workflow.workflow"); //--Test pan
+	//workflow.loadWorkflow("data/create_new.workflow");
+	// if (!workflow.loadWorkflow("data/foreach.workflow")) {
+	   // showPopup("Unable to load foreach.workflow");
+	// }
+	
+	force_redraw=true;
+  }
+  
+       
+  //--Reset any selection if saving...
+    //--Clear Arrow buffer
+  bufConnectorEdge.background(255);  
+  //-- Draw background
+  // CASE 1. We already have a good background
+  buffers.beginDraw();
+ if (!force_redraw&&workflow_background!=null&&!save_image&&workflow_background.width==width&&workflow_background.height==height) {
+     buffers.image(workflow_background,0,0);	
+  } else {
+     
+	 // CASE 2. We redraw the background
+    buffers.background(255);
+    //--Line in the background
+    buffers.stroke(70);
+    buffers.strokeWeight(0.2f);
+       // Added January 2011 - Stroke weight change each 50;     
+           buffers.strokeWeight(0.5f);
+           buffers.line(10,10, 10, maxheight);
+           buffers.line(maxwidth,10, maxwidth, maxheight);
+           buffers.line(10, 10, maxwidth, 10);
+           buffers.line(10, maxheight, maxwidth, maxheight);
+           buffers.strokeWeight(0.1f);
+       if (draw_grid) {
+            for (int x=10; x<=maxwidth; x+=10) {
+                if (x%100==0) {
+                    buffers.strokeWeight(0.5f);
+                } else {
+                    buffers.strokeWeight(0.1f);
+                }
+                buffers.line(x, 10, x, maxheight);
+            }
+            for (int y=10; y<=maxheight; y+=10) {
+                if (y%100==0) {
+                    buffers.strokeWeight(0.5f);
+                } else {
+                    buffers.strokeWeight(0.1f);
+                }
+                buffers.line(10, y, maxwidth, y);
+            }
+       }
+			
+			buffers.fill(0);
+			buffers.shape(armadillo,15,10,armadillo.width/10, armadillo.height/10);
+			 //--Workflow name now in the bottom of the workflow area
+			buffers.stroke(128);
+            buffers.fill(128);
+            buffers.textFont(boldfont);
+            buffers.textAlign(LEFT);
+			
+			//-- Save background for futher use and   
+			 workflow_background=buffers.get();	
+			 //buffers.image(workflow_background,0,0);
+		//buffers=workflow_background;		
+			force_redraw=false;
+   } 
+   //image(buffers,0,0);
+    //stroke(128);
+    //fill(0);
+    //textFont(boldfont);   
+    //text("Test: "+frameCount,15,15);
+    workflow.draw_buffers(buffers); 	
+	
+	//--Draw the zoom windows
+	workflow.draw_zoom(maxwidth, maxheight,buffers);
+		
+	//--Draw the white border
+	buffers.fill(255);
+	buffers.noStroke();
+	buffers.rect(0,0,9,maxheight); //--LEFT
+	buffers.rect(0,0,maxwidth,9); //--TOP		
+	buffers.rect(width-9,0,width,height); //--RIGHT
+	buffers.rect(0,height-17,maxwidth,height); //--BOTTOM
+	buffers.strokeWeight(0.5f);
+	buffers.stroke(70);
+	buffers.line(10,10, 10, maxheight);
+	buffers.line(maxwidth,10, maxwidth, maxheight);
+	buffers.line(10, 10, maxwidth, 10);
+	buffers.line(10, maxheight, maxwidth, maxheight);
+	
+	buffers.endDraw();	
+	image(buffers,0,0);
+    //println(workflow.pan_x+" "+workflow.pan_y);
+	//--No good
+	//if ( javascript!=null) javascript.double_buffer();
+	//--debug image(bufConnectorEdge,0,0);
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// Keyboard function
+
+  
+    public void keyPressed()  {
+       
+	   
+	    int keycode=keyCode;
+        
+		
+       switch(keycode) {
+           case LEFT: workflow.pan_workflow(100,0);					
+					  break;
+		   case RIGHT:workflow.pan_workflow(-100,0);					  						
+					  break;
+           case UP:  workflow.pan_workflow(0,100);	
+						break;
+		   case DOWN:workflow.pan_workflow(0,-100);	
+					  break;
+					  
+					  
+		   //--Fast display current and next workflow 
+           // case KeyEvent.VK_LEFT :
+              // //workbox.loadPreviousWorkflow();
+            // break;
+            // case KeyEvent.VK_RIGHT  :
+                // workbox.loadNextWorkflow();
+            // break;
+           //--Snapshot (fast screenshot)     
+            // case KeyEvent.VK_F1  :
+                // while(Util.FileExists(Config.currentPath+File.separator+"image"+images_counter+".png")) images_counter++;
+                // System.out.println("saving "+Config.currentPath+File.separator+"image"+images_counter+".png");
+                // saveImage(Config.currentPath+File.separator+"image"+images_counter+".png");
+                // images_counter++;
+            // break;    
+           //--Decompose component
+            // case KeyEvent.VK_F2  :
+                 // decompose();
+            // break;         
+                
+           //--Display edge informations
+           //case KeyEvent.VK_SPACE:  workflow.displayEdge(); break;
+           //--Delete current selection
+           case DELETE: workflow.deleteSelected();break;
+           case BACKSPACE: workflow.deleteSelected();break;
+            //--CTRL-A (Select All Objects)
+            case 65 :
+                if (lastKeycode==17) workflow.selectAll();
+            break;
+            //--Ctrl-Ins (Copy)
+            // case KeyEvent.VK_INSERT:
+                // if ((arg0.getModifiers() & InputEvent.CTRL_MASK) !=0) {
+                    // //--Save selection into buffer
+                    // copySelection();
+                // } 
+                 // //--Shift-Ins (Paste)
+                // if ((arg0.getModifiers() & InputEvent.SHIFT_MASK) !=0) {
+                    // //--Paste selection into buffer
+                     // pasteSelection();
+                // }
+                // break;
+           //--Ctrl-C (Copy)
+             case 67:
+                if (lastKeycode==17) {
+                    //--Save selection into buffer
+                    workflow.copySelection();
+                }
+                break;
+		    //--Ctrl-V (Paste)
+			case 86:
+                if (lastKeycode==17) {
+                    //--Save selection into buffer
+                    workflow.pasteSelection();
+                }
+                break;
+          //--Ctrl-S (Save current workflow)
+         // case KeyEvent.VK_S:
+                // if ((arg0.getModifiers() & InputEvent.CTRL_MASK) !=0) {
+                    // //--Save workflow
+                    // workbox.getCurrentWorkflows().setId(0);
+                    // workbox.saveWorkflowToDatabase("Saved on "+Util.returnCurrentDateAndTime());
+                // }
+                // break;
+         //--CTRL-N (New workflow)
+            // case KeyEvent.VK_N :
+                // if ((arg0.getModifiers() & InputEvent.CTRL_MASK) !=0) {
+                    // workbox.newWorkflow();
+                // }
+            // break;
+           //--CTRL-P (Test, save pdf)
+            // case KeyEvent.VK_P :
+                // if ((arg0.getModifiers() & InputEvent.CTRL_MASK) !=0) {
+                    // this.SaveWorkflowPDF();
+                    
+                // }
+            // break;     
+                
+            //--CTRL-Z (Undo) - Deta
+            // case KeyEvent.VK_Z :
+                // if ((arg0.getModifiers() & InputEvent.CTRL_MASK) !=0)workflow.Undo();
+            // break;
+            // case KeyEvent.VK_R :
+                // if ((arg0.getModifiers() & InputEvent.CTRL_MASK) !=0) {
+                    // workbox.Run();
+                // }
+            // break;    
+       }
+	   lastKeycode=keycode;
+       redraw();
+        //--Debug
+       if (debug) console.log("keycode: "+keycode+"keyEvent: "+key);
+    }
+
+
+  		
+////////////////////////////////////////////////////////////////////////////////
+/// Menu Functions
+
+	public void deleteSelected() {
+		workflow.deleteSelected();
+		verifySelection();
+		redraw();
+	}
+	
+	public void deleteAll() {
+		workflow.selectAll();
+		workflow.deleteSelected();
+		redraw();
+	}
+
+	public void resetState() {
+		workflow.resetState();
+		verifySelection();
+		redraw();
+	}
+	
+	// Edit the current selected object
+	public void editSelected() {
+ 	
+	 for (int i=0;i<workflow.work.size();i++) {
+              workflow_object tmp=(workflow_object)workflow.work.get(i);
+              if (tmp.selected) {			   
+              	if (tmp instanceof workflow_object) { 
+					workflow_thumb=get(tmp.x-105, tmp.y-105, 210, 210);					
+				} else {
+					workflow_thumb=get(tmp.x-105, tmp.y-50, 210, 100);					
+				}
+				javascript.showDialog(tmp.getProperties(), width/2, height/2);	              	
+              	workflow.resetSelected();
+              	return;
+              }
+          }    
+  	}
+  	
+	//--Add a program to the workflow
+  	public void addProgram(String properties_file) {
+  		
+            //--Load the Object and drop at this point
+            workflow_properties tmp=new workflow_properties();
+            tmp.load(properties_file);
+            //highlight for 10 seconds
+            tmp.put("highlight", 10);         
+            workflow.createObject(tmp, width/2, height/2);
+            //--Old..
+            //createObject(tmp, new Point(15,15));
+            force_redraw=true;
+            redraw();  
+  	}
+	
+	//
+	public void addData(String outputType,String filename, String parent_object) {
+  		 					workflow_properties tmp=new workflow_properties();
+							if (filename=="") {
+								tmp.setName(outputType);
+								 tmp.put("colorMode","GREEN");
+								 tmp.put("defaultColor","GREEN");
+								 tmp.put("Output"+outputType, "True");
+								 tmp.put("outputType", outputType);
+								 tmp.put("Connector1Output","True");
+								 tmp.put("Connector0Output", "True");
+								 tmp.put("Connector0Conditional", "True");
+								 tmp.put("ObjectType", "OutputDatabase");
+								 tmp.put("editorClass", "editors.OutputEditor");
+								 tmp.put("Description", "Undefined");
+								 tmp.put("output_"+outputType.toLowerCase()+"_id", 0);
+								tmp.put("highlight", 10);       							
+							} else {
+								 tmp.setName(outputType);
+								 tmp.put("colorMode","GREEN");
+								 tmp.put("defaultColor","GREEN");
+								 tmp.put("Output"+outputType, "True");
+								 tmp.put("outputType", outputType);
+								 tmp.put("Connector1Output","True");
+								 tmp.put("Connector0Output", "True");
+								 tmp.put("Connector0Conditional", "True");
+								 tmp.put("ObjectType", "OutputDatabase");
+								 tmp.put("editorClass", "editors.OutputEditor");
+								 tmp.put("Description", filename);
+								 tmp.put("output_"+outputType.toLowerCase()+"_id", 1);
+								tmp.put("highlight", 10);         
+                            }
+							workflow.createObject(tmp, width/2, height/2);           
+            force_redraw=true;
+            redraw();  
+  	}
+  	
+  	public String generate_popupUploadDataOption(String type) {
+  		String menu="";
+  		//"<select id='select-choice-0' name='select-choice-0' data-native-menu='false'>";
+  		menu+="<option value='0' class='default' selected>Create new "+type+" </option>";
+					
+  		for (int i=0;i<workflow.work.size();i++) {
+              workflow_object tmp=(workflow_object)workflow.work.get(i);
+              if (tmp instanceof workflow_object_output_database&&tmp.getProperties().get("outputType")==type) {
+              	  menu+="<option value='"+tmp.getProperties().getID()+"'>Make repetition with "+tmp.getProperties().get('Description')+"</option>";
+              }
+          }    
+  		//menu+="</select>";
+  		return menu;
+  	}
+  	
+	public String saveWorkflow() {
+		//return workflow.workflowToJSON();
+		return workflow.workflowToStringForExport();	
+		
+	}
+	
+	public void loadWorkflow(String filename,String filename_usager) {
+		//--Remove object in current workflow	
+		workflow.selectAll();
+		workflow.deleteSelected();
+		
+		//		--filename_usager (nom du fichier de l'usager)
+		if (!workflow.loadWorkflow(filename)) {
+	   		showPopup("Unable to load "+filename_usager);
+		} else {
+			//--Reset state Etienen 2013
+			workflow.resetState();
+			force_redraw=true;
+			 redraw();
+		}
+} 
+	
+////////////////////////////////////////////////////////////////////////////////
+/// Mouse Functions
+
+public void mouseDragged()  {
+      int px=mouseX-pmouseX;
+      int py=mouseY-pmouseY;     
+	  cursor((PImage)filedata.get("hand_close.png")); 
+	  workflow.move(px,py);	
+      redraw();
+} //End mouse dragged
+
+public void mouseClicked() {
+ //--do we have a selection    
+    Object selection=workflow.select(mouseX, mouseY);   
+    //--Save position (if needed)
+    click_x=mouseX;
+    click_y=mouseY;
+	//--Case 0. Inside zoom
+	if (mouseX>zoom_window_start_x&&mouseX<maxwidth&&mouseY>zoom_window_start_y&&mouseY<maxheight) {
+		//--Map the zoom
+		int pos_x=map(mouseX-zoom_window_start_x, 0, 200, 0, maxwidth*zoom_factor);
+		int pos_y=map(mouseY-zoom_window_start_y, 0, 150, 0, maxheight*zoom_factor);
+		//--Cursor is the middle
+		pos_x-= maxwidth/2;
+		pos_y-= maxheight/2;
+		workflow.pan_workflow(-workflow.ref_x, -workflow.ref_y); //--Pan to origin	
+		workflow.pan_workflow(-pos_x, -pos_y); //--Pan to new position 		
+		return;
+	}
+	
+    //--Case 1. Rigth click
+    if (mouseButton==RIGHT) {
+             //Popup(mouseEvent); //--Debug problem
+             rightClick(selection);
+             
+    } else if (selection!=null) {
+    //--Case 2. Left click
+        if (mouseButton==LEFT) {
+			//--removed &&mouseEvent.getClickCount()==2
+            
+			if (double_click==true) { 
+				double_click=false;
+				leftClick(selection);
+				workflow.resetSelected();				
+				} else {
+					  if (selection instanceof workflow_connector) workflow.createOutput_Objects((workflow_connector)selection);
+				}
+			
+        }
+     }
+    //--Case 3. No selection;
+    else {
+        workflow.resetSelected();
+     }
+     verifySelection();
+ redraw();  
+}
+
+public void verifySelection() {
+	int number_connection=workflow.getNumberConnectionSelected();
+	int number_object=workflow.getNumberObjectSelected();
+	if (number_connection>0||number_object>0) {
+		javascript.setDeleteButton(true);
+	} else {
+		javascript.setDeleteButton(false);
+	}
+	if (number_object==1) {
+		javascript.setEditButton(true);
+	} else {
+		javascript.setEditButton(false);
+	}
+	
+}
+
+public void rightClick(Object o) {
+    workflow.resetSelected();
+    workflow.updateDependance(); //be sure we are up to date
+    //--note: selection can be null (o!=null&&) since we want to allow insertion of object
+   if (!(o instanceof workflow_connector)&&!(o instanceof workflow_connector_edge)) {
+            workflow_object obj=(workflow_object)o;
+            popup_selection=obj;
+			 workflow_properties tmp=((workflow_object)o).getProperties();
+			// tmp.print(); -> Print properties to processingjs stdout
+			//--This show a Dialog
+			//javascript.showDialog(tmp, mouseX, mouseY);
+			if (o instanceof workflow_object_output||o instanceof workflow_object_output_database) {
+				//--This display the content of the object				
+				javascript.showProperties(tmp);
+			} else {
+				//--This shoud display the contextual menu for this tool
+				javascript.showProperties(tmp); 
+			}
+            //createpopup(popup_selection);
+           // popupobject.show(mouseevent.getcomponent(), mouseevent.getx(), mouseevent.gety());
+            //if (popup_selection!=null) popup_selection.selected=false;
+    } 
+}
+
+public void leftClick(Object o) {
+    if (o!=null) {
+       // workflow.updateDependance(); //Be sure we are up to date
+        if (o instanceof workflow_connector) workflow.createOutput_Objects((workflow_connector)o);
+        if (o instanceof workflow_object) {
+            workflow_properties tmp=((workflow_object)o).getProperties();
+             //workflow_object obj=(workflow_object)o;
+			//obj.getProperties().print();
+			//tmp.print();
+			
+				javascript.showDialog(tmp, mouseX, mouseY);
+			
+			//--DEbug Config.log(tmp.getProperties());
+            // workbox.Message("Loading "+tmp.getName(), "");
+            //this.propertieseditorbox.display(tmp, this);
+            // workbox.Message("Idle", "");
+        }
+    }
+}
+
+public String getName() {
+	return workflow.getName();
+}
+
+public void setName(String name) {
+	workflow.name=name;
+}
+
+/*
+ * Save return a workflow thumbnail	(created in
+ * editSelected() ) so the user know what is selected 
+ */	
+public String return_workflow_thumb() {
+	return workflow_thumb.save();
+}
+
+public void mouseReleased() {     	  
+	  //--Cursor
+	  if (mouseX>zoom_window_start_x&&mouseX<maxwidth&&mouseY>zoom_window_start_y&&mouseY<maxheight) {
+			cursor(CROSS);
+		} else {
+			cursor(ARROW);	
+		}
+		
+	  workflow.notMoving();
+      redraw();
+      verifySelection();
+  } //End mouse dragged
+
+public void mouseMoved() {
+     	//--Cursor	
+		if (mouseX>zoom_window_start_x&&mouseX<maxwidth&&mouseY>zoom_window_start_y&&mouseY<maxheight) {
+			cursor(CROSS);
+		} else {
+			cursor(ARROW);	
+		}
+	 redraw();
+  } //End mouse moved
+
+   
+public Boolean isChanged() {
+	return changed;
+}
+
+public void setChanged(Boolean ch) {        
+	changed = ch;
+}
+
+public void double_clicked(Boolean ch) {        
+	double_click = ch;
+}

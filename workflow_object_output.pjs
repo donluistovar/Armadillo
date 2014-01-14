@@ -1,0 +1,265 @@
+/**
+ * This represent an output object
+ * used to represent one type of output
+ */
+class workflow_object_output extends workflow_object {
+
+    float step=1;         //Current step for animation
+    float stepNb=20;      //Number of step
+    pvertex source;       //Source Spline vertex
+    pvertex destination;  //Destination Spline vertex
+    String description="";
+	int test=0;           //for highlight display
+	
+    ////////////////////////////////////////////////////////////////////////////
+    /// Constants
+    final static int Output_LEFT=0;
+    final static int Output_RIGHT=1;
+    
+    ////////////////////////////////////////////////////////////////////////////
+    /// Default constructor for other objects
+    
+    public workflow_object_output() {}
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// Normal default constructor
+
+    public workflow_object_output(outputType, int x, int y) {
+       
+	   if (outputType instanceof String) {
+        //--Set the object properties
+		//properties=new workflow_properties();
+	   // this.properties.print();
+		properties.setName(outputType);
+        properties.put("colorMode","GREEN");
+        properties.put("defaultColor","GREEN");
+        properties.put("Output"+outputType, "True");
+        properties.put("outputType", outputType);
+        properties.put("Connector1Output","True");
+        properties.put("ObjectType", "Output");
+        properties.put("editorClass", "editors.OutputEditor");
+	   } else {
+			properties=outputType;
+	   
+	   }
+        Vertex=new pvertex[4];
+        connection=new workflow_connector[2];
+        // -- Weight and height
+        float w = 61;
+        float h = 14;
+               // -- Make the vertex needed
+        addVertex(x, y);
+        addVertex(x+w,y);
+        addVertex(x+w, y+h);
+        addVertex(x, y+h);
+        // -Create the connector
+        for (int i=0; i<connection.length;i++) {
+          connection[i]=new workflow_connector(this);
+        }
+        // - Calculate their position
+        recalculatePosition();
+ }
+
+
+     // public workflow_object_output(workflow_properties _properties, int x, int y) {
+    
+        // properties=_properties;
+        // Vertex=new pvertex[4];
+        // connection=new workflow_connector[2];
+        // // -- Weight and height
+        // float w = 61;
+        // float h = 14;
+         // // -- Make the vertex needed
+        // addVertex(x, y);
+        // addVertex(x+w,y);
+        // addVertex(x+w, y+h);
+        // addVertex(x, y+h);
+        // // -Create the connector
+        // for (int i=0; i<connection.length;i++) {
+          // connection[i]=new workflow_connector(this);
+        // }
+        // // - Calculate their position
+        // recalculatePosition();
+ // }
+
+ public void drawFeature(){
+    if (properties.getBoolean("NoDraw")) return;
+    // - Inside of object
+    boolean inside=inside2();
+    //-- Draw shape this draw a very basic shape in case we don't have the image
+    //-- Note also used for the inside procedure...
+    strokeWeight(0.1f);
+    noStroke();
+    noFill();
+    beginShape(QUADS);
+    for(int i=0;i<Vertex_count;i++){
+      vertex(Vertex[i].x,Vertex[i].y);
+    }
+    endShape();
+
+    PImage displayImage=null;
+    if (inside||selected) {
+        displayImage=(PImage)filedata.get("link_black.png");
+    } else if (properties.getOutputID(properties.get("outputType"))==0) {
+        displayImage=(PImage)filedata.get("link_cyan.png");
+    } else {
+          if (properties.get("colorMode").equals("RED")) displayImage=(PImage)filedata.get("link_red.png");
+          if (properties.get("colorMode").equals("BLUE")) displayImage=(PImage)filedata.get("link_blue.png");
+          if (properties.get("colorMode").equals("ORANGE")) displayImage=(PImage)filedata.get("link_orange.png");
+          if (properties.get("colorMode").equals("GREEN"))  displayImage=(PImage)filedata.get("link_green.png");
+          if (displayImage==null) displayImage=(PImage)filedata.get("link_green.png");
+    }
+    if (displayImage!=null) image(displayImage,this.x-(displayImage.width/2), this.y-2);
+    // - draw connector
+    for (int i=0; i<connection.length;i++) {
+        if (i==Output_RIGHT) connection[i].drawFeature();
+    }
+    // - draw text
+    fill(0);
+    textAlign(CENTER);
+    textFont(smallfont);
+    text(properties.getName(), (Vertex[1].x-Vertex[0].x)/2+Vertex[0].x, (Vertex[2].y-Vertex[0].y)/2+Vertex[0].y+2);
+    fill(128);
+    textFont(font);
+
+    //--Detect object over
+    if (inside) {
+        if (time_over==0) {
+            time_over=millis();
+        }
+    } else {
+        time_over=0;
+        description="";
+    }
+     String type=properties.get("outputType");
+     int output_id=properties.getInt("output_"+type.toLowerCase()+"_id");
+
+     
+
+     if (inside&&output_id>0&&(millis()-time_over)>10) {
+        fill(0);
+        textFont(font);
+        //Output output=new Output();
+        //output.setType(type);
+        //--This will try to load the description
+        //--Update: No, must be done in updateDependance
+		//        if (description.isEmpty()) description=output.getBiologic().getNameId(output_id);
+        if (properties.isSet("Description")) description=properties.get("Description");
+        if (description==null) description="";
+        float w = textWidth(description) + 10;
+        float h = textAscent() + textDescent() + 4;
+        fill (0xff79D1F0);
+        stroke(255);
+        //stroke(0xff79D1F0);
+        rectMode(CORNER);
+        rect (mouseX-w/2, mouseY - h/2, w, h);
+        fill(0);
+        textAlign(CENTER, CENTER);
+        text(description,mouseX,mouseY);
+    }
+
+  }
+
+  public void drawFeature_buffer(PGraphics buffers){
+    if (properties.getBoolean("NoDraw")) return;
+    // - Inside of object
+    boolean inside=inside2();
+    //-- Draw shape this draw a very basic shape in case we don't have the image
+    //-- Note also used for the inside procedure...
+    // buffers.strokeWeight(0.1f);
+    // buffers.noStroke();
+    // buffers.noFill();
+    // buffers.beginShape(QUADS);
+    // for(int i=0;i<Vertex_count;i++){
+      // vertex(Vertex[i].x,Vertex[i].y);
+    // }
+    // endShape();
+
+    PImage displayImage=null;
+    if (inside||selected) {
+        displayImage=(PImage)filedata.get("link_black.png");
+    } else if (properties.getOutputID(properties.get("outputType"))==0) {
+        displayImage=(PImage)filedata.get("link_cyan.png");
+    } else {
+          if (properties.get("colorMode").equals("RED")) displayImage=(PImage)filedata.get("link_red.png");
+          if (properties.get("colorMode").equals("BLUE")) displayImage=(PImage)filedata.get("link_blue.png");
+          if (properties.get("colorMode").equals("ORANGE")) displayImage=(PImage)filedata.get("link_orange.png");
+          if (properties.get("colorMode").equals("GREEN"))  displayImage=(PImage)filedata.get("link_green.png");
+          if (displayImage==null) displayImage=(PImage)filedata.get("link_green.png");
+    }
+    if (displayImage!=null) buffers.image(displayImage,this.x-(displayImage.width/2), this.y-2);
+    // - draw connector
+    for (int i=0; i<connection.length;i++) {
+        if (i==Output_RIGHT) connection[i].drawFeature_buffer(buffers);
+    }
+    // - draw text
+    buffers.fill(0);
+    buffers.textAlign(CENTER);
+    buffers.textFont(smallfont);
+    buffers.text(properties.getName(), (Vertex[1].x-Vertex[0].x)/2+Vertex[0].x, (Vertex[2].y-Vertex[0].y)/2+Vertex[0].y+2);
+    buffers.fill(128);
+    buffers.textFont(font);
+
+    //--Detect object over
+    if (inside) {
+        if (time_over==0) {
+            time_over=millis();
+        }
+    } else {
+        time_over=0;
+        description="";
+    }
+     String type=properties.get("outputType");
+     int output_id=properties.getInt("output_"+type.toLowerCase()+"_id");
+
+     
+	//--Etienne Lord, 2013 -> Don't draw description here
+     // if (inside&&output_id>0&&(millis()-time_over)>10) {
+        // buffers.fill(0);
+        // buffers.textFont(font);
+        // //Output output=new Output();
+        // //output.setType(type);
+        // //--This will try to load the description
+        // //--Update: No, must be done in updateDependance
+		// //        if (description.isEmpty()) description=output.getBiologic().getNameId(output_id);
+        // if (properties.isSet("Description")) description=properties.get("Description");
+        // if (description==null) description="";
+        // float w = textWidth(description) + 10;
+        // float h = textAscent() + textDescent() + 4;
+        // buffers.fill (0xff79D1F0);
+        // buffers.stroke(255);
+        // //stroke(0xff79D1F0);
+        // buffers.rectMode(CORNER);
+        // buffers.rect (mouseX-w/2, mouseY - h/2, w, h);
+        // buffers.fill(0);
+        // buffers.textAlign(CENTER, CENTER);
+        // buffers.text(description,mouseX,mouseY);
+    // }
+
+  }
+  
+  /**
+   * Calculate object_connector location
+   */
+  
+  public void recalculatePosition() {
+      properties.put("x", Vertex[0].x); //Thit is the left-top corner
+      properties.put("y", Vertex[0].y);
+      this.x=parseInt(Vertex[0].x+(Vertex[1].x-Vertex[0].x)/2);
+      this.y=parseInt(Vertex[0].y+(Vertex[1].y-Vertex[0].y)/2);
+      //-- Initialise Connector
+    for (int i=0; i<connection.length; i++) {
+        switch(i) {
+          case Output_LEFT : updateConnector(connection[i],i,this.x-35,this.y+2,null);
+                             break;
+          case Output_RIGHT: updateConnector(connection[i],i,this.x+30,this.y+2,null);
+                             break;
+       }
+    }
+  }
+
+  public String getName() {
+      return properties.get("outputType");
+  }
+
+}

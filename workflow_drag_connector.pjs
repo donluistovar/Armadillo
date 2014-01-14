@@ -1,0 +1,59 @@
+/**
+ * A Drag connector :: Used to redimension some component
+ * This in fact represent one point witch migh be connected to annother point
+ * Etienne Lord
+ */
+public class workflow_drag_connector {
+   ////////////////////////////////////////////////////////////////////////////
+   /// VARIABLES
+    String name="";
+   workflow_object parent=null;
+   int x=0;
+   int y=0;
+   public int mode=UPRIGHT;
+   public boolean selected=false;
+
+   ////////////////////////////////////////////////////////////////////////////
+   /// CONSTANT
+   public final static int UPLEFT=3;  //Strange numbering but easier for resize
+   public final static int UPRIGHT=0;
+   public final static int DOWNLEFT=2;
+   public final static int DOWNRIGHT=1;
+
+   public void draw() {
+     PImage displayImage=null;
+     //boolean inside=inside();
+
+       if (inside()) {
+          switch (mode) {
+              case UPRIGHT   : displayImage=(PImage)filedata.get("arrow_left_red.png"); break;
+              case DOWNRIGHT:  displayImage=(PImage)filedata.get("arrow_down_red.png"); break;
+          }
+          image(displayImage,this.x, this.y);
+       } else
+       if (selected) {
+          switch (mode) {
+              case UPRIGHT   : displayImage=(PImage)filedata.get("arrow_left_red.png"); break;
+              case DOWNRIGHT:  displayImage=(PImage)filedata.get("arrow_down_red.png"); break;
+          }
+          image(displayImage,this.x, this.y);
+       } else
+       if (parent.inside()) {
+          switch (mode) {
+              case UPRIGHT   : displayImage=(PImage)filedata.get("arrow_left_blue.png"); break;
+              case DOWNRIGHT:  displayImage=(PImage)filedata.get("arrow_down_blue.png"); break;
+          }
+          image(displayImage,this.x, this.y);
+        }
+
+ }
+
+   public boolean inside() {
+     switch (mode) {
+              case UPRIGHT   : return (mouseX > x-8 && mouseX < x+8 && mouseY > y-8 && mouseY < y+8);
+              case DOWNRIGHT : return (mouseX > x-8 && mouseX < x+8 && mouseY > y-8 && mouseY < y+8);
+          }
+      return false;
+   }
+
+}

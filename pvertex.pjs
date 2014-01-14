@@ -1,0 +1,20 @@
+/**
+ * Simple vertex class used by the workflow_object for position and detection
+ * of insideness
+ */
+class pvertex {
+  public float x;
+  public float y;
+  
+
+  public pvertex(float x, float y) {
+  this.x=x;
+  this.y=y;
+  }
+
+  public pvertex(int x, int y) {
+    this.x=(float)x;
+    this.y=(float)y;
+    }
+
+}

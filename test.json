@@ -1,0 +1,45 @@
+{
+    "Armadillo workflow": {
+        "Created on": "2012-12-06 16:30:31"
+    },
+    "Object": {
+        "Random Tree612163001": {
+            "Connector1Conditional": "True",            
+        }
+    },
+    "Connector": {
+        "connector_FF000000": {
+            "notDeletabled": "false",
+            "source_properties_id": "1",
+            "properties_id": "18",
+            "dest_properties_id": "2",
+            "Name": "connector_FF000000",
+            "source": "1",
+            "destination": "2""displayEdge": "false"
+        }"connector_FF010101": {
+            "notDeletabled": "false",
+            "source_properties_id": "1",
+            "properties_id": "21",
+            "dest_properties_id": "0",
+            "Name": "connector_FF010101",
+            "source": "1",
+            "destination": "2""displayEdge": "false"
+        }"connector_FF020202": {
+            "notDeletabled": "true",
+            "source_properties_id": "2",
+            "properties_id": "24",
+            "dest_properties_id": "3",
+            "Name": "connector_FF020202",
+            "source": "0",
+            "destination": "0""displayEdge": "false"
+        }"connector_FF030303": {
+            "notDeletabled": "true",
+            "source_properties_id": "2",
+            "properties_id": "27",
+            "dest_properties_id": "4",
+            "Name": "connector_FF030303",
+            "source": "0",
+            "destination": "0""displayEdge": "false"
+        }
+    }
+}

@@ -1,0 +1,100 @@
+/**
+ * Selection object
+ */
+public class workflow_selection {
+ int x1,y1,x2,y2;
+
+ /**
+  * Default constructor
+  * @param x1
+  * @param y1
+  */
+ public workflow_selection(int x1, int y1) {
+   this.x1=x1;
+   this.y1=y1;
+   this.x2=x1;
+   this.y2=y1;
+ }
+
+ public workflow_selection(int x1, int y1, int x2, int y2) {
+   this.x1=x1;
+   this.y1=y1;
+   this.x2=x2;
+   this.y2=y2;
+ }
+
+ public void update(int x2, int y2) {
+     this.x2=x2;
+     this.y2=y2;
+ }
+
+ public void drawFeature() {
+   float[] dashes = { 16.0f, 8.0f, 4.0f, 8.0f };
+  
+   // BasicStroke pen=new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER,1.0f, dashes, 0.0f);
+  
+   noFill();
+   stroke(0);
+   strokeWeight(2.0f);   
+   // Graphics2D g2 = ((PGraphicsJava2D) g).g2;
+   // BasicStroke old=(BasicStroke) g2.getStroke();
+   // g2.setStroke(pen);
+   //--Note: the else case is to handle if the selected point is higher
+   if (x1<x2&&y1<y2) {
+     rect(x1,y1,abs(x2-x1), abs(y2-y1));
+   }
+   else if (x2<x1&&y2<y1)
+   {
+     rect(x2,y2,abs(x1-x2), abs(y1-y2));
+   }
+   else if (x2<x1&&y1<y2)
+   {
+     rect(x2,y1,abs(x1-x2), abs(y1-y2));
+   }
+   else if (x1<x2&&y2<y1)
+   {
+     rect(x1,y2,abs(x1-x2), abs(y1-y2));
+   }
+   // g2.setStroke(old);
+ }
+
+
+ public void  drawFeature_buffer(PGraphics buffers) {
+   float[] dashes = { 16.0f, 8.0f, 4.0f, 8.0f };
+  
+   // BasicStroke pen=new BasicStroke(1.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER,1.0f, dashes, 0.0f);
+  
+   buffers.noFill();
+   buffers.stroke(0);
+   buffers.strokeWeight(2.0f);   
+   // Graphics2D g2 = ((PGraphicsJava2D) g).g2;
+   // BasicStroke old=(BasicStroke) g2.getStroke();
+   // g2.setStroke(pen);
+   //--Note: the else case is to handle if the selected point is higher
+   if (x1<x2&&y1<y2) {
+     buffers.rect(x1,y1,abs(x2-x1), abs(y2-y1));
+   }
+   else if (x2<x1&&y2<y1)
+   {
+     buffers.rect(x2,y2,abs(x1-x2), abs(y1-y2));
+   }
+   else if (x2<x1&&y1<y2)
+   {
+     buffers.rect(x2,y1,abs(x1-x2), abs(y1-y2));
+   }
+   else if (x1<x2&&y2<y1)
+   {
+     buffers.rect(x1,y2,abs(x1-x2), abs(y1-y2));
+   }
+   // g2.setStroke(old);
+ }
+ 
+ public boolean inside2(int x, int y) {
+ //--Note: the else case is to handle if the selected point is higher
+   int ax1=min(x1, x2);
+   int ax2=max(x1, x2);
+   int ay1=min(y1, y2);
+   int ay2=max(y1, y2); 
+   return (x > ax1 && x < ax2 && y > ay1 && y < ay2);
+ }
+}

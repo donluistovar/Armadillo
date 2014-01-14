@@ -1,0 +1,1137 @@
+# Armadillo workflow
+# Created on 2012-10-17 21:41:50
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=Random Tree -software output (2012-10-17 20\:42\:38)
+Name=OutputText
+Object=
+ObjectID=OutputText_1709094005
+ObjectType=Output
+Order=5
+OutputOutputText=True
+ParentID=Random Tree_1709084124
+Status=404
+StatusString=No Class is set to run...
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=OutputText
+output_outputtext_id=3
+properties_id=9
+x=472.0
+y=223.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=SPR Identification Tool_result
+Name=Results
+Object=
+ObjectID=Results_1709094006
+ObjectType=Output
+Order=8
+OutputResults=True
+ParentID=SPR Identification Tool_1709084118
+Status=404
+StatusString=No Class is set to run...
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=Results
+output_results_id=4
+properties_id=10
+x=812.0
+y=366.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=SPR Identification Tool -software output (2012-10-17 20\:42\:39)
+Name=OutputText
+Object=
+ObjectID=OutputText_1709094007
+ObjectType=Output
+Order=9
+OutputOutputText=True
+ParentID=SPR Identification Tool_1709084118
+Status=404
+StatusString=No Class is set to run...
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=OutputText
+output_outputtext_id=5
+properties_id=11
+x=812.0
+y=346.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=Random Tree (2012-10-17 20\:42\:37)_0
+Name=Tree
+Object=
+ObjectID=Tree_1709094008
+ObjectType=Output
+Order=6
+OutputTree=True
+ParentID=Random Tree_1709084124
+Status=404
+StatusString=No Class is set to run...
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=Tree
+output_tree_id=2
+properties_id=12
+x=472.0
+y=203.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=HGT matrix 2012-10-17 20\:43\:18
+Name=Matrix
+Object=
+ObjectID=Matrix_1709094009
+ObjectType=Output
+OutputMatrix=True
+ParentID=HGT Detector 3.2_1709084388
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=Matrix
+output_matrix_id=1
+properties_id=13
+x=824.0
+y=187.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=HGT Detector 3.2 -software output (2012-10-17 20\:43\:18)
+Name=OutputText
+Object=
+ObjectID=OutputText_1709094010
+ObjectType=Output
+OutputOutputText=True
+ParentID=HGT Detector 3.2_1709084388
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=OutputText
+output_outputtext_id=8
+properties_id=14
+x=824.0
+y=207.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=HGT Detector 3.2_output.txt
+Name=Results
+Object=
+ObjectID=Results_1709094011
+ObjectType=Output
+OutputResults=True
+ParentID=HGT Detector 3.2_1709084388
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=Results
+output_results_id=7
+properties_id=15
+x=824.0
+y=227.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=Hybrid Interleave_result
+Name=Results
+Object=
+ObjectID=Results_1709094012
+ObjectType=Output
+OutputResults=True
+ParentID=Hybrid Interleave_1709084396
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=Results
+output_results_id=9
+properties_id=16
+x=825.0
+y=491.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=Hybrid Interleave -software output (2012-10-17 20\:43\:47)
+Name=OutputText
+Object=
+ObjectID=OutputText_1709094013
+ObjectType=Output
+OutputOutputText=True
+ParentID=Hybrid Interleave_1709084396
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=OutputText
+output_outputtext_id=10
+properties_id=17
+x=826.0
+y=471.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=PIRN name tree names
+Name=Matrix
+Object=
+ObjectID=Matrix_1709094014
+ObjectType=Output
+OutputMatrix=True
+ParentID=PIRN_1709084616
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=Matrix
+output_matrix_id=2
+properties_id=18
+x=821.0
+y=68.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=Trees for network
+Name=TextFile
+Object=
+ObjectID=TextFile_1709094015
+ObjectType=Output
+OutputTextFile=True
+ParentID=PIRN_1709084616
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=TextFile
+output_textfile_id=12
+properties_id=19
+x=821.0
+y=88.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=PIRN -software output (2012-10-17 20\:49\:03)
+Name=OutputText
+Object=
+ObjectID=OutputText_1709094016
+ObjectType=Output
+OutputOutputText=True
+ParentID=PIRN_1709084616
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=OutputText
+output_outputtext_id=13
+properties_id=20
+x=821.0
+y=108.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=PIRN_HybridizationNetwork.gml
+Name=Results
+Object=
+ObjectID=Results_1709094017
+ObjectType=Output
+OutputResults=True
+ParentID=PIRN_1709084616
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=Results
+output_results_id=11
+properties_id=21
+x=821.0
+y=128.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+ClassName=programs.PIRN
+Commandline_Running=cmd.exe /C pirn-win-v20.exe -C -n 1000 speciesTree.txt                                            
+Connector0Output=True
+Connector1Conditional=True
+Connector2=Gene tree(s)
+Connector3=Species tree
+Description=SPRDist uses integer programming to solve the problem of computing\nrSPR distances between two rooted binary trees. For introduction on\nwhat is rSPR, you can google the web to find many pointers on this\nsubject.
+EditorClassName=editors.PIRNEditor
+Executable=executable\\PIRN-2.0\\pirn-win-v20.exe
+ExecutableMacOSX=
+ExitValue=0
+HelpSupplementary=
+InputMultipleTrees=Connector2
+InputTree=True
+Keyword0=Horizontal gene transfer detection
+Name=PIRN
+NoThread=true
+NormalExitValue=0
+Object=
+ObjectID=PIRN_1709094018
+ObjectType=Program
+Order=9
+OutputMatrix=Connector0
+OutputOutputText=Connector0
+OutputResults=Connector0
+OutputTextFile=Connector0
+Publication=Yufeng Wu, "Close lower and upper bounds for the minimum reticulate network of multiple phylogenetic trees", in Proceedings of ISMB 2010, Bioinformatics 2010 26(12)\:i140-i148, 2010
+RunningDirectory=C\:\\Armadillo\\executable\\PIRN-2.0
+RuntimeMacOSX=bash (.sh)
+SampleWorkflow=SPRDist.properties.db
+Similar0=LaTrans.properties
+Similar1=PhyloNet_riatahgt.properties
+Status=100
+StatusString=
+TimeRunning=219354
+Tooltip=PIRN\: Tool to reconstructing the minimum reticulate networks for multiple phylogenetic trees
+Type=Horizontal Genes Tranfer
+UseRuntimeMacOSX=true
+VerifyExitValue=true
+Version=2.0
+Version_MacOSX=
+Website=http\://www.engr.uconn.edu/~ywu/PIRN.html
+colorMode=GREEN
+debug=true
+defaultColor=GREEN
+filename=C\:\\Armadillo\\data\\properties\\PIRN.properties
+help=http\://www.trex.uqam.ca/index.php?action\=hgt&project\=trex
+input_tree_id20=1
+input_tree_id30=2
+mode=1
+nbInput=2
+output_matrix_id=2
+output_outputtext_id=13
+output_results_id=11
+output_textfile_id=12
+properties_id=22
+x=624.0
+y=68.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=Random Tree (2012-10-17 20\:42\:36)_0
+Name=Tree
+Object=
+ObjectID=Tree_1709094019
+ObjectType=Output
+Order=3
+OutputTree=True
+Status=404
+StatusString=No Class is set to run...
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=Tree
+output_tree_id=1
+properties_id=23
+x=478.0
+y=317.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=Ranger-dtl -software output (2012-10-17 20\:50\:54)
+Name=OutputText
+Object=
+ObjectID=OutputText_1709094020
+ObjectType=Output
+OutputOutputText=True
+ParentID=Ranger-dtl_1709084624
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=OutputText
+output_outputtext_id=16
+properties_id=24
+x=819.0
+y=581.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=Ranger-dtl_output
+Name=Results
+Object=
+ObjectID=Results_1709094021
+ObjectType=Output
+OutputResults=True
+ParentID=Ranger-dtl_1709084624
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=Results
+output_results_id=14
+properties_id=25
+x=819.0
+y=601.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Connector1Output=True
+Description=Generation of 10 DNA sequences of 100 bp
+Name=Alignment
+Object=
+ObjectID=Alignment_1709094022
+ObjectType=Output
+Order=1
+OutputAlignment=True
+Status=404
+StatusString=No Class is set to run...
+colorMode=GREEN
+defaultColor=GREEN
+editorClass=editors.OutputEditor
+outputType=Alignment
+output_alignment_id=2
+properties_id=26
+x=188.0
+y=268.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+ClassName=programs.randtree
+Commandline_Running=cmd.exe /C executable\\randtree.exe output >outfile                                              
+Connector0Output=True
+Connector1Conditional=True
+Description=Generate pseudo-random Tree  using the MAVID randtree program.
+EditorClassName=
+Executable=executable\\randtree.exe
+ExecutableMacOSX=Executable/MacOSX/mavid-2.0.4/utils/randtree/randtree
+ExitValue=0
+HelpSupplementary=
+InputAlignment=Connector2
+Keyword0=Random, Tree
+Name=Random Tree
+NoThread=true
+Object=
+ObjectID=Random Tree_1709094023
+ObjectType=Program
+Order=4
+OutputOutputText=Connector0
+OutputTree=Connector0
+Publication=(N. Bray and L. Pachter, MAVID\: Constrained ancestral alignment of multiple sequences,, Genome Research, 14\:693-699 (2004))
+RuntimeMacOSX=bash (.sh)
+SampleWorkflow=randTree.properties.db
+Status=100
+StatusString=
+TimeRunning=688
+Tooltip=Generate pseudo-random Tree  using the MAVID randtree program.
+Type=Random Sequences or Trees
+VerifyExitValue=true
+Website=http\://bio.math.berkeley.edu/mavid/
+colorMode=BLUE
+debug=false
+defaultColor=BLUE
+default_mode=0
+default_replicate=10
+default_seed=100
+default_type=0
+filename=C\:\\Armadillo\\data\\properties\\randTree.properties
+help=http\://bio.math.berkeley.edu/mavid/
+input_alignment_id20=2
+mode=3
+nbInput=1
+output_outputtext_id=3
+output_tree_id=2
+properties_id=27
+replicate=10
+seed=100
+type=1
+x=283.0
+y=160.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+ClassName=programs.randtree
+Commandline_Running=cmd.exe /C executable\\randtree.exe output >outfile                                              
+Connector0Output=True
+Connector1Conditional=True
+Description=Generate pseudo-random Tree  using the MAVID randtree program.
+EditorClassName=
+Executable=executable\\randtree.exe
+ExecutableMacOSX=Executable/MacOSX/mavid-2.0.4/utils/randtree/randtree
+ExitValue=0
+HelpSupplementary=
+InputAlignment=Connector2
+Keyword0=Random, Tree
+Name=Random Tree
+NoThread=true
+Object=
+ObjectID=Random Tree_1709094024
+ObjectType=Program
+Order=2
+OutputOutputText=Connector0
+OutputTree=Connector0
+Publication=(N. Bray and L. Pachter, MAVID\: Constrained ancestral alignment of multiple sequences,, Genome Research, 14\:693-699 (2004))
+RuntimeMacOSX=bash (.sh)
+SampleWorkflow=randTree.properties.db
+Status=100
+StatusString=
+TimeRunning=1346
+Tooltip=Generate pseudo-random Tree  using the MAVID randtree program.
+Type=Random Sequences or Trees
+VerifyExitValue=true
+Website=http\://bio.math.berkeley.edu/mavid/
+colorMode=BLUE
+debug=false
+defaultColor=BLUE
+default_mode=0
+default_replicate=10
+default_seed=100
+default_type=0
+filename=C\:\\Armadillo\\data\\properties\\randTree.properties
+help=http\://bio.math.berkeley.edu/mavid/
+input_alignment_id20=2
+mode=3
+nbInput=1
+output_outputtext_id=2
+output_tree_id=1
+properties_id=28
+replicate=10
+seed=100
+type=1
+x=286.0
+y=290.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+ClassName=programs.randomInternalSequences
+Commandline_Running=cmd.exe /C Not Set Not Set                                              
+Connector0Output=True
+Connector1Conditional=True
+Description=Internal application to generate some pseudo-random sequences.\nNote\: for simulation, use SeqGen.
+EditorClassName=editors.randomSequencesEditor
+HelpSupplementary=
+InternalArmadilloApplication=true
+Keyword0=Random, Sequences, Alignment
+Name=Random Sequences
+NoThread=false
+Object=
+ObjectID=Random Sequences_1709094025
+ObjectType=Program
+Order=0
+OutputAlignment=Connector0
+OutputMultipleSequences=Connector0
+OutputSequence=Connector0
+Publication=NA
+SampleWorkflow=randomSequence.properties.db
+Similar0=seqgen.properties
+Status=100
+StatusString=
+TimeRunning=1097
+Tooltip=Generate some random sequences
+Type=Random Sequences or Trees
+VerifyExitValue=false
+WebServices=true
+Website=NA
+colorMode=BLUE
+debug=false
+defaultColor=BLUE
+default_mode=0
+default_replicate=10
+default_seed=100
+default_type=0
+filename=C\:\\Armadillo\\data\\properties\\randomSequence.properties
+mode=3
+nbInput=0
+output_alignment_id=2
+output_multiplesequences_id=2
+output_outputtext_id=1
+output_sequence_id=47
+properties_id=29
+replicate=10
+seed=100
+type=1
+x=25.0
+y=160.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+ClassName=programs.sprit
+Commandline_Running=java -jar sprit.jar speciesTree.txt geneTree.txt 0 0 0 0                                          
+Connector0Output=True
+Connector1Conditional=True
+Connector2=Gene tree
+Connector3=Species tree
+Description=The SPR Identification Tool (SPRIT), a novel algorithm that solves the fixed parameter tractable minimum RSPR problem. \n\nThe algorithm can be used in two ways, exhaustive search that guarantees the minimum RSPR distance and a heuristic approach that guarantees finding a solution, but not necessarily the minimum one.
+EditorClassName=editors.SpritEditor
+Executable=executable\\sprit\\sprit.jar
+ExecutableLinux=executable\\sprit\\sprit.jar
+ExecutableMacOSX=executable\\sprit\\sprit.jar
+ExitValue=0
+HelpSupplementary=
+InputTree=True
+Keyword0=Horizontal gene transfer detection
+Name=SPR Identification Tool
+NoThread=true
+NormalExitValue=3
+Object=
+ObjectID=SPR Identification Tool_1709094026
+ObjectType=Program
+Order=7
+OutputOutputText=Connector0
+OutputResults=Connector0
+Publication=SPRIT\: Identifying horizontal gene transfer in rooted phylogenetic trees.\nHill T, Nordström KJ, Thollesson M, Säfström TM, Vernersson AK, Fredriksson R, Schiöth HB.\nBMC Evol Biol. 2010 Feb 13;10\:42.\nPMID\: 20152048
+RunningDirectory=C\:\\Armadillo\\executable\\sprit
+RuntimeMacOSX=bash (.sh)
+SampleWorkflow=sprit.properties.db
+Similar0=LaTrans.properties
+Similar1=PhyloNet_riatahgt.properties
+Status=100
+StatusString=
+TimeRunning=1575
+Tooltip=Calculating the subtree prune and regraft distance between phylogenies
+Type=Horizontal Genes Tranfer
+UseRuntimeMacOSX=true
+VerifyExitValue=false
+Version=1.0
+Version_Linux=1.0
+Version_MacOSX=1.0
+Website=http\://code.google.com/p/phylogenetics/
+colorMode=GREEN
+debug=true
+defaultColor=GREEN
+filename=C\:\\Armadillo\\data\\properties\\SPRIT.properties
+help=http\://www.trex.uqam.ca/index.php?action\=hgt&project\=trex
+input_tree_id20=1
+input_tree_id30=2
+nbInput=2
+output_outputtext_id=5
+output_results_id=4
+properties_id=30
+subtree=True
+x=623.0
+y=282.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+ClassName=programs.hybridinterleave
+Commandline_Running=java -jar HybridInterleave.jar "(RAND2,((RAND6,RAND1),(((RAND9,RAND4),(RAND0,RAND5)),(RAND7,(RAND8,RAND3)))));" "((((RAND3,((RAND8,(RAND6,RAND7)),RAND0)),RAND9),(RAND5,RAND4)),(RAND2,RAND1));"                                              
+Connector0Output=True
+Connector1Conditional=True
+Connector2=Gene tree
+Connector3=Species tree
+Description=An exact algorithm to compute the minimum number of hybridization\nevents for two rooted binary phylogenetic trees on the same set\nof taxa in realistic time.
+EditorClassName=
+Executable=executable\\HybridInterleave\\HybridInterleave.jar
+ExecutableLinux=executable\\HybridInterleave\\HybridInterleave.jar
+ExecutableMacOSX=executable\\HybridInterleave\\HybridInterleave.jar
+ExitValue=0
+HelpSupplementary=
+InputTree=True
+Keyword0=Horizontal gene transfer detection
+Name=Hybrid Interleave
+NoThread=true
+NormalExitValue=3
+Object=
+ObjectID=Hybrid Interleave_1709094027
+ObjectType=Program
+Order=9
+OutputOutputText=Connector0
+OutputResults=Connector0
+Publication=Publication(s)Quantifying hybridization in realistic time.\nCollins J, Linz S, Semple C.\nJ Comput Biol. 2011 Oct;18(10)\:1305-18. Epub 2011 Jan 6.\nPMID\: 21210735
+RunningDirectory=C\:\\Armadillo\\executable\\HybridInterleave
+RuntimeMacOSX=bash (.sh)
+SampleWorkflow=
+Similar0=HGT32.properties
+Similar1=LaTrans.properties
+Similar2=PhyloNet_riatahgt.properties
+Status=100
+StatusString=
+TimeRunning=800
+Tooltip=Detect Horizontal Gene Transfer
+Type=Horizontal Genes Tranfer
+UseRuntimeMacOSX=true
+VerifyExitValue=false
+Version=1.0
+Version_MacOSX=1.0
+Website=http\://ab.inf.uni-tuebingen.de/people/linz/software/HybridInterleave.zip/view
+colorMode=GREEN
+debug=true
+defaultColor=GREEN
+filename=C\:\\Armadillo\\data\\properties\\HybridInterleave.properties
+help=http\://www.trex.uqam.ca/index.php?action\=hgt&project\=trex
+input_tree_id20=1
+input_tree_id30=2
+nbInput=2
+output_outputtext_id=10
+output_results_id=9
+properties_id=31
+subtree=True
+x=624.0
+y=383.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+ClassName=programs.ranger_dtl
+Commandline_Running=cmd.exe /C ranger-dtl-D.exe -i speciesTree.txt -o output.txt                                            
+Connector0Output=True
+Connector1Conditional=True
+Connector2=Gene tree
+Connector3=Species tree
+Description=RANGER-DTL (short for Rapid ANalysis of Gene family Evolution using Reconciliation-DTL) is a software package for inferring gene family evolution by speciation, gene duplication, horizontal gene transfer, and gene loss. The software takes as input a gene tree (rooted or unrooted) and a rooted species tree and reconciles the two by postulating speciation, duplication, transfer, and loss events. RANGER-DTL implements efficient algorithms that can efficiently analyze trees with even thousands of taxa, and can handle both undated and dated species trees (i.e., both cladograms and chronograms). Further details on the functionality of RANGER-DTL are given in the manual.
+EditorClassName=editors.ranger_dtlEditor
+Executable=executable\\ranger-dtl-1.0\\ranger-dtl-D.exe
+ExecutableMacOSX=
+ExitValue=0
+HelpSupplementary=
+InputTree=True
+Keyword0=Horizontal gene transfer detection
+Name=Ranger-dtl
+NoThread=true
+NormalExitValue=0
+Object=
+ObjectID=Ranger-dtl_1709094028
+ObjectType=Program
+Order=9
+OutputOutputText=Connector0
+OutputResults=Connector0
+Publication=Efficient Algorithms for the Reconciliation Problem with Gene Duplication, Horizontal Transfer, and Loss\nMukul S. Bansal, Eric J. Alm, Manolis Kellis. \nISMB 2012; Bioinformatics 28\: i283-i291, 2012.
+RunningDirectory=C\:\\Armadillo\\executable\\ranger-dtl-1.0
+RuntimeMacOSX=bash (.sh)
+SampleWorkflow=SPRDist.properties.db
+Similar0=LaTrans.properties
+Similar1=PhyloNet_riatahgt.properties
+Status=100
+StatusString=
+TimeRunning=1035
+Tooltip=RANGER-DTL (short for Rapid ANalysis of Gene family Evolution using Reconciliation-DTL)
+Type=Horizontal Genes Tranfer
+UseRuntimeMacOSX=true
+VerifyExitValue=true
+Version=1.0
+Version_MacOSX=
+Website=http\://compbio.mit.edu/ranger-dtl/
+colorMode=GREEN
+debug=true
+defaultColor=GREEN
+filename=C\:\\Armadillo\\data\\properties\\ranger-dtl.properties
+help=http\://www.trex.uqam.ca/index.php?action\=hgt&project\=trex
+input_tree_id20=1
+input_tree_id30=2
+mode=1
+nbInput=2
+output_outputtext_id=16
+output_results_id=14
+output_textfile_id=15
+properties_id=32
+x=625.0
+y=490.0
+
+Object
+#
+#Wed Oct 17 21:41:50 EDT 2012
+ClassName=programs.hgt
+Commandline_Running=cmd.exe /C run_hgt.exe -inputfile\=input.txt -version\=web -subtree\=yes                                             
+Connector0Output=True
+Connector1Conditional=True
+Connector2=Gene tree(s)
+Connector3=Species tree
+Description=Detect Horizontal Gene Transfer using tree consensus. New version 2010.\n\nNote\: The Tree is the species tree and the MultipleTrees genes trees...
+EditorClassName=editors.HgtEditor
+Executable=executable\\hgt32\\run_hgt.exe
+ExecutableMacOSX=Executable/MacOSX/hgt-3.2/hgt-detection_3.22/hgt
+ExitValue=0
+HelpSupplementary=
+InputMultipleTrees=Connector2
+InputTree=True
+Keyword0=Horizontal gene transfer detection
+Name=HGT Detector 3.2
+NoThread=true
+NormalExitValue=3
+Object=
+ObjectID=HGT Detector 3.2_1709094029
+ObjectType=Program
+Order=9
+OutputMatrix=Connector0
+OutputOutputText=Connector0
+OutputResults=Connector0
+Publication=Inferring and validating horizontal gene transfer events using bipartition dissimilarity.\nBoc A, Philippe H, Makarenkov V.\nSyst Biol. 2010 Mar;59(2)\:195-211.
+RunningDirectory=C\:\\Armadillo\\executable\\hgt32
+RuntimeMacOSX=bash (.sh)
+SampleWorkflow=HGT32.properties.db
+Similar0=LaTrans.properties
+Similar1=PhyloNet_riatahgt.properties
+Status=100
+StatusString=
+TimeRunning=3798
+Tooltip=Detect Horizontal Gene Transfer using tree consensus.
+Type=Horizontal Genes Tranfer
+UseRuntimeMacOSX=true
+VerifyExitValue=false
+Version=3.2
+Version_MacOSX=3.2
+Website=trex.bioinfo.uqam.ca
+colorMode=GREEN
+debug=true
+defaultColor=GREEN
+filename=C\:\\Armadillo\\data\\properties\\HGT32.properties
+help=http\://www.trex.uqam.ca/index.php?action\=hgt&project\=trex
+input_tree_id20=1
+input_tree_id30=2
+nbInput=2
+output_matrix_id=1
+output_outputtext_id=8
+output_results_id=7
+properties_id=33
+subtree=True
+x=620.0
+y=173.0
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16777216
+dest_properties_id=12
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=27
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16711423
+dest_properties_id=9
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=27
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16645630
+dest_properties_id=30
+destination=3
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=12
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16579837
+dest_properties_id=26
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=29
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16514044
+dest_properties_id=27
+destination=2
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=26
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16448251
+dest_properties_id=28
+destination=2
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=26
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16382458
+dest_properties_id=23
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=28
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16316665
+dest_properties_id=30
+destination=2
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=23
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16250872
+dest_properties_id=11
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=30
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16185079
+dest_properties_id=10
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=30
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16119286
+dest_properties_id=33
+destination=3
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=12
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-16053493
+dest_properties_id=33
+destination=2
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=23
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15987700
+dest_properties_id=13
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=33
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15921907
+dest_properties_id=14
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=33
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15856114
+dest_properties_id=15
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=33
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15790321
+dest_properties_id=31
+destination=3
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=12
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15724528
+dest_properties_id=31
+destination=2
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=23
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15658735
+dest_properties_id=17
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=31
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15592942
+dest_properties_id=16
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=31
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15527149
+dest_properties_id=22
+destination=3
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=12
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15461356
+dest_properties_id=22
+destination=2
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=23
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15395563
+dest_properties_id=18
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=22
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15329770
+dest_properties_id=19
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=22
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15263977
+dest_properties_id=20
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=22
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15198184
+dest_properties_id=21
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=22
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15132391
+dest_properties_id=32
+destination=2
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=23
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15066598
+dest_properties_id=32
+destination=3
+displayEdge=false
+notDeletabled=false
+source=1
+source_properties_id=12
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-15000805
+dest_properties_id=24
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=32
+
+Connector
+#
+#Wed Oct 17 21:41:50 EDT 2012
+Name=connector_-14935012
+dest_properties_id=25
+destination=0
+displayEdge=false
+notDeletabled=true
+source=0
+source_properties_id=32
+
+

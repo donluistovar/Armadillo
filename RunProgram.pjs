@@ -1,0 +1,54 @@
+/*
+ *  Armadillo Workflow Platform v1.5
+ *  A simple pipeline system for phylogenetic analysis
+ *  
+ *  Copyright (C) 2009-2012  Etienne Lord, Mickael Leclercq
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+public class RunProgram {
+	
+    ////////////////////////////////////////////////////////////////////////////
+    /// Database variables
+    protected int id=0;    
+    protected int properties_id = 0;
+    private int workflows_id = 0;
+    protected String note = "";
+    protected String programTimeStart = "";
+    protected String programTimeEnd = "";
+    protected String runProgramOutput="";
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// Constant for properties PORT
+    
+     public static Integer PortInputUP=3;
+     public static Integer PortInputDOWN=2;
+     public static Integer PortInput=null;
+     public static Integer PortOutput=0;
+
+	//-- Status code (This is the most important table )
+    public static final int status_nothing=0;
+    public static final int status_idle=1;
+    public static final int status_changed=10;
+    public static final int status_done=100;
+    public static final int status_error=404; //:)
+    public static final int status_warning=900; 
+    public static final int status_running=500;
+    public static final int status_BadRequirements=450;
+    public static final int status_runningclassnotfound=408;
+    public static final int status_programnotfound=410;    
+	 
+
+} //--End RunProgram

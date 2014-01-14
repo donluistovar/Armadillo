@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8">  
+        <link rel="shortcut icon" href="data/favicon.ico" />  
+        <script type="text/javascript" src="jquery-1.8.3.js"></script>            
+         <link rel='stylesheet' type='text/css' href='css/flick/jquery-ui-1.9.2.custom.css' />                             
+        <link rel="stylesheet" href="jquery.mobile-1.2.0.min.css" />
+        <script src="jquery.mobile-1.2.0.min.js"></script>    
+        <script src="processing-1.4.1.js"></script>
+       <!--   <script src="armadillo.js"></script>
+      <script type="text/javascript" src="uploadify/jquery.uploadify.js"></script>
+        <link rel="stylesheet" type="text/css" href="uploadify/uploadify.css" /> -->
+      <script>
+		$(document).ready(function(){	
+			$("#popupInsertData" ).popup();
+			$("#popupInsertData h2" ).html('Upload');
+			$("#popupInsertData .default" ).text("Etienne");
+			$("#popupInsertData").popup('open');
+			
+			
+		});
+		
+		//    $(function() {
+// 					$('#file_upload').uploadify({
+// 						 'removeCompleted' : false,
+// 						'swf'      : 'uploadify/uploadify.swf',
+// 						'uploader' : 'uploadify/uploadify.php',
+// 						'checkExisting' : 'uploadify/check-exists.php',
+// 						 'debug'    : true,
+// 						 'wmode'          : 'transparent',
+// 						'fileSizeLimit' : '20MB',
+// 						'auto':false,
+// 						'method'   : 'post',
+//     				'formData' : { 'type' : 'MultipleSequences' },
+//     				'onSelectError' : function() {
+//             alert('The file ' + file.name + ' returned an error and was not added to the queue.');
+//         },
+// 					 'onCancel' : function(file) {
+//             alert('The file ' + file.name + ' was cancelled.');
+//         },
+// 				'onUploadSuccess' : function(file, data, response) {
+// 					alert('The file was saved to: ' + data);
+// 				},'onUploadError' : function(file, errorCode, errorMsg, errorString) {
+//            			 alert('The file ' + file.name + ' could not be uploaded: ' + errorString);
+//         		}
+// 					});
+// 				});
+    </script>
+		 
+    </head>
+    
+    <body>    
+        <style>
+            canvas {margin:  0px;padding: 0px;background-color: white;display: block;}
+            .over { border: 2px dashed #000;}
+            #popupHeader h2 {text-align: center;}
+           
+        </style>
+        
+        <!-- properties dialog -popupInsertData-->
+				<div data-role="popup" id="popupInsertData" data-position-to="window" data-overlay-theme="a" data-theme="c" style="max-width:400px;" class="ui-corner-all">
+					<div data-role="header" data-theme="a" class="ui-corner-top">
+						<a href="#help" data-role="button" data-inline="true" data-icon="info" data-transition="fade" data-theme="b">Help</a>
+						<div id='popupHeader'><h2>Insert Data</h2></div>
+						<a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
+					</div>
+					<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
+						<h3 class="ui-title" style='text-align:center;'>Select the files and the type of insertion in the workflow.</h3>
+						  <form enctype='multipart/form-data'>
+        					<input type="file" name="file_upload" id="file_upload" /><br>
+        					
+        					
+								<select name="menu">
+									<option value="0" selected class='default'>Create new MultipleSequences </option>
+									<option value="add to 1">add to 1</option>
+									<option value="add to 2">add to 2</option>
+									<option value="add to 3">add to 3</option>
+								</select>
+							
+						<!-- <a href="javascript:$('#file_upload').uploadify('upload','*');" data-role="button" data-inline="true" data-transition="flow" data-theme="b" style='text-align:center;'>Insert</a>  -->
+    				    </form>
+					</div>
+				</div>
+      
+        
+        </body>
+        
+</html>

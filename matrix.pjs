@@ -1,0 +1,300 @@
+/**
+ *  Matrix Online
+ *  A simple pipeline system for phylogenetic analysis
+ *  
+ *  Copyright (C) 2009-2013  Etienne Lord
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+
+//
+// Render Matrix for workflow
+// 28 Mai 2013
+// Etienne Lord
+
+boolean to_pdf=true;
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+/// SKETCH VARIABLES (Processing)
+PFont small, smallg;                         //Font - small
+PFont smallNumber,smallNumber2;                   //Font - small
+PFont smallItalic,big;     
+ data_matrix data;
+color from = color(220, 220, 220);
+color to = #1139F5;
+int minimum_matrix=0;
+int maximum_matrix=0;
+int[][] matrix;
+int n;
+int k;
+ArrayList<workflows> wp=new ArrayList<workflows>();
+ArrayList<String> properties_name=new ArrayList<String>();
+//https://raw.github.com/mbostock/d3/master/lib/colorbrewer/colorbrewer.js
+//["#f7fbff","#deebf7","#c6dbef","#9ecae1","#6baed6","#4292c6","#2171b5","#08519c","#08306b"]
+String[] blue9={"#f7fbff","#deebf7","#c6dbef","#9ecae1","#6baed6","#4292c6"};
+int[] colors=new int[blue9.length];
+
+public void setup() {
+    size(600,6000);
+    int font_factor=12;
+     small=createFont("Arial",font_factor,true);
+   big=createFont("Arial",12,true);
+   smallg=createFont("Arial gras",font_factor,false);
+  smallNumber=createFont("Arial",8.5f);
+    smallNumber2=createFont("Arial",8);
+  smallItalic=createFont("Arial Gras Italique",11);
+ 
+ load("pair.txt");
+  //for (workflows w:wp) println(w.data.size());
+  //for (String w:properties_name) println(w);
+}
+
+public void draw() {
+  background(255);
+  //Display the workflow
+ 
+	fill(0);
+	textFont(smallg);
+	textAlign(RIGHT);
+	text("Clusters",100,95);
+	textAlign(LEFT);
+	textFont(small);
+   int i=0;
+   boolean type=false;
+   int cl_group=0;
+   int x=100;
+  for (workflows w:wp) {  
+    if (cl_group!=w.clustering_group) {
+      cl_group=w.clustering_group;
+      type=!type; 
+    } 
+  
+    textAlign(CENTER);
+     String txt=""+w.clustering_group;
+	 int position=x+w.wlen/2;
+	 if (type) {
+        fill(0);    		
+        text(txt,position,95 );          
+      } else {
+        fill(0);
+         rect(x,80,w.wlen,18);
+        fill(255);
+       text(txt,position,95 );    
+      }           
+      textAlign(LEFT);       
+      
+    for (int j=0; j<k;j++) { 
+       stroke(255);
+        int m=int(map(w.data.get(j),minimum_matrix,maximum_matrix,0,colors.length-1));
+        fill(colors[m]);
+		rect(x, 100+j*20,w.wlen,19);
+	   fill(0);
+	   textAlign(CENTER);
+       text(""+w.data.get(j),-1+x+w.wlen/2,115+j*20 );
+    }
+	textAlign(LEFT);
+   stroke(0);
+      fill(0);      
+      line(x,99,x+w.wlen,99);
+    i++;
+	x=x+w.wlen;
+  }
+  
+  // //--Print the properties name
+  for (int j=0; j<k;j++) { 
+		fill(0);
+       text(""+properties_name.get(j),x+5,115+j*20 );
+  }
+  
+}
+
+////////////////////////////////////////////////////////////////////////////////
+/// JavaScript Functions 
+/// (from http://processingjs.org/articles/PomaxGuide.html#sketchtojs)
+	
+	 	
+	 interface JavaScript {
+			//--This hold the pjs interface
+			void load(String filename);	
+			
+   }
+  
+  JavaScript javascript;
+  
+    public void bindJavascriptPjs(JavaScript js) {
+      javascript = js;
+    }
+
+
+public void loadCluster(ArrayList<workflows> wp, String results_filename, String stats_filename) {
+      String stats="";
+     String results_string="";  
+      String stri[]=loadStrings(stats_filename);
+      for (String s:stri) stats+=s;
+      stri=loadStrings(results_filename);
+      
+    
+		 String[] m = match(stats, "Best.is.for.([0-9]*)");
+      	  if (m!=null) {
+				 int no_group=int(m[1]);
+				 int no_group_tabs_index=no_group-2;
+                 int index=0;
+				 
+                 HashMap<Integer,Integer>workflow_group=new HashMap<Integer,Integer>();
+				for (String s:stri) {
+                              String[] tabs=s.split("\t");                                                          
+                             if (index>0) {                                
+                                  int clustering_group=int(tabs[no_group_tabs_index].trim());
+                                   workflows w= wp.get(index-1);
+								   w.clustering_group=clustering_group;
+                             }
+                             index++;
+                         }
+				      		 
+      	  }
+	
+       // Pattern best=Pattern.compile("Best.is.for.([0-9]*)",Pattern.CASE_INSENSITIVE);
+                     // Matcher mbest=best.matcher(stats);
+                     // if (mbest.find()) {
+                         // String results=mbest.group(1);
+                         // //System.out.println("Best: "+results);
+                         // int no_group=Integer.valueOf(results);
+                         // println("Best cluster: "+no_group+" groups");                         
+                         // //--Parse results
+                        
+                         
+                         // for (String s:results_string.split("\n")) {
+                             // String[] tabs=s.split("\t");                                                          
+                             // if (index>0) {
+                                // try {
+                                 // Integer clustering_group=Integer.valueOf(tabs[no_group_tabs_index].trim());
+                                    // workflow_group.put(index-1,clustering_group);
+                                // } catch(Exception e) {}                                
+                             // }
+                             // index++;
+                         // }
+                         // for (int k:workflow_group.keySet()) println(k);
+                          // index=0;
+                         // for (workflows w:wp) {                              
+                                  // w.clustering_group=workflow_group.get(index);                                  
+                                  // index++;                                                         
+                          // }     
+                     // }
+  
+  }
+
+
+ public void Shellsort(ArrayList<workflows> wp) {
+  int index=0;
+  workflows[] a=new workflows[wp.size()];
+  for (workflows w:wp) a[index++]=w;
+  
+  //for (workflows m:a) println("*"+m.workflow_name);
+    int l=0;
+    int r=a.length-1;
+    int h;
+    for (h=1; h<=(r-l)/9; h= 3*h+1);
+     for (;h>0;h = int(h/3)) {
+		  for  (int i= l+h; i<=r; i++) {
+		    int j=i; 
+		    
+			workflows v=a[i];			
+			  while (j >= l+h && v.clustering_group < a[j-h].clustering_group) {
+			 a[j] = a[j-h] ; 
+			 j-=h; 
+		   }  
+		  a[j]=v;
+		}
+	 }
+   wp.clear();
+ for (workflows  w:a) wp.add(w);
+}  
+    
+public void loadMatrix(String filename) {
+  wp.clear();
+  properties_name.clear();
+  String stri[] = loadStrings(filename);
+  //--Read the number of workflows (n) and data (k)
+  int index=0;
+  int[] nums = int(split(stri[index++], '\t'));
+  n=nums[0];
+  k=nums[1];
+  matrix=new int[k][n];
+  // //--Read the matrix 
+  for (int j=0; j<k;j++) {
+	 float[] fnums = float(split(stri[index++], '\t'));
+	 for (i=0; i<n; i++) matrix[j][i]=int(fnums[i]);
+	 
+  }
+  // //--Read the rest until the Workflows and 	
+   boolean in_workflow=false;
+   boolean in_program=false;
+   int i=0;
+   
+   for (;index<stri.length;index++) {	  
+		if (stri[index].startsWith("Workflows:")) {
+			 in_workflow=true;
+		  } else
+		 if (stri[index].startsWith("Programs:")) {
+			in_workflow=false;
+			in_program=true;
+		} 
+		else
+		if (in_workflow) {
+			workflows tmp=new workflows();
+			tmp.workflow_name=stri[index];	
+						
+			for (int j=0; j<k;j++) {
+			    int len=textWidth("  "+matrix[j][i]+"  ");
+				if (len>tmp.wlen) tmp.wlen=len;
+				tmp.data.add( matrix[j][i]);
+			}		
+			tmp.clustering_group=n-i;
+			wp.add(tmp);
+			i++; 
+		} else 
+		if (in_program) {
+			String[] s =split(stri[index], '\t')
+			properties_name.add(s[1]);
+		} 
+	}
+}   
+
+public void load(String filename) {
+ loadMatrix(filename);
+
+  for (int i=0; i<n; i++) {
+    for (int j=0; j<k;j++) {
+      if (matrix[j][i]>maximum_matrix) { 
+        maximum_matrix=matrix[j][i];
+      }
+    }
+  }
+
+  //--Color
+  int i=0;
+  for (String s:blue9) {
+    s="FF" + s.substring(1);  
+    colors[i++]=unhex(s);
+  }
+  //--Cluster
+  loadCluster(wp,filename+".groups.txt", filename+".statistics.txt");
+  Shellsort(wp);
+
+}
+   
+ 
+

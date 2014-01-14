@@ -1,0 +1,1243 @@
+
+
+public class workflow_object {
+  // A la base, la fearure n'est qu'un poligon former de vertex
+  // TO DO: Put the pvertex in a Vector Collection
+  pvertex[] Vertex;
+  int Vertex_count=0;
+  public int x=0;                      // this is the object center X
+  public int y=0;                      // this is the object center Y
+  public Boolean moving=false;       // Are we moving
+  public Boolean selected=false;     // Selected?
+  public long time_over=0;            //over_time represent the start time in millisecond we are over an object
+  workflow_connector[] connection;    //Connector to this object
+  int test=0;
+  
+  //////////////////////////////////////////////////////////////////////////////
+  /// Database info
+  public workflow_properties properties=new workflow_properties();
+  public int objects_id=0;
+  	
+  
+  ///////////////////////////////////////////////////////////////////////////
+  /// Constant
+  public final static int LEFT=0; //BECAUSE OF IF OBJECT... EASIER
+  public final static int UP=1;
+  public final static int DOWN=2;
+  public final static int RIGHT=3;
+  public final static int UPLEFT=3;  //Strange numbering but easier for resize
+  public final static int UPRIGHT=0;
+  public final static int DOWNLEFT=2;
+  public final static int DOWNRIGHT=1;
+  public final static int OUTPUT=0;
+  public final static int INPUT1=2;
+  public final static int INPUT2=3;
+  public final static int TOP=1;
+
+  
+  /**
+  * Constructor
+  */
+  public workflow_object() {
+
+  }
+
+  /**
+   * Alternative constructor to put description
+   */
+  public workflow_object(workflow_properties obj) {
+    properties=obj;
+    resetColorMode();
+    Vertex=new pvertex[4];
+    connection=new workflow_connector[properties.getInt("nbInput")+2];
+    //-- debug println("workflow_object"+obj.getName()+" connection:"+ connection.length);
+	float x1=properties.getInt("x");
+    float y1=properties.getInt("y");
+    float w=149;
+    float h=86;
+    // -- Make the vertex needed for object selection
+    addVertex(x1, y1);
+    addVertex(x1+w,y1);
+    addVertex(x1+w, y1+h);
+    addVertex(x1, y1+h);  
+    // -Create the connector
+    
+    for (int i=0; i<connection.length;i++) {
+      connection[i]=new workflow_connector(this);
+    }
+    // - Calculate their position
+    recalculatePosition();
+
+  }
+
+
+
+  /**
+   * Default constructor for drag and drop
+   */
+  public workflow_object(workflow_properties obj, int x2, int y2) {
+    this.properties=obj;
+    resetColorMode();
+    Vertex=new pvertex[4];
+    connection=new workflow_connector[properties.getInt("nbInput")+2];    
+	//-- debug println("workflow_object"+obj.getName()+" connection:"+ connection.length);
+    float w=149;
+    float h=86;
+    properties.put("x",x2);
+    properties.put("y",y2);
+    // -- Make the vertex needed
+    addVertex(x2, y2);
+    addVertex(x2+w,y2);
+    addVertex(x2+w, y2+h);
+    addVertex(x2, y2+h);
+    // -Create the connector
+    for (int i=0; i<connection.length;i++) {
+      connection[i]=new workflow_connector(this);
+    }
+    // - Calculate their position
+    recalculatePosition();   
+  }
+
+    public void featureTranslate(float x2, float y2) {
+    
+    // - For debug
+    //println(name);
+     
+        
+      for (int i=0; i<Vertex_count;i++) {
+        Vertex[i].x+=x2;
+        Vertex[i].y+=y2;
+        //super.addPoint((int)Vertex[i].x,(int)Vertex[i].y);
+      }
+      //--Set new position in properties
+      properties.put("x",Vertex[0].x);
+      properties.put("y",Vertex[0].y);
+      //--debug Config.log(properties.getProperties());
+      recalculatePosition();
+  }
+
+
+  public void addVertex(float x, float y) {
+    pvertex v = new pvertex(x,y);
+    if (Vertex_count == Vertex.length) {
+      Vertex = (pvertex[]) expand(Vertex)  ;
+    }      
+      Vertex[Vertex_count++] = v;
+    }
+
+
+
+
+  /**
+   * Set the color mode
+   * Refer to workflow_object color (red, blue, green, orange, (black))
+   * @param colorMode
+   */
+  public void setColorMode(String colorMode) {
+      this.properties.put("colorMode",colorMode);
+  }
+
+  
+  /**
+   *
+   * @return this Object properties
+   */
+  public workflow_properties getProperties() {
+      return properties;
+  }
+
+  public String toString() {
+      Util u=new Util();	  
+	  return this.properties.getName()+u.returnCount();	  
+  }
+
+	
+  
+
+  /**
+   * Put back the object to is default color mode
+   */
+  public void resetColorMode() {
+     this.properties.put("colorMode",this.properties.get("defaultColor"));
+  }
+ 
+  public String getColorMode() {
+      return this.properties.get("colorMode");
+  }
+
+  public String getDefautlColorMode() {
+      return this.properties.get("defaultColor");
+  }
+
+  /**
+   * Generic method to create a connector object
+   */
+  public workflow_connector createConnector(int number,int x, int y, String type) {
+    workflow_connector tmp=new workflow_connector(this);
+    tmp.x=x;
+    tmp.y=y;
+    tmp.number=number;
+    String keyConnector="Connector"+number;
+    String keyOutput="Connector"+number+"Output";
+    String keyConditional="Connector"+number+"Conditional";
+    tmp.output=(properties.isSet(keyOutput));
+    tmp.conditional=properties.isSet(keyConditional);
+    tmp.outputType=type;
+    return tmp;
+  }
+
+  /**
+   * Generic method to update a connector object (position, properties...)
+   */
+  public void updateConnector(workflow_connector tmp, int number,int x, int y, String type) {
+    tmp.x=x;
+    tmp.y=y;
+    tmp.number=number;
+    String keyConnector="Connector"+number;
+    String keyOutput="Connector"+number+"Output";
+    String keyConditional="Connector"+number+"Conditional";
+    tmp.output=(properties.isSet(keyOutput));
+    tmp.conditional=properties.isSet(keyConditional);
+    tmp.outputType=type;
+ }
+
+   /**
+   * Generic method to update a connector object type (needed for If)...
+   */
+  public void updateConnectorType(int connector_id,String type) {
+    this.connection[connector_id].outputType=type;
+ }
+  
+  /**
+   * This is needed to recalculate the object position if it's moved
+   * Note: it also set its properties
+   */
+  public void recalculatePosition() {
+      properties.put("x", Vertex[0].x); //Thit is the left-top corner
+      properties.put("y", Vertex[0].y);
+      //--debug if (debug) Config.log("Moving "+properties.getName()+" to (x,y):"+properties.get("x")+" "+properties.get("y"));
+      //--This represent the middle of the object
+      this.x=parseInt(Vertex[0].x+(Vertex[1].x-Vertex[0].x)/2);
+      this.y=parseInt(Vertex[0].y+(Vertex[1].y-Vertex[0].y)/2);
+      //-- Initialise Connector
+    for (int i=0; i<connection.length; i++) {
+       switch(i) {
+         case OUTPUT   : 
+                        updateConnector(connection[i],i,this.x+73,this.y+56,null);
+                        //connection[i].x=this.x+73;connection[i].y=this.y+56;
+                        //Note: output not needed since we create connector
+                        //connection[i].setOutput(true);
+                         break;
+         case TOP:      updateConnector(connection[i],i,this.x,this.y-9,null);
+//                        connection[i].x=this.x;connection[i].y=this.y-9;
+//                        connection[i].conditional=true;
+//                        connection[i].output=true;
+                         break;
+         case INPUT1 :  updateConnector(connection[i],i,this.x-82,this.y+56,null);
+//                              connection[i].x=this.x-82;connection[i].y=this.y+56;
+//                              connection[i].addInput(getInput1());
+//                              connection[i].setOutput(false);
+                         break;
+         case INPUT2 : updateConnector(connection[i],i,this.x-82,this.y+37,null);
+//                              connection[i].x=this.x-82;connection[i].y=this.y+37;
+//                              connection[i].addInput(getInput2());
+//                              connection[i].setOutput(false);
+                         break;
+         
+       }
+    }
+      //Config.log(properties.getProperties());
+  }
+
+  /**
+   * Return the nearest connector to the mouse position for this object
+   * Note: Override this methode for particular object
+   * @return
+   */
+  public workflow_connector returnNearestConnector() {
+        workflow_connector dest_connector=this.connection[0];
+        float currentDist=dist(mouseX,mouseX, dest_connector.x, dest_connector.y);
+        //Search for the closest work_connector
+        for (int j=1; j<connection.length;j++) {
+            float newDist=dist(mouseX, mouseY, connection[j].x, connection[j].y);
+            if (newDist<currentDist) {
+            currentDist=newDist;
+            dest_connector=connection[j];
+          }
+        }
+      return dest_connector;
+  }
+ 
+  /**
+   * Return the nearest COMPATIBLE connector to the mouse position for this object
+   * Note: Override this methode for particular object
+   * @return
+   */
+  public workflow_connector returnNearestConnector(workflow_connector source) {
+        workflow_connector dest_connector=this.connection[0];
+        float currentDist=dist(source.x,source.y, dest_connector.x, dest_connector.y);
+        //Search for the closest work_connector
+        for (int j=1; j<connection.length;j++) {
+            float newDist=dist(source.x, source.y, connection[j].x, connection[j].y);
+            if (newDist<currentDist) {
+            currentDist=newDist;
+            dest_connector=connection[j];
+          }
+        }
+      return dest_connector;
+  }
+
+  /**
+   * Search for a connector at mouseX, mouseY
+   * if found return it
+   * @return return a connector or null if not found
+   */
+  public workflow_connector returnConnector() {
+     for (int i=0; i<connection.length;i++) {
+         if (connection[i].inside2()) return connection[i];
+     }
+     return null;
+  }
+
+   /**
+   * Return the corresponding connector   
+   * @return return a connector or null if not found
+   */
+  public workflow_connector returnConnector(int connector_number) {
+     if (connector_number<connection.length) {
+      return connection[connector_number];     
+     } else {
+        return null;
+     }
+  }
+
+
+////////////////////////////////////////////////////////////////////////////////
+/// Draw feature
+///--@Deprecated (see drawFeature_buffer(PGraphics buffers))
+  public void drawFeature(){    
+	
+	if (properties.get("outputType").equals("Workflows")) {
+       drawWorkflow();
+    } else {
+    //--Detect if we are inside the object
+    Boolean inside=inside2();    	
+	//--Draw this object
+    strokeWeight(0.1f);
+    PImage displayImage=null;
+    if (properties.getBoolean("NoDraw")) return;
+    int nbInput=properties.getInt("nbInput");
+    if (inside||selected) {
+        if (nbInput==0) displayImage=(PImage)filedata.get("workflow_black.png");
+        if (nbInput==1) displayImage=(PImage)filedata.get("workflow_black_single.png");
+        if (nbInput==2)  displayImage=(PImage)filedata.get("workflow_black_double.png");
+    } else {
+        if(properties.get("colorMode").equals("RED")) {
+                        if (nbInput==0) displayImage=(PImage)filedata.get("workflow_red.png");
+                        if (nbInput==1) displayImage=(PImage)filedata.get("workflow_red_single.png");
+                        if (nbInput==2) displayImage=(PImage)filedata.get("workflow_red_double.png");
+        }
+        if(properties.get("colorMode").equals("CYAN")) {
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_cyan.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_cyan_single.png");
+                      if (nbInput==2) displayImage=(PImage)filedata.get("workflow_cyan_double.png");
+        }
+        if(properties.get("colorMode").equals("BLUE")){
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_blue.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_blue_single.png");
+                      if (nbInput==2) displayImage=(PImage)filedata.get("workflow_blue_double.png");
+        }
+        if(properties.get("colorMode").equals("ORANGE")) {
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_orange.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_orange_single.png");
+                      if (nbInput==2)displayImage=(PImage)filedata.get("workflow_orange_double.png");
+        }
+        if(properties.get("colorMode").equals("PURPLE")) {
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_purple.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_purple_single.png");
+                      if (nbInput==2)displayImage=(PImage)filedata.get("workflow_purple_double.png");
+        }
+        if(properties.get("colorMode").equals("GREEN")) {
+                      if (nbInput==0)displayImage=(PImage)filedata.get("workflow_green.png");
+                      if (nbInput==1)displayImage=(PImage)filedata.get("workflow_green_single.png");
+                      if (nbInput==2)displayImage=(PImage)filedata.get("workflow_green_double.png");
+        }
+        if (displayImage==null) {
+                        if (nbInput==0) displayImage=(PImage)filedata.get("workflow_red.png");
+                        if (nbInput==1) displayImage=(PImage)filedata.get("workflow_red_single.png");
+                        if (nbInput==2) displayImage=(PImage)filedata.get("workflow_red_double.png");
+        }
+    } //--End else
+   if (properties.isSet("highlight")) {
+		if (test!=second()) {
+			if (test%2==0) {
+					 if (nbInput==0) displayImage=(PImage)filedata.get("workflow_cyan.png");
+					 if (nbInput==1) displayImage=(PImage)filedata.get("workflow_cyan_single.png");
+					if (nbInput==2) displayImage=(PImage)filedata.get("workflow_cyan_double.png");
+			}
+			test=second();
+			int highlight=properties.getInt("highlight")-1;
+			if (highlight>0) {
+				properties.put("highlight",highlight);
+			} else {
+				properties.remove("highlight");
+			}
+		}
+    } 
+	if (properties.isSet("ForObjectID")) {
+                 int count=0;                 
+				 for (Object key:properties.keySetproperties()) {                    			
+					 String[] m = match(key, "For_(.*)");
+					 if (m!=null) count++;
+                  }
+					
+				 //--Add paralel information here		
+					noFill();
+					strokeWeight(2.0f);
+					stroke(128);
+					strokeCap(ROUND);
+					rect(this.x-100, this.y-25, 200, 125);		
+					strokeWeight(0.1f);
+					fill(0);
+					textAlign(CENTER);
+					textFont(boldfont);
+					text("Parallel section ("+count+" repetition)",this.x,this.y-10);
+					textFont(font);
+					fill(0);					
+	  }
+   
+    if (displayImage!=null) image(displayImage,this.x-(displayImage.width/2), this.y);
+    // - draw connector
+    for (int i=0; i<connection.length;i++) {
+        connection[i].drawFeature();
+    }
+    // - draw text
+    fill(0);
+    textFont(bigfont);
+    textAlign(CENTER);
+    String name=properties.getName();    
+    text(name, this.x, this.y+11);
+    fill(128);
+//    --Note description now in tooltip
+//    text(properties.getDescription(), this.x,this.y+20);
+    textFont(smallfont);
+    textAlign(LEFT);
+    text("Input", x-75, y+21);
+    textAlign(RIGHT);
+    text("Output", x+58, y+21);
+    fill(0);	
+    //--Output OUTPUT
+    int nb_output=connection[OUTPUT].getOutput().size();
+    if (properties.isSet("Connector0")) {
+       	textAlign(RIGHT);
+		String name=properties.get("Connector0");
+		  if (name.equals("MultipleSequences")) name="Sequences";
+		  text(name, x+65, y+65);
+    } else
+    if (connection[OUTPUT].isOutputAll()) {
+        text("All", x+65, y+65);
+    } else if (nb_output>4) {
+        text("Many", x+55, y+65);
+    }
+    else {
+        int start_y=(nb_output==4?60:65)-(10*nb_output)/2;
+        for (int j=0; j<nb_output;j++) {
+			textAlign(RIGHT);
+			String name=connection[OUTPUT].getOutput().get(j);
+			if (name.equals("MultipleSequences")) name="Sequences";
+            text(name,x-(name.length*2)+60, y+start_y+(j*10));
+        }
+    }
+    //--CASE 1: One input Input 1
+    textAlign(LEFT);
+    if (nbInput==1)
+    {
+        int nb_input=connection[INPUT1].getInput().size();
+        int start_y=65-(10*nb_input)/2;
+        
+        if (properties.isSet("Connector2")) {
+			String name=properties.get("Connector2");
+            if (name.equals("MultipleSequences")) name="Sequences";
+			text(name, x-65, y+65);
+        } else
+        if (connection[INPUT1].isInputAll()) {
+           text("All", x-65, y+65);
+        } else if (nb_input>5) {
+           text("Many", x-65, y+65);
+        }
+        else {
+             for (int j=0; j<nb_input;j++) {
+                String name=connection[INPUT1].getInput().get(j);
+                if (name.equals("MultipleSequences")) { name="Sequences";}
+                text(name,x-65, y+start_y+(j*10));
+                textFont(smallfont);				
+             }
+        }
+        //text(connection[INPUT1].getInput().get(0),x-60, y+65);
+    } //--End connection==1
+    //--CASE 2: More than 1 input
+    if (nbInput>1) {
+        int nb_input1=connection[INPUT1].getInput().size();
+        int nb_input2=connection[INPUT2].getInput().size();
+        int start_y1=65-(10*nb_input1)/2;
+        int start_y2=45-(10*nb_input2)/2;
+        if (properties.isSet("Connector2")) {
+			String name=properties.get("Connector2");
+			if (name.equals("MultipleSequences")) { name="Sequences";}
+            text(name, x-65, y+65);
+        } else
+        if (connection[INPUT1].isInputAll()) {
+            text("All",x-65, y+65);
+        } else if (nb_input1>2) {
+            text("Many",x-65, y+65);
+        }
+        else for (int j=0; j<nb_input1;j++) {
+				String name=connection[INPUT1].getInput().get(j);
+                if (name.equals("MultipleSequences")) { name="Sequences";}
+                 text(name,x-65, y+start_y1+(j*10));
+				console.log(name);
+        }
+		
+        if (properties.isSet("Connector3")) {
+			String name=properties.get("Connector3");
+			if (name.equals("MultipleSequences")) { name="Sequences";}
+            text(name, x-65, y+45);
+        } else
+        if (connection[INPUT2].isInputAll()) {
+            text("All",x-65, y+45);
+        } else if (nb_input2>2) {
+            text("Many",x-65, y+45);
+        }
+        else
+            for (int j=0; j<nb_input2;j++) {
+                String name=connection[INPUT2].getInput().get(j);
+				if (name.equals("MultipleSequences")) { name="Sequences";}
+				text(name,x-65, y+start_y2+(j*10));
+            }
+    } //--End connection >1
+
+    
+    //--Draw a progress box
+    if (properties.isSet("StatusProgress")) drawProgress(properties.getInt("StatusProgress"));
+    //--Show status
+        int statuscode=properties.getInt("Status");
+        
+		String status="";        
+        fill(128);
+        switch(statuscode) {
+            case RunProgram.status_nothing:
+                                    fill(128);
+                                    status="";
+                                    //--Alternative...
+                                    if (properties.getBoolean("UseAlternative")) {
+                                      displayImage=(PImage)filedata.get("backet_work2.png");
+                                        if (displayImage!=null) image(displayImage,this.x+40, this.y-40);  
+                                    }
+//                                    displayImage=(PImage)filedata.get("Button.Green-Stop-16x16.png");
+//                                    if (displayImage!=null) image(displayImage,this.x+45, this.y-8);
+                                    break;   
+
+            case RunProgram.status_done:                                                                       
+                                    String timeRunning="Done in : "+Util.msToString(properties.getLong("TimeRunning"));                                                                        
+                                    // if (config.getBoolean("Display_elapsed_time")) {
+                                    // //--Display Running box
+                                        // textFont(font);
+                                        // float w = textWidth(timeRunning) + 10;
+                                        // float h = textAscent() + textDescent() + 4;
+                                        // fill (255);
+                                        // stroke(1);
+                                        // strokeWeight(1.5f);
+                                        // rectMode(CORNER);
+                                        // rect (this.x-w/2,this.y-15 - h/2, w, h);
+                                        // fill(0);
+                                        // textAlign(CENTER, CENTER);
+                                        // text(timeRunning,this.x,this.y-15);
+                                        // strokeWeight(0.1f);
+                                    // }
+                                     fill(0xff0E15C1);
+                                    status="Done";
+                                    displayImage=(PImage)filedata.get("backet_ok.png");
+                                    if (displayImage!=null) image(displayImage,this.x+30, this.y-30);
+                                    break;
+            case RunProgram.status_runningclassnotfound:
+                                    fill(0xffFA0D0D);
+                                    status="No class found";
+                                    displayImage=(PImage)filedata.get("small_warning.png");
+                                    if (displayImage!=null) image(displayImage,this.x+24, this.y-20);
+                                    break;
+            case RunProgram.status_programnotfound:
+                                    fill(0xffFA0D0D);
+                                    status="Program not found";
+                                    displayImage=(PImage)filedata.get("small_warning.png");
+                                    if (displayImage!=null) image(displayImage,this.x+24, this.y-20);
+                                    break;
+            case RunProgram.status_error:
+                                    fill(0xffFA0D0D);
+                                    status="Error: ";
+                                    displayImage=(PImage)filedata.get("small_warning.png");
+                                    if (displayImage!=null) image(displayImage,this.x+24, this.y-20);
+                                    break;
+              case RunProgram.status_BadRequirements:
+                                    fill(0xffFA0D0D);
+                                    status=properties.getStatusString();
+                                    displayImage=(PImage)filedata.get("small_warning.png");
+                                    if (displayImage!=null) image(displayImage,this.x+24, this.y-20);
+                                    break;
+             case RunProgram.status_idle:
+                                    fill(128);
+                                    status="Waiting to run...";
+                                    displayImage=(PImage)filedata.get("pause.png");
+                                    if (displayImage!=null) image(displayImage,this.x+45, this.y-4);
+                                    break;    
+             case RunProgram.status_running: 
+                                    // if (config.getBoolean("Display_elapsed_time")) {
+                                    // long time=millis()-properties.getLong("TimeRunning");
+                                    // timeRunning="Elapsed: "+Util.msToString(time);
+
+                                    // //--Display Running box                                       
+                                        // textFont(font);
+                                        // float w = textWidth(timeRunning) + 10;
+                                        // float h = textAscent() + textDescent() + 4;
+                                        // fill (255);
+                                        // stroke(1);
+                                        // strokeWeight(1.5f);
+                                        // rectMode(CORNER);
+                                        // rect (this.x-w/2,this.y-15 - h/2, w, h);
+                                        // fill(0);
+                                        // textAlign(CENTER, CENTER);                                       
+                                        // text(timeRunning,this.x,this.y-15);                                      
+                                        // strokeWeight(0.1f);
+                                    // }
+                                        fill(0xff0E15C1);
+                                        status="Running";
+                                        displayImage=(PImage)filedata.get("play.png");
+                                        if (displayImage!=null) image(displayImage,this.x+45, this.y-4);
+                                    break;
+        }
+        textAlign(CENTER);
+        textFont(smallfont);
+        if (status.length()>0) text(status,this.x, this.y+79);
+    
+        //--Detect object over
+    if (inside) {
+        if (time_over==0) {
+            time_over=millis();
+        }
+    } else {
+        time_over=0;
+    }
+
+    String description=properties.getTooltip();	
+    Boolean alternative=properties.getBoolean("UseAlternative");
+    //--Set the display time of tooltip  to 300 ms
+    if (!movingFlag&&inside&&description.length()>0&&(millis()-time_over)>300) {
+       fill(0);
+       textFont(font);       
+       
+       float w = textWidth(description) + 10;
+        float h = textAscent() + textDescent() + 4;
+        fill (0xff79D1F0);
+        //stroke(0xff79D1F0);
+        stroke(255);
+        rectMode(CORNER);
+        rect (mouseX-w/2, mouseY - h/2, w, h);
+        fill(0);
+        textAlign(CENTER, CENTER);        
+        text(description,mouseX,mouseY);
+    }		
+    } //--End draw object
+	
+  }
+
+  public void drawFeature_buffer(PGraphics buffers){    
+	
+	if (properties.get("outputType").equals("Workflows")) {
+       drawWorkflow();
+    } else {
+    //--Detect if we are inside the object
+    Boolean inside=inside2();    	
+	//--Draw this object
+    buffers.strokeWeight(0.1f);
+    PImage displayImage=null;
+    if (properties.getBoolean("NoDraw")) return;
+    int nbInput=properties.getInt("nbInput");
+    if (inside||selected) {
+        if (nbInput==0) displayImage=(PImage)filedata.get("workflow_black.png");
+        if (nbInput==1) displayImage=(PImage)filedata.get("workflow_black_single.png");
+        if (nbInput==2)  displayImage=(PImage)filedata.get("workflow_black_double.png");
+    } else {
+        if(properties.get("colorMode").equals("RED")) {
+                        if (nbInput==0) displayImage=(PImage)filedata.get("workflow_red.png");
+                        if (nbInput==1) displayImage=(PImage)filedata.get("workflow_red_single.png");
+                        if (nbInput==2) displayImage=(PImage)filedata.get("workflow_red_double.png");
+        }
+        if(properties.get("colorMode").equals("CYAN")) {
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_cyan.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_cyan_single.png");
+                      if (nbInput==2) displayImage=(PImage)filedata.get("workflow_cyan_double.png");
+        }
+        if(properties.get("colorMode").equals("BLUE")){
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_blue.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_blue_single.png");
+                      if (nbInput==2) displayImage=(PImage)filedata.get("workflow_blue_double.png");
+        }
+        if(properties.get("colorMode").equals("ORANGE")) {
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_orange.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_orange_single.png");
+                      if (nbInput==2)displayImage=(PImage)filedata.get("workflow_orange_double.png");
+        }
+        if(properties.get("colorMode").equals("PURPLE")) {
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_purple.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_purple_single.png");
+                      if (nbInput==2)displayImage=(PImage)filedata.get("workflow_purple_double.png");
+        }
+        if(properties.get("colorMode").equals("GREEN")) {
+                      if (nbInput==0)displayImage=(PImage)filedata.get("workflow_green.png");
+                      if (nbInput==1)displayImage=(PImage)filedata.get("workflow_green_single.png");
+                      if (nbInput==2)displayImage=(PImage)filedata.get("workflow_green_double.png");
+        }
+        if (displayImage==null) {
+                        if (nbInput==0) displayImage=(PImage)filedata.get("workflow_red.png");
+                        if (nbInput==1) displayImage=(PImage)filedata.get("workflow_red_single.png");
+                        if (nbInput==2) displayImage=(PImage)filedata.get("workflow_red_double.png");
+        }
+    } //--End else
+   if (properties.isSet("highlight")) {
+		if (test!=second()) {
+			if (test%2==0) {
+					 if (nbInput==0) displayImage=(PImage)filedata.get("workflow_cyan.png");
+					 if (nbInput==1) displayImage=(PImage)filedata.get("workflow_cyan_single.png");
+					if (nbInput==2) displayImage=(PImage)filedata.get("workflow_cyan_double.png");
+			}
+			test=second();
+			int highlight=properties.getInt("highlight")-1;
+			if (highlight>0) {
+				properties.put("highlight",highlight);
+			} else {
+				properties.remove("highlight");
+			}
+		}
+    } 
+	if (properties.isSet("ForObjectID")) {
+                 int count=0;                 
+				 for (Object key:properties.keySetproperties()) {                    			
+					 String[] m = match(key, "For_(.*)");
+					 if (m!=null) count++;
+                  }
+					
+				 //--Add paralel information here		
+					buffers.noFill();
+					buffers.strokeWeight(2.0f);
+					buffers.stroke(128);
+					buffers.strokeCap(ROUND);
+					buffers.rect(this.x-100, this.y-25, 200, 125);		
+					buffers.strokeWeight(0.1f);
+					buffers.fill(0);
+					buffers.textAlign(CENTER);
+					buffers.textFont(boldfont);
+					buffers.text("Parallel section ("+count+" repetition)",this.x,this.y-10);
+					buffers.textFont(font);
+					buffers.fill(0);					
+	  }
+   
+    if (displayImage!=null) buffers.image(displayImage,this.x-(displayImage.width/2), this.y);
+    // - draw connector
+    for (int i=0; i<connection.length;i++) {
+        connection[i].drawFeature_buffer(buffers);
+    }
+    // - draw text
+    buffers.fill(0);
+    buffers.textFont(font);
+    buffers.textAlign(CENTER);
+    String name=properties.getName();    
+    buffers.text(name, this.x, this.y+11);
+    buffers.fill(128);
+//    --Note description now in tooltip
+//    text(properties.getDescription(), this.x,this.y+20);
+    buffers.textFont(smallfont);
+    buffers.textAlign(LEFT);
+    buffers.text("Input", x-75, y+21);
+    buffers.textAlign(RIGHT);
+    buffers.text("Output", x+58, y+21);
+    buffers.fill(0);	
+    //--Output OUTPUT
+    int nb_output=connection[OUTPUT].getOutput().size();
+    if (properties.isSet("Connector0")) {
+       	String name=properties.get("Connector0");
+		  if (name.equals("MultipleSequences")) name="Sequences";
+		buffers.textAlign(RIGHT);
+	   buffers.text(name, x+65, y+65);
+    } else
+    if (connection[OUTPUT].isOutputAll()) {
+        buffers.text("All", x+65, y+65);
+    } else if (nb_output>4) {
+        buffers.text("Many", x+55, y+60);
+    }
+    else {
+        int start_y=(nb_output==4?60:65)-(10*nb_output)/2;
+        for (int j=0; j<nb_output;j++) {
+			buffers.textAlign(RIGHT);
+			String name=connection[OUTPUT].getOutput().get(j);			
+			if (name.equals("MultipleSequences")) name="Sequences";
+            buffers.text(name,x-(name.length*2)+60, y+start_y+(j*10));
+        }
+    }
+    //--CASE 1: One input Input 1
+    buffers.textAlign(LEFT);
+    if (nbInput==1)
+    {
+        int nb_input=connection[INPUT1].getInput().size();
+        int start_y=65-(10*nb_input)/2;
+        
+        if (properties.isSet("Connector2")) {
+			String name=properties.get("Connector2");
+		  if (name.equals("MultipleSequences")) name="Sequences";
+            buffers.text(name, x-65, y+65);
+        } else
+        if (connection[INPUT1].isInputAll()) {
+           buffers.text("All", x-65, y+65);
+        } else if (nb_input>5) {
+           buffers.text("Many", x-65, y+45);
+        }
+        else {
+             for (int j=0; j<nb_input;j++) {
+                String name=connection[INPUT1].getInput().get(j);               
+				if (name.equals("MultipleSequences")) name="Sequences";
+                buffers.text(name,x-65, y+start_y+(j*10));
+                buffers.textFont(smallfont);
+             }
+        }
+        //text(connection[INPUT1].getInput().get(0),x-60, y+65);
+    } //--End connection==1
+    //--CASE 2: More than 1 input
+    if (nbInput>1) {
+        int nb_input1=connection[INPUT1].getInput().size();
+        int nb_input2=connection[INPUT2].getInput().size();
+        int start_y1=65-(10*nb_input1)/2;
+        int start_y2=45-(10*nb_input2)/2;
+        if (properties.isSet("Connector2")) {
+			String name=properties.get("Connector2");
+		  if (name.equals("MultipleSequences")) name="Sequences";
+            buffers.text(name, x-65, y+65);
+        } else
+        if (connection[INPUT1].isInputAll()) {
+           buffers.text("All",x-65, y+65);
+        } else if (nb_input1>2) {
+            buffers.text("Many",x-65, y+45);
+        }
+        else for (int j=0; j<nb_input1;j++) {
+				String name=connection[INPUT1].getInput().get(j);
+			   if (name.equals("MultipleSequences")) name="Sequences";
+                    buffers.text(name,x-65, y+start_y1+(j*10));
+                }
+
+        if (properties.isSet("Connector3")) {
+				String name=properties.get("Connector3");
+			   if (name.equals("MultipleSequences")) name="Sequences";
+            buffers.text(properties.get("Connector3"), x-65, y+45);
+        } else
+        if (connection[INPUT2].isInputAll()) {
+            buffers.text("All",x-65, y+45);
+        } else if (nb_input2>2) {
+            buffers.text("Many",x-65, y+45);
+        }
+        else
+            for (int j=0; j<nb_input2;j++) {
+				String name=connection[INPUT2].getInput().get(j);
+			   if (name.equals("MultipleSequences")) name="Sequences";			
+                buffers.text(name,x-65, y+start_y2+(j*10));
+            }
+    } //--End connection >1
+
+    
+    //--Draw a progress box
+    if (properties.isSet("StatusProgress")) drawProgress(properties.getInt("StatusProgress"));
+    //--Show status
+        int statuscode=properties.getInt("Status");
+        
+		String status="";        
+        fill(128);
+        switch(statuscode) {
+            case RunProgram.status_nothing:
+                                    fill(128);
+                                    status="";
+                                    //--Alternative...
+                                    if (properties.getBoolean("UseAlternative")) {
+                                      displayImage=(PImage)filedata.get("backet_work2.png");
+                                        if (displayImage!=null) buffers.image(displayImage,this.x+40, this.y-40);  
+                                    }
+//                                    displayImage=(PImage)filedata.get("Button.Green-Stop-16x16.png");
+//                                    if (displayImage!=null) image(displayImage,this.x+45, this.y-8);
+                                    break;   
+
+            case RunProgram.status_done:                                                                       
+                                    String timeRunning="Done in : "+Util.msToString(properties.getLong("TimeRunning"));                                                                        
+                                    // if (config.getBoolean("Display_elapsed_time")) {
+                                    // //--Display Running box
+                                        // textFont(font);
+                                        // float w = textWidth(timeRunning) + 10;
+                                        // float h = textAscent() + textDescent() + 4;
+                                        // fill (255);
+                                        // stroke(1);
+                                        // strokeWeight(1.5f);
+                                        // rectMode(CORNER);
+                                        // rect (this.x-w/2,this.y-15 - h/2, w, h);
+                                        // fill(0);
+                                        // textAlign(CENTER, CENTER);
+                                        // text(timeRunning,this.x,this.y-15);
+                                        // strokeWeight(0.1f);
+                                    // }
+                                     fill(0xff0E15C1);
+                                    status="Done";
+                                    displayImage=(PImage)filedata.get("backet_ok.png");
+                                    if (displayImage!=null) buffers.image(displayImage,this.x+30, this.y-30);
+                                    break;
+            case RunProgram.status_runningclassnotfound:
+                                    fill(0xffFA0D0D);
+                                    status="No class found";
+                                    displayImage=(PImage)filedata.get("small_warning.png");
+                                    if (displayImage!=null) buffers.image(displayImage,this.x+24, this.y-20);
+                                    break;
+            case RunProgram.status_programnotfound:
+                                    fill(0xffFA0D0D);
+                                    status="Program not found";
+                                    displayImage=(PImage)filedata.get("small_warning.png");
+                                    if (displayImage!=null) buffers.image(displayImage,this.x+24, this.y-20);
+                                    break;
+            case RunProgram.status_error:
+                                    fill(0xffFA0D0D);
+                                    status="Error: ";
+                                    displayImage=(PImage)filedata.get("small_warning.png");
+                                    if (displayImage!=null) buffers.image(displayImage,this.x+24, this.y-20);
+                                    break;
+              case RunProgram.status_BadRequirements:
+                                    fill(0xffFA0D0D);
+                                    status=properties.getStatusString();
+                                    displayImage=(PImage)filedata.get("small_warning.png");
+                                    if (displayImage!=null) buffers.image(displayImage,this.x+24, this.y-20);
+                                    break;
+             case RunProgram.status_idle:
+                                    fill(128);
+                                    status="Waiting to run...";
+                                    displayImage=(PImage)filedata.get("pause.png");
+                                    if (displayImage!=null) buffers.image(displayImage,this.x+45, this.y-4);
+                                    break;    
+             case RunProgram.status_running: 
+                                    // if (config.getBoolean("Display_elapsed_time")) {
+                                    // long time=millis()-properties.getLong("TimeRunning");
+                                    // timeRunning="Elapsed: "+Util.msToString(time);
+
+                                    // //--Display Running box                                       
+                                        // textFont(font);
+                                        // float w = textWidth(timeRunning) + 10;
+                                        // float h = textAscent() + textDescent() + 4;
+                                        // fill (255);
+                                        // stroke(1);
+                                        // strokeWeight(1.5f);
+                                        // rectMode(CORNER);
+                                        // rect (this.x-w/2,this.y-15 - h/2, w, h);
+                                        // fill(0);
+                                        // textAlign(CENTER, CENTER);                                       
+                                        // text(timeRunning,this.x,this.y-15);                                      
+                                        // strokeWeight(0.1f);
+                                    // }
+                                        fill(0xff0E15C1);
+                                        status="Running";
+                                        displayImage=(PImage)filedata.get("play.png");
+                                        if (displayImage!=null) buffers.image(displayImage,this.x+45, this.y-4);
+                                    break;
+        }
+        buffers.textAlign(CENTER);
+        buffers.textFont(smallfont);
+        if (status.length()>0) buffers.text(status,this.x, this.y+79);
+    
+        //--Detect object over
+    if (inside) {
+        if (time_over==0) {
+            time_over=millis();
+        }
+    } else {
+        time_over=0;
+    }
+	//--Etienne Lord, 2013 
+    // String description=properties.getTooltip();	
+    // Boolean alternative=properties.getBoolean("UseAlternative");
+    // //--Set the display time of tooltip  to 300 ms
+    // if (!movingFlag&&inside&&description.length()>0&&(millis()-time_over)>3000) {
+       // buffers.fill(0);
+       // buffers.textFont(font);       
+       
+       // float w = textWidth(description) + 10;
+        // float h = textAscent() + textDescent() + 4;
+        // buffers.fill (0xff79D1F0);
+        // //stroke(0xff79D1F0);
+        // buffers.stroke(255);
+        // buffers.rectMode(CORNER);
+        // buffers.rect (mouseX-w/2, mouseY - h/2, w, h);
+        // buffers.fill(0);
+        // buffers.textAlign(CENTER, CENTER);        
+        // buffers.text(description,mouseX,mouseY);
+    // }		
+    } //--End draw object
+	
+  }
+  
+  /**
+   * Special draw if we have a workflow object
+   */
+  public void drawWorkflow() {
+    //--Detect if we are inside the object
+    Boolean inside=inside2();
+    //--Draw this object
+    strokeWeight(0.1f);
+    PImage displayImage=null;
+    if (properties.getBoolean("NoDraw")) return;
+    int nbInput=properties.getInt("nbInput");
+    if (inside||selected) {
+        if (nbInput==0) displayImage=(PImage)filedata.get("workflow_black.png");
+        if (nbInput==1) displayImage=(PImage)filedata.get("workflow_black_single.png");
+        if (nbInput==2)  displayImage=(PImage)filedata.get("workflow_black_double.png");
+    } else {
+        if(properties.get("colorMode").equals("RED")) {
+                        if (nbInput==0) displayImage=(PImage)filedata.get("workflow_red.png");
+                        if (nbInput==1) displayImage=(PImage)filedata.get("workflow_red_single.png");
+                        if (nbInput==2) displayImage=(PImage)filedata.get("workflow_red_double.png");
+        }
+        if(properties.get("colorMode").equals("CYAN")) {
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_cyan.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_cyan_single.png");
+                      if (nbInput==2) displayImage=(PImage)filedata.get("workflow_cyan_double.png");
+        }
+        if(properties.get("colorMode").equals("BLUE")){
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_blue.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_blue_single.png");
+                      if (nbInput==2) displayImage=(PImage)filedata.get("workflow_blue_double.png");
+        }
+        if(properties.get("colorMode").equals("ORANGE")) {
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_orange.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_orange_single.png");
+                      if (nbInput==2)displayImage=(PImage)filedata.get("workflow_orange_double.png");
+        }
+        if(properties.get("colorMode").equals("PURPLE")) {
+                      if (nbInput==0) displayImage=(PImage)filedata.get("workflow_purple.png");
+                      if (nbInput==1) displayImage=(PImage)filedata.get("workflow_purple_single.png");
+                      if (nbInput==2)displayImage=(PImage)filedata.get("workflow_purple_double.png");
+        }
+        if(properties.get("colorMode").equals("GREEN")) {
+                      if (nbInput==0)displayImage=(PImage)filedata.get("workflow_green.png");
+                      if (nbInput==1)displayImage=(PImage)filedata.get("workflow_green_single.png");
+                      if (nbInput==2)displayImage=(PImage)filedata.get("workflow_green_double.png");
+        }
+        if (displayImage==null) {
+                        if (nbInput==0) displayImage=(PImage)filedata.get("workflow_red.png");
+                        if (nbInput==1) displayImage=(PImage)filedata.get("workflow_red_single.png");
+                        if (nbInput==2) displayImage=(PImage)filedata.get("workflow_red_double.png");
+        }
+    } //--End else
+    if (displayImage!=null) image(displayImage,this.x-(displayImage.width/2), this.y);
+    // - draw connector
+    for (int i=0; i<connection.length;i++) {
+        connection[i].drawFeature();
+    }
+    // - draw text
+    fill(0);
+    textFont(font);
+    textAlign(CENTER);
+    text(properties.getName(), this.x, this.y+10);
+    textFont(smallfont);
+    text(properties.getDescription(), this.x,this.y+20);
+    fill(128);
+    textAlign(LEFT);
+    text("Input", x-65, y+39);
+    textAlign(RIGHT);
+    text("Output", x+65, y+39);
+    fill(0);
+    //--Output OUTPUT
+	 textAlign(LEFT);
+    int nb_output=connection[OUTPUT].getOutput().size();
+    if (connection[OUTPUT].isOutputAll()) {
+        text("All", x+65, y+65);
+    } else if (nb_output>4) {
+        text("Many", x+65, y+65);
+    }
+    else {
+        int start_y=(nb_output==4?60:65)-(10*nb_output)/2;
+        for (int j=0; j<nb_output;j++) {
+             textAlign(CENTER);
+			text(connection[OUTPUT].getOutput().get(j),(x+45), y+start_y+(j*10));
+        }
+    }
+    //--CASE 1: One input Input 1
+    textAlign(LEFT);
+    if (nbInput==1)
+    {
+        int nb_input=connection[INPUT1].getInput().size();
+        int start_y=65-(10*nb_input)/2;
+        if (connection[INPUT1].isInputAll()) {
+           text("All", x-65, y+65);
+        } else if (nb_input>5) {
+           text("Many", x-65, y+65);
+        }
+        else {
+             for (int j=0; j<nb_input;j++) {
+                text(connection[INPUT1].getInput().get(j),x-65, y+start_y+(j*10));
+             }
+        }
+        //text(connection[INPUT1].getInput().get(0),x-60, y+65);
+    } //--End connection==1
+    //--CASE 2: More than 1 input
+    if (nbInput>1) {
+        int nb_input1=connection[INPUT1].getInput().size();
+        int nb_input2=connection[INPUT2].getInput().size();
+        int start_y1=65-(10*nb_input1)/2;
+        int start_y2=45-(10*nb_input2)/2;
+        if (connection[INPUT1].isInputAll()) {
+            text("All",x-65, y+65);
+        } else if (nb_input1>2) {
+            text("Many",x-65, y+65);
+        }
+        else for (int j=0; j<nb_input1;j++) {
+                    text(connection[INPUT1].getInput().get(j),x-65, y+start_y1+(j*10));
+                }
+
+        if (connection[INPUT2].isInputAll()) {
+            text("All",x-65, y+45);
+        } else if (nb_input2>2) {
+            text("Many",x-65, y+45);
+        }
+        else
+            for (int j=0; j<nb_input2;j++) {
+                text(connection[INPUT2].getInput().get(j),x-65, y+start_y2+(j*10));
+            }
+    } //--End connection >1
+
+
+    //--Draw a progress box
+    if (properties.isSet("statusProgress")) drawProgress(properties.getInt("statusProgress"));
+    //--Show status
+        int statuscode=properties.getInt("Status");
+        String status="";
+        textAlign(CENTER);
+        textFont(smallfont);
+        fill(128);
+        switch(statuscode) {
+            case RunProgram.status_nothing:
+                                    fill(128);
+                                    status="";
+//                                    displayImage=(PImage)filedata.get("Button.Green-Stop-16x16.png");
+//                                    if (displayImage!=null) image(displayImage,this.x+45, this.y-8);
+                                    break;
+
+            case RunProgram.status_done:
+                                    fill(0xff0E15C1);
+                                    status="Done";
+                                    displayImage=(PImage)filedata.get("backet_ok.png");
+                                    if (displayImage!=null) image(displayImage,this.x+30, this.y-30);
+                                    break;
+             case RunProgram.status_error:
+                                    fill(0xffFA0D0D);
+                                    status="Error";
+                                    displayImage=(PImage)filedata.get("small_warning.png");
+                                    if (displayImage!=null) image(displayImage,this.x+24, this.y-20);
+                                    break;
+              case RunProgram.status_BadRequirements:
+                                    fill(0xffFA0D0D);
+                                    status="Some requirements not found.";
+                                    displayImage=(PImage)filedata.get("small_warning.png");
+                                    if (displayImage!=null) image(displayImage,this.x+24, this.y-20);
+                                    break;
+             case RunProgram.status_idle:
+                                    fill(128);
+                                    status="Waiting to run...";
+                                    displayImage=(PImage)filedata.get("pause.png");
+                                    if (displayImage!=null) image(displayImage,this.x+45, this.y-4);
+                                    break;
+             case RunProgram.status_running:
+                                    fill(0xff0E15C1);
+                                    status="Running";
+                                    displayImage=(PImage)filedata.get("play.png");
+                                    if (displayImage!=null) image(displayImage,this.x+45, this.y-4);
+                                    break;
+        }
+
+        if (status.length()>0) text(status,this.x, this.y+79);
+
+    //if (test>100) test=0;
+
+    //--For small_preview editor
+    // if (config.getBoolean("displayConnector")) {
+       // textFont(font);
+        // fill(0);
+        // for (int i=0; i<connection.length;i++) {
+         // switch(i) {
+            // case OUTPUT: text(str(i),connection[i].x+10, connection[i].y); break;
+            // case TOP:    text(str(i),connection[i].x-5, connection[i].y-2); break;
+            // case INPUT1: text(str(i),connection[i].x-5, connection[i].y); break;
+            // case INPUT2: text(str(i),connection[i].x-5, connection[i].y); break;
+        // }
+        // }
+    // }
+  }
+
+   public void drawSimpleFeature(){
+    //--Detect if we are inside the object
+    Boolean inside=inside2();
+    // - Inside of object
+    //-- This draw a shape for debug
+          fill(192);
+        if (inside) fill(0xff54B5E8);
+        if (this.moving||this.selected) fill(0xff4ED34D);
+
+        stroke(255);		
+        beginShape(QUADS);
+        for(int i=0;i<Vertex_count;i++){
+          vertex(Vertex[i].x,Vertex[i].y);
+        }
+        endShape();
+
+    // - draw text
+    fill(0);
+    textFont(font);
+    textAlign(CENTER);
+    text(properties.getName(), this.x, this.y+11);
+    if (properties.isSet("Order")&&!movingFlag) text(properties.get("Order"),this.x, this.y+23);
+    fill(128);
+
+    
+  }
+  
+  public void drawProgress(int progress) {
+      if (progress>100) progress=100;
+      if (progress<0) progress=0;
+      stroke(0);
+      noFill();
+      rect(this.x-60, this.y+75, 101,4);
+      fill(60);
+      text(str(progress)+" %",this.x+45, this.y+80);
+      fill(color(0,progress*255/100,128));
+      noStroke();
+      rect(this.x-59, this.y+76, progress,3);
+  }
+
+  public String getName() {
+     println("workflow_object: properties.getName() : "+properties.getName());
+	 return properties.getName();
+  }
+
+    //--Note: inside seem a reserved keyword
+	public Boolean inside2() {	 	
+		return inside2(mouseX,mouseY);	  	  
+	}
+
+	public Boolean inside2(int x, int y) {       	   
+		int ax1=min(Vertex[0].x, Vertex[1].x);
+	    int ax2=max(Vertex[0].x, Vertex[1].x);
+	    int ay1=min(Vertex[0].y, Vertex[2].y);
+	    int ay2=max(Vertex[0].y, Vertex[2].y); 
+	    return (x > ax1 && x < ax2 && y > ay1 && y < ay2);
+    }
+
+
+
+	 
+  }//End workflow_object

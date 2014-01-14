@@ -1,0 +1,16 @@
+var dataString = 'comment=' + comment;
+$.ajax({
+  type: "POST",
+  url: "pagepostbyajax.php",
+//this data is mendetory when u want post data when posting page by ajax.
+//after that ur data send to that page. now in backend page echo json data.if your //data is in array format the use json_encode() function then echo that json data
+//now you find tht json in your success that can you use by taking a loop.
+  data: dataString,
+  cache: false,
+ datatype: json,
+  success: function(html){
+  $("ul#update").append(datal);
+
+   alert(data);    
+  }
+ });

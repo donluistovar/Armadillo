@@ -1,0 +1,969 @@
+# Armadillo workflow
+# Created on 2012-10-10 15:30:09
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+defaultColor=BLUE
+HelpSupplementary=
+Status=100
+output_matrix_id=3
+StatusString=
+Name=DNADIST (Phylip)
+SampleWorkflow=DNAdist.properties.db
+ObjectID=DNADIST (Phylip)_1009032905
+Keyword0=Distance, DNA sequences
+Object=
+InputAlignment=Connector2
+ClassName=programs.dnadist
+colorMode=BLUE
+Description=Calculate a distance matrix from DNA sequences.\nCopyright 2000-2008 by The University of Washington. \nWritten by Joseph Felsenstein.
+TimeRunning=671
+Publication=Felsenstein, J. 1989. PHYLIP - Phylogeny Inference Package (Version 3.2). Cladistics 5\: 164-166.
+properties_id=23
+Executable=executable\\phylip-3.69\\exe\\dnadist.exe
+OutputPhylip_Distance=Connector0
+Order=7
+Commandline_Running=cmd.exe /C executable\\phylip-3.69\\exe\\dnadist.exe <dnadist.params                                               
+ExitValue=0
+debug=false
+output_outputtext_id=3
+help=http\://evolution.genetics.washington.edu/phylip/doc/dnadist.html
+Tooltip=Calculate a distance matrix from DNA sequences.
+filename=C\:\\armadillo2\\armadillo\\data\\properties\\DNAdist.properties
+Similar5=ProtDist.properties
+Similar4=PROml.properties
+output_Phylip_Distance_id=7
+Similar3=DNAPars.properties
+nbInput=1
+Website=http\://evolution.genetics.washington.edu/phylip.html
+Similar2=DNAmlE.properties
+Similar1=DNAml.properties
+NoThread=true
+Connector0Output=True
+EditorClassName=editors.DnaDistEditor
+Similar0=DNAdist.properties
+y=134.0
+OutputMultipleTree=Connector0
+ExecutableMacOSX=Executable/MacOSX/phylip-3.69/exe/dnadist
+x=513.0
+input_phylip_seqboot_id20=6
+Version=3.69
+RuntimeMacOSX=bash (.sh)
+Type=Tree - Phylip
+InputPhylip_Seqboot=Connector2
+VerifyExitValue=true
+ObjectType=Program
+OutputOutputText=Connector0
+OutputMatrix=Connector0
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+output_phylip_seqboot_id=6
+Name=Phylip_Seqboot
+outputType=Phylip_Seqboot
+OutputPhylip_Seqboot=True
+colorMode=GREEN
+y=188.0
+editorClass=editors.OutputEditor
+x=427.0
+properties_id=24
+Status=404
+ObjectID=Phylip_Seqboot_1009032906
+defaultColor=GREEN
+Object=
+Connector1Output=True
+Description=SEQBOOT (Phylip) (2012-04-20 11\:03\:39)
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=6
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+output_phylip_distance_id=7
+OutputPhylip_Distance=True
+Name=Phylip_Distance
+outputType=Phylip_Distance
+colorMode=GREEN
+y=188.0
+editorClass=editors.OutputEditor
+x=681.0
+properties_id=25
+Status=404
+ObjectID=Phylip_Distance_1009032907
+defaultColor=GREEN
+Object=
+Connector1Output=True
+Description=UnknownPhylip
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=8
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+OutputOutputText=True
+Name=OutputText
+outputType=OutputText
+colorMode=GREEN
+y=127.0
+editorClass=editors.OutputEditor
+x=973.0
+ParentID=NEIGHBOR (Phylip)_1610115678
+properties_id=26
+Status=404
+ObjectID=OutputText_1009032908
+defaultColor=GREEN
+output_outputtext_id=5
+Object=
+Connector1Output=True
+Description=NEIGHBOR (Phylip) -software output (2012-04-20 11\:03\:41)
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=11
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+OutputTree=True
+Name=Tree
+outputType=Tree
+colorMode=GREEN
+y=220.0
+editorClass=editors.OutputEditor
+x=947.0
+properties_id=27
+Status=404
+ObjectID=Tree_1009032909
+defaultColor=GREEN
+Object=
+Connector1Output=True
+Description=Neighbor UPGMA (2012-04-20 11\:03\:41)_0
+output_tree_id=7
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=13
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+Name=Results
+outputType=Results
+colorMode=GREEN
+y=193.0
+editorClass=editors.OutputEditor
+x=948.0
+ParentID=NEIGHBOR (Phylip)_1610115678
+properties_id=28
+output_results_id=4
+OutputResults=True
+Status=404
+ObjectID=Results_1009032910
+defaultColor=GREEN
+Object=
+Connector1Output=True
+Description=Neighbor-Joining of Trees at 2012-04-20 11\:03\:41
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=10
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+Name=MultipleTrees
+outputType=MultipleTrees
+output_multipletrees_id=6
+colorMode=GREEN
+OutputMultipleTrees=True
+y=154.0
+editorClass=editors.OutputEditor
+x=970.0
+ParentID=NEIGHBOR (Phylip)_1610115678
+properties_id=29
+Status=404
+ObjectID=MultipleTrees_1009032911
+defaultColor=GREEN
+Object=
+Connector1Output=True
+Description=Neighbor UPGMA (2012-04-20 11\:03\:41)
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=12
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+CommandLine=
+defaultColor=GREEN
+HelpSupplementary=
+Status=100
+StatusString=
+Name=TreeDist (Phylip)
+SampleWorkflow=Treedist.properties.db
+ObjectID=TreeDist (Phylip)_1009032912
+Keyword0=Tree, Distance, Phylip
+Object=
+ClassName=programs.treedist
+colorMode=GREEN
+Description=This program computes distances between trees. Two distances are computed, the Branch Score Distance of Kuhner and Felsenstein (1994), and the more widely known Symmetric Difference of Robinson and Foulds (1981).  \nCopyright 2000-2008 by The University of Washington. \nWritten by Joseph Felsenstein.
+TimeRunning=468
+Publication=Felsenstein, J. 1989. PHYLIP - Phylogeny Inference Package (Version 3.2). Cladistics 5\: 164-166.
+properties_id=30
+Executable=executable\\phylip-3.69\\exe\\treedist.exe
+Order=14
+Commandline_Running=cmd.exe /C executable\\phylip-3.69\\exe\\treedist.exe <treedist.params                                               
+output_results_id=6
+ExitValue=0
+debug=true
+output_outputtext_id=7
+OutputResults=Connector0
+help=http\://evolution.genetics.washington.edu/phylip/doc/treedist.html
+InputMultipleTrees=Connector2
+Tooltip=Compute the distances between trees using the Branch Score Distance and the Robinson and Fould distance.
+Connector1Conditional=True
+filename=C\:\\armadillo2\\armadillo\\data\\properties\\Treedist.properties
+nbInput=1
+Website=http\://evolution.genetics.washington.edu/phylip/
+EditorClassName=editors.TreeDistEditor
+Connector0Output=True
+NoThread=true
+Similar0=RobinsonFould.properties
+y=300.0
+ExecutableMacOSX=Executable/MacOSX/phylip-3.69/exe/treedist
+x=1080.0
+input_tree_id21=6
+Version_MacOSX=3.69
+input_tree_id20=7
+Version=3.69
+RuntimeMacOSX=bash (.sh)
+Type=Tree - Distance
+VerifyExitValue=true
+InputTree=Connector2
+ObjectType=Program
+OutputOutputText=Connector0
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+OutputOutputText=True
+Name=OutputText
+outputType=OutputText
+colorMode=GREEN
+y=320.0
+editorClass=editors.OutputEditor
+x=1277.0
+ParentID=TreeDist (Phylip)_1710001829
+properties_id=31
+Status=404
+ObjectID=OutputText_1009032913
+defaultColor=GREEN
+output_outputtext_id=7
+Object=
+Connector1Output=True
+Description=TreeDist (Phylip) -software output (2012-04-20 11\:03\:42)
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=16
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+Name=Results
+outputType=Results
+colorMode=GREEN
+y=340.0
+editorClass=editors.OutputEditor
+x=1277.0
+ParentID=TreeDist (Phylip)_1710001829
+properties_id=32
+output_results_id=6
+OutputResults=True
+Status=404
+ObjectID=Results_1009032914
+defaultColor=GREEN
+Object=
+Connector1Output=True
+Description=Unknown
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=15
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+Name=MultipleTrees
+outputType=MultipleTrees
+output_multipletrees_id=7
+colorMode=GREEN
+OutputMultipleTrees=True
+y=197.0
+editorClass=editors.OutputEditor
+x=1277.0
+ParentID=Robinson&Fould_1710001934
+properties_id=33
+Status=404
+ObjectID=MultipleTrees_1009032915
+defaultColor=GREEN
+Object=
+Connector1Output=True
+Description=Robinson&Fould (2012-04-20 11\:03\:43)
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=21
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+output_matrix_id=4
+Name=Matrix
+outputType=Matrix
+colorMode=GREEN
+y=227.0
+editorClass=editors.OutputEditor
+x=1277.0
+ParentID=Robinson&Fould_1710001934
+properties_id=34
+OutputMatrix=True
+Status=404
+ObjectID=Matrix_1009032916
+defaultColor=GREEN
+Object=
+Connector1Output=True
+Description=Robinson&Fould (2012-04-20 11\:03\:43)
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=20
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+OutputOutputText=True
+Name=OutputText
+outputType=OutputText
+colorMode=GREEN
+y=247.0
+editorClass=editors.OutputEditor
+x=1277.0
+ParentID=Robinson&Fould_1710001934
+properties_id=35
+Status=404
+ObjectID=OutputText_1009032917
+defaultColor=GREEN
+output_outputtext_id=9
+Object=
+Connector1Output=True
+Description=Robinson&Fould -software output (2012-04-20 11\:03\:44)
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=19
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+Name=Results
+outputType=Results
+colorMode=GREEN
+y=267.0
+editorClass=editors.OutputEditor
+x=1277.0
+ParentID=Robinson&Fould_1710001934
+properties_id=36
+output_results_id=8
+OutputResults=True
+Status=404
+ObjectID=Results_1009032918
+defaultColor=GREEN
+Object=
+Connector1Output=True
+Description=Robinson&Fould (2012-04-20 11\:03\:43)
+ObjectType=Output
+StatusString=No Class is set to run...
+Order=18
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+CommandLine=
+defaultColor=GREEN
+HelpSupplementary=
+Status=100
+output_multipletrees_id=7
+output_matrix_id=4
+StatusString=
+OutputMultipleTrees=Connector0
+Name=Robinson&Fould
+SampleWorkflow=RobinsonFould.properties.db
+ObjectID=Robinson&Fould_1009032919
+Keyword0=Distance, Tree
+Object=
+ClassName=programs.rf
+colorMode=GREEN
+Description=Calculate the Robinson & Fould distance between 2 or more phylogenetic tree.\n(Created by Vladimir Makarenkov)
+TimeRunning=859
+Publication=Robinson, D.R. et L.R. Foulds. (1981). Comparison of phylogenetic trees. Math Biosci., volume 53, pages 131-147.
+properties_id=37
+Executable=executable\\rf.exe
+Order=17
+Commandline_Running=cmd.exe /C executable\\rf.exe input.txt output1.txt tmp.txt matrix.txt                                            
+output_results_id=8
+ExitValue=0
+debug=true
+output_outputtext_id=9
+OutputResults=Connector0
+InputMultipleTrees=Connector2
+Tooltip=Calculate the Robinson & Fould distance between 2 or more phylogenetic tree.
+Connector1Conditional=True
+filename=C\:\\armadillo2\\armadillo\\data\\properties\\RobinsonFould.properties
+nbInput=1
+Website=trex.bioinfo.uqam.ca
+NoThread=true
+EditorClassName=editors.rfEditor
+Connector0Output=True
+Similar0=Treedist.properties
+y=197.0
+ExecutableMacOSX=executable/MacOSX/rf
+x=1080.0
+input_tree_id21=6
+input_tree_id20=7
+RuntimeMacOSX=bash (.sh)
+Type=Tree - Distance
+VerifyExitValue=true
+InputTree=Connector2
+ObjectType=Program
+OutputOutputText=Connector0
+OutputMatrix=Connector0
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+defaultColor=BLUE
+HelpSupplementary=
+Status=100
+StatusString=
+Name=Random Tree
+output_tree_id=6
+SampleWorkflow=randTree.properties.db
+ObjectID=Random Tree_1009032920
+mode=3
+Keyword0=Random, Tree
+replicate=10
+Object=
+InputAlignment=Connector2
+ClassName=programs.randtree
+colorMode=BLUE
+default_seed=100
+Description=Generate pseudo-random Tree  using the MAVID randtree program.
+TimeRunning=1047
+Publication=(N. Bray and L. Pachter, MAVID\: Constrained ancestral alignment of multiple sequences,, Genome Research, 14\:693-699 (2004))
+properties_id=38
+Executable=executable\\randtree.exe
+Order=3
+Commandline_Running=cmd.exe /C executable\\randtree.exe output >outfile                                              
+ExitValue=0
+debug=false
+output_outputtext_id=1
+seed=100
+OutputTree=Connector0
+help=http\://bio.math.berkeley.edu/mavid/
+Tooltip=Generate pseudo-random Tree  using the MAVID randtree program.
+Connector1Conditional=True
+filename=C\:\\armadillo2\\armadillo\\data\\properties\\randTree.properties
+nbInput=1
+Website=http\://bio.math.berkeley.edu/mavid/
+NoThread=true
+Connector0Output=True
+EditorClassName=
+input_alignment_id20=1
+y=260.0
+ExecutableMacOSX=Executable/MacOSX/mavid-2.0.4/utils/randtree/randtree
+x=263.0
+default_type=0
+RuntimeMacOSX=bash (.sh)
+default_replicate=10
+Type=Random Sequences or Trees
+VerifyExitValue=true
+ObjectType=Program
+OutputOutputText=Connector0
+default_mode=0
+type=1
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+defaultColor=BLUE
+HelpSupplementary=
+Status=100
+output_multipletrees_id=6
+StatusString=
+OutputMultipleTrees=Connector0
+Name=NEIGHBOR (Phylip)
+output_tree_id=7
+ObjectID=NEIGHBOR (Phylip)_1009032921
+Object=
+ClassName=programs.neighbor
+colorMode=BLUE
+Description=Using a distance matrix, infer a phylogenetic tree using Neighbor-Joining.\n\nCopyright 1986-2008 by The University of Washington.
+TimeRunning=562
+Publication=Felsenstein, J. 1989. PHYLIP - Phylogeny Inference Package (Version 3.2). Cladistics 5\: 164-166.
+properties_id=39
+InputPhylip_Distance=Connector2
+Executable=executable\\phylip-3.69\\exe\\neighbor.exe
+Order=9
+Commandline_Running=cmd.exe /C executable\\phylip-3.69\\exe\\neighbor.exe <neighbor.params                                               
+output_results_id=4
+ExitValue=0
+debug=false
+output_outputtext_id=5
+input_phylip_distance_id20=7
+OutputTree=Connector0
+UPGMA=true
+OutputResults=Connector0
+help=http\://evolution.genetics.washington.edu/phylip/doc/neighbor.html
+InputMultipleTrees=Connector2
+Tooltip=Using a distance matrix, infer a phylogenetic tree using Neighbor-Joining.
+Connector1Conditional=True
+filename=C\:\\armadillo2\\armadillo\\data\\properties\\Neighbor.properties
+nbInput=1
+Website=http\://evolution.genetics.washington.edu/phylip.html
+NoThread=true
+Connector0Output=True
+EditorClassName=editors.NeighborEditor
+y=135.0
+OutputMultipleTree=Connector0
+ExecutableMacOSX=Executable/MacOSX/phylip-3.69/exe/neighbor
+x=769.0
+Version_MacOSX=3.69
+InputOutgroup=Connector3
+Version=3.69
+RuntimeMacOSX=bash (.sh)
+Type=Tree - Phylip
+VerifyExitValue=true
+InputTree=Connector2
+ObjectType=Program
+OutputOutputText=Connector0
+
+Object
+#
+#Wed Oct 10 15:30:09 EDT 2012
+defaultColor=BLUE
+HelpSupplementary=
+Status=100
+OutputPhylip_Seqboot=Connector0
+StatusString=
+output_Phylip_Seqboot_id=6
+Name=SEQBOOT (Phylip)
+SampleWorkflow=SeqBoot.properties.db
+ObjectID=SEQBOOT (Phylip)_1009032922
+mode=0
+Keyword0=Tree, Sequences, Bootstrap, Jack-Knife, Phylip
+replicate=200
+Object=
+InputAlignment=Connector2
+ClassName=programs.seqboot
+colorMode=BLUE
+default_seed=4533
+Description=Generate duplicate datasets with either bootstrap, jacknife or other method.\nCopyright 2000-2008 by The University of Washington. \nWritten by Joseph Felsenstein.
+TimeRunning=625
+Publication=Felsenstein, J. 1989. PHYLIP - Phylogeny Inference Package (Version 3.2). Cladistics 5\: 164-166.
+properties_id=40
+Executable=executable\\phylip-3.69\\exe\\seqboot.exe
+Order=5
+Commandline_Running=cmd.exe /C executable\\phylip-3.69\\exe\\seqboot.exe <seqboot.params                                               
+ExitValue=0
+debug=false
+output_outputtext_id=2
+seed=4533
+help=http\://evolution.genetics.washington.edu/phylip/doc/seqboot.html
+Tooltip=Generate duplicate datasets with either bootstrap, jacknife or other method.
+filename=C\:\\armadillo2\\armadillo\\data\\properties\\SeqBoot.properties
+nbInput=1
+Website=http\://evolution.genetics.washington.edu/phylip/
+NoThread=true
+EditorClassName=editors.SeqBootEditor
+Connector0Output=True
+input_alignment_id20=1
+Connector1Output=True
+y=133.0
+ExecutableMacOSX=Executable/MacOSX/phylip-3.69/exe/seqboot
+x=262.0
+Version_MacOSX=3.69
+Version=3.69
+RuntimeMacOSX=bash (.sh)
+Type=Tree - Phylip
+default_replicate=100
+VerifyExitValue=true
+ObjectType=Program
+OutputOutputText=Connector0
+default_mode=0
+type=0
+
+Object
+#
+#Wed Oct 10 15:30:10 EDT 2012
+OutputTree=True
+Name=Tree
+outputType=Tree
+colorMode=GREEN
+y=314.0
+editorClass=editors.OutputEditor
+x=551.0
+properties_id=41
+ExitValue=0
+RuntimeMacOSX=bash (.sh)
+debug=true
+Status=100
+Commandline_Running=cmd.exe /C java -jar Executable/forester.jar Random_Tree__2012-04-20_11.03.38__0.nh                                             
+ExecutableMacOSX=executable/MacOSX/forester-0.957/forester.jar
+Executable=Executable/forester.jar
+ExecutableLinux=Not Set
+ObjectID=Tree_1009032923
+defaultColor=GREEN
+output_outputtext_id=10
+TimeRunning=1334935923906
+Object=
+Connector1Output=True
+Description=Random Tree (2012-04-20 11\:03\:38)_0
+ObjectType=Output
+output_tree_id=6
+StatusString=
+Order=4
+
+Object
+#
+#Wed Oct 10 15:30:10 EDT 2012
+nbInput=0
+Connector0Conditional=True
+ClassName=Not Set
+Name=Phylogenetic Inference using PHYLIP
+Connector1Conditional=True
+colorMode=ORANGE
+NoThread=false
+y=26
+Type=Comments
+x=248
+Connector2Conditional=True
+properties_id=42
+Connector0Output=True
+VerifyExitValue=false
+Connector3Conditional=True
+filename=C\:\\armadillo2\\armadillo\\data\\properties\\COMMENTS.properties
+ObjectID=Phylogenetic Inference using PHYLIP_1009032924
+defaultColor=ORANGE
+Connector3Output=True
+EditorClassName=editors.CommentsEditor
+Connector2Output=True
+Object=
+Connector1Output=True
+Description=\nUsing PHYLIP to infers a UPGMA\nTree from a DNA Alignment.
+ObjectType=ScriptBig
+Order=1
+
+Object
+#
+#Wed Oct 10 15:30:10 EDT 2012
+Connector0Conditional=True
+Name=Alignment
+outputType=Alignment
+colorMode=GREEN
+y=179.0
+OutputAlignment=True
+x=62.0
+properties_id=43
+Connector0Output=True
+Status=404
+ObjectID=Alignment_1009032925
+defaultColor=GREEN
+output_alignment_id=1
+Object=
+Connector1Output=True
+Description=Mycobacteriophage.fasta
+ObjectType=OutputDatabase
+StatusString=No Class is set to run...
+Order=2
+
+Object
+#
+#Wed Oct 10 15:30:10 EDT 2012
+defaultColor=BLUE
+HelpSupplementary=
+Status=100
+StatusString=
+OutputSequence=Connector0
+Name=Random Sequences
+SampleWorkflow=randomSequence.properties.db
+ObjectID=Random Sequences_1009032926
+output_multiplesequences_id=2
+mode=3
+output_sequence_id=15
+Keyword0=Random, Sequences, Alignment
+replicate=20
+Object=
+ClassName=programs.randomInternalSequences
+colorMode=BLUE
+default_seed=100
+Description=Internal application to generate some pseudo-random sequences.\nNote\: for simulation, use SeqGen.
+TimeRunning=656
+InternalArmadilloApplication=true
+Publication=NA
+properties_id=44
+Order=0
+output_alignment_id=2
+Commandline_Running=cmd.exe /C Not Set Not Set                                              
+debug=false
+WebServices=true
+output_outputtext_id=11
+seed=200
+Tooltip=Generate some random sequences
+OutputMultipleSequences=Connector0
+Connector1Conditional=True
+filename=d\:\\Armadillo_onlineNovembre_28\\data\\properties\\randomSequence.properties
+nbInput=0
+Website=NA
+NoThread=false
+Connector0Output=True
+EditorClassName=editors.randomSequencesEditor
+Similar0=seqgen.properties
+y=360.0
+x=536.0
+default_type=0
+default_replicate=10
+Type=Random Sequences or Trees
+VerifyExitValue=false
+OutputAlignment=Connector0
+ObjectType=Program
+default_mode=0
+type=1
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=2
+Name=connector_-16777216
+displayEdge=false
+source=1
+notDeletabled=false
+dest_properties_id=40
+source_properties_id=43
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-16711423
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=24
+source_properties_id=40
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=2
+Name=connector_-16645630
+displayEdge=false
+source=1
+notDeletabled=false
+dest_properties_id=23
+source_properties_id=24
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-16579837
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=25
+source_properties_id=23
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=2
+Name=connector_-16514044
+displayEdge=false
+source=1
+notDeletabled=false
+dest_properties_id=39
+source_properties_id=25
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-16448251
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=27
+source_properties_id=39
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-16382458
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=29
+source_properties_id=39
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-16316665
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=26
+source_properties_id=39
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-16250872
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=28
+source_properties_id=39
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=2
+Name=connector_-16185079
+displayEdge=false
+source=1
+notDeletabled=false
+dest_properties_id=37
+source_properties_id=27
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=2
+Name=connector_-16119286
+displayEdge=false
+source=1
+notDeletabled=false
+dest_properties_id=30
+source_properties_id=27
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-16053493
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=31
+source_properties_id=30
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-15987700
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=32
+source_properties_id=30
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-15921907
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=33
+source_properties_id=37
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-15856114
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=34
+source_properties_id=37
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-15790321
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=35
+source_properties_id=37
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-15724528
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=36
+source_properties_id=37
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=2
+Name=connector_-15658735
+displayEdge=false
+source=1
+notDeletabled=false
+dest_properties_id=38
+source_properties_id=43
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=0
+Name=connector_-15592942
+displayEdge=false
+source=0
+notDeletabled=true
+dest_properties_id=41
+source_properties_id=38
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=2
+Name=connector_-15527149
+displayEdge=false
+source=1
+notDeletabled=false
+dest_properties_id=37
+source_properties_id=41
+
+Connector
+#
+#Wed Oct 10 15:30:10 EDT 2012
+destination=2
+Name=connector_-15461356
+displayEdge=false
+source=1
+notDeletabled=false
+dest_properties_id=30
+source_properties_id=41
+
+

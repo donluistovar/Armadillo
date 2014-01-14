@@ -1,0 +1,137 @@
+/*
+ *  Armadillo Workflow Platform v1.0
+ *  A simple pipeline system for phylogenetic analysis
+ *  
+ *  Copyright (C) 2009-2011  Etienne Lord, Mickael Leclercq
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Collection of util command
+ * @author Etienne Lord
+ * @since  October 2012
+ */
+public class Util {
+   
+    public static final int Mb=1048576;
+    public static final int MaxMb=26214400; //25Mb (we don't try to load fasta file bigger)
+    public static int count=0; //--Internal variable for returnCount...
+   
+    public Util() {}
+
+
+     /**
+     * Return a random Value of N number
+     * @return a Random String of N random number
+     */
+    public static String returnRandom(int N) {
+        // Random r=new Random();
+        // StringBuilder s=new StringBuilder();
+        // for (int i=0; i<N; i++) {
+            // s.append(String.valueOf(r.nextInt(10)));
+        // }
+        // return s.toString();
+    }
+
+    /**
+     * Return a number containing the date and N random number
+     * @return a String
+     */
+    public static String returnRandomAndDate() {
+        // Calendar today=Calendar.getInstance();
+        // String tmpdir="";
+        // //VARIABLE
+        // String dd=String.valueOf(today.get(Calendar.DAY_OF_MONTH));
+        // String mm=String.valueOf(today.get(Calendar.MONTH));
+        // String yyyy=String.valueOf(today.get(Calendar.YEAR));
+         // Random r=new Random();
+        // StringBuilder s=new StringBuilder();
+        // s.append(dd);
+        // s.append(mm);
+        // s.append(yyyy);
+        // s.append(count);
+        // return s.toString();
+    }
+
+    /**
+     * This return a time code JJMMYYMMSS used by the hashcode
+     * @return
+     */
+    public int returnTimeCode() {    
+        int[] tt={0,0,0,0,0,0};
+        tt[0]=day();
+        tt[1]=month();
+        tt[2]=hour();
+        tt[3]=minute();
+        return (tt[0]*1000000+tt[1]*10000+tt[2]*100+tt[3]);
+    }
+
+    /**
+     * his return a time code as yyyy-MM-dd HH:mm:ss
+     * @return s A String of the current Date and Time	 
+     */
+    public String returnCurrentDateAndTime() {
+       
+        return nf(year(),4)+"-"+nf(month(),2)+"-"+nf(day(),2)+" "+nf(hour(),2)+":"+nf(minute(),2)+":"+nf(second(),2);
+
+    }
+
+    /**
+     *
+     * @return s A String of the current Year as YYYY
+     */
+    public String returnCurrentYear() {       
+        return nf(year(),4);
+
+    }
+    
+    /**
+     * Return a number increasing at each time    
+     * @return a String
+     */
+     public int returnCount() {
+		count++;
+        int c=returnTimeCode()*100+count;
+        //--Ensure positive count...
+        if (c<0) c*=-1;
+        return c;
+    }
+
+       /**
+        * Transform a number in ms to its d,h,m,s representation
+        * @param ms (system millisecond)
+        * @return a String representation
+        */
+       public static String msToString(long ms) {
+            // long d, h, m, s;
+            // d=ms / 86400000;
+            // ms=ms-(d*86400000);
+            // h = ms / 3600000;
+            // ms=ms-(h*3600000);
+            // m=ms/60000;
+            // ms=ms-(m*60000);
+            // s=ms/1000;
+            // ms=ms-(s*1000);
+            // String str="";
+            // if (d>2000) return ms+" ms "; //hack
+            // if (d!=0) return d+"d "+h+"h "+m+"m "+s+"s ";
+            // if (h!=0) return h+"h "+m+"m "+s+"s ";
+            // if (m!=0) return m+"m "+s+"s ";
+            // if (s!=0) return s+"s "+ms+"ms ";
+             return ms+"ms ";
+       }
+	   	
+       
+}

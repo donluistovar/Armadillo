@@ -1,0 +1,200 @@
+/**
+ * A Connection object on a workflow_object
+ * This in fact represent one point witch migh be connected to annother point
+ * Etienne Lord 
+ * @since October 2012
+ */
+public class workflow_connector {
+   //--Connection specific
+   int number=0;                              //This connector number
+   Boolean output=false;              //Is is an output connector?
+   Boolean conditional=false;         //Is is a conditional input//output
+   Boolean accept_multiple_input=true;//Can the connector accept multiple inputs? (default: true)
+   public workflow_object parent=null;
+   String outputType;                       //Connector type of Output
+   //--Position
+   int x=0;
+   int y=0;
+   //--Interface variables
+   public Boolean selected=false;
+   public Boolean destination=false; // -- Is it a destination node: If true, we don't draw the black node
+
+   /////////////////////////////////////////////////////////////////////////////
+   /// Constructor
+   public workflow_connector(workflow_object _parent) {
+      parent=_parent;
+   }
+
+   public void drawFeature() {
+     PImage displayImage=null;
+     //--Debug
+         
+      //--Draw the inside area
+      if (debug) rect(this.x-5, this.y-5, 20,20);
+         
+       if (inside2()||destination) {
+          displayImage=(PImage)filedata.get("red_dot.png");
+          image(displayImage,this.x, this.y);
+       } else
+       if (selected&&!destination) {
+          displayImage=(PImage)filedata.get("black_dot.png");
+          image(displayImage,this.x, this.y);
+
+       } else
+       if (parent!=null && parent.inside2()) {
+          displayImage=(PImage)filedata.get("red_dot.png");
+          image(displayImage,this.x, this.y);
+       }
+	}
+	
+	 public void drawFeature_buffer(PGraphics buffers) {
+     PImage displayImage=null;
+     //--Debug
+         
+      //--Draw the inside area
+      if (debug) buffers.rect(this.x-5, this.y-5, 20,20);
+         
+       if (inside2()||destination) {
+          displayImage=(PImage)filedata.get("red_dot.png");
+          buffers.image(displayImage,this.x, this.y);
+       } else
+       if (selected&&!destination) {
+          displayImage=(PImage)filedata.get("black_dot.png");
+          buffers.image(displayImage,this.x, this.y);
+
+       } else
+       if (parent!=null && parent.inside2()) {
+          displayImage=(PImage)filedata.get("red_dot.png");
+          buffers.image(displayImage,this.x, this.y);
+       }
+ }
+
+   public Boolean inside2() {
+       int size=20;
+       //--Size from the middle of the connector
+       return (mouseX > this.x-5 && mouseX < this.x-5+size && mouseY > this.y-5 && mouseY < this.y-5+size);
+   }
+
+   /**
+    *
+    * @param type
+    * @return can this connector accept the specified input
+    */
+   public Boolean input(String type) {
+       if (debug) println("workflow_connector - input() "+type); 
+       if (this.output) return false;
+       //if (debug) println("isInputAll" + isInputAll());
+       if (isInputAll()) return true;
+       //if (debug) println("outputType:"+outputType);
+       if (outputType!=null&&outputType.equals(type)) return true;
+       //--Exceptions
+       if (outputType!=null&&outputType.equals("Outgroup")&&type.equals("Sequence")) return true;
+       String keyConnector="Connector"+number;
+       //if (debug) println("keyConnector:"+keyConnector);
+       String value=parent.properties.get("Input"+type);
+       //if (debug) println("value:"+value+" "+value.equals(keyConnector));
+       //--Added true in lowercase - Septembre 2011       
+       if (value.equalsIgnoreCase("True")||value.equalsIgnoreCase("true")) return true;
+       if (value.equals(keyConnector)) return true;       
+       return false;
+   }
+
+   public ArrayList getOutput() {
+       ArrayList tmp=new ArrayList();
+       //--Case 1. Not an output... return empty array
+       if (!isOutput()||isInputAll()) return tmp;
+       String keyConnector="Connector"+number;
+       //--Case 2. OutputAll ->Return Everything
+       if (isOutputAll()) {
+           for (String S:workflow_properties_dictionnary.InputOutputType) {
+		    if (debug) println("workflow_connector - getOutput():"+"Output"+S)
+			tmp.add("Output"+S);
+		   }
+           return tmp;
+       }
+       //--Case 3. Return output
+       if (outputType!=null) {
+          tmp.add(outputType);
+          return tmp;
+       }
+                    
+         for (String key:workflow_properties_dictionnary.InputOutputType) {
+             String value=parent.properties.get("Output"+key);
+             Boolean valueb=parent.properties.getBoolean("Output"+key);
+             if (value.equals(keyConnector)||valueb) {                 
+                 tmp.add(key);
+             } 
+         }
+       return tmp;
+   }
+   
+   public ArrayList getInput() {
+       ArrayList tmp=new ArrayList();
+       //--Case 1. Not an output... return empty array
+       if (isOutput()) return tmp;
+       String keyConnector="Connector"+number;
+       //--Case 2. OutputAll ->Return Everything
+       if (isInputAll()) {
+           for (String S:workflow_properties_dictionnary.InputOutputType) tmp.add("Input"+S);
+           return tmp;
+       }
+       //--Case 3. Return output
+       if (outputType!=null) {
+          tmp.add(outputType);
+          return tmp;
+       }
+
+         for (String key:workflow_properties_dictionnary.InputOutputType) {
+             String value=parent.properties.get("Input"+key);
+             if (value.equals(keyConnector)||value.equals("True")) {
+                 tmp.add(key);
+             }
+         }
+       
+       return tmp;
+   }
+
+   public Boolean isOutputAll() {
+       String value=parent.getProperties().get("OutputAll");
+       Boolean b=(value.equals("True")||value.equals("true")||value.equals("Connector"+number));
+       return b;
+   }
+      
+   public Boolean isInputAll() {
+       String value=parent.getProperties().get("InputAll");
+       Boolean b=(value.equals("True")||value.equals("true")||value.equals("Connector"+number));
+       return b;
+   }
+
+
+   public void setOutput(Boolean b) {
+       this.output=b;
+   }
+
+   public Boolean isOutput() {
+       return this.output;
+   }
+
+    public Boolean isConditional() {
+       return this.conditional;
+   }
+
+    public void setConditional(Boolean b) {
+        this.conditional=b;
+    }
+
+        /**
+         * @return the accept_multiple_input
+         */
+        public Boolean isAccept_multiple_input() {
+            return accept_multiple_input;
+        }
+
+        /**
+         * @param accept_multiple_input the accept_multiple_input to set
+         */
+        public void setAccept_multiple_input(Boolean accept_multiple_input) {
+            this.accept_multiple_input = accept_multiple_input;
+        }
+
+}//--End connector

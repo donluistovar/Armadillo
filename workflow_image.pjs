@@ -1,0 +1,62 @@
+/*
+ *  Armadillo Workflow Platform v2.0
+ *  A simple pipeline system for phylogenetic analysis
+ *  
+ *  Copyright (C) 2009-2011  Etienne Lord, Mickael Leclercq
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+ 
+/////////////////////////////////////////////////////////////////////////////////
+/// Pre-load the splash screen
+
+
+
+
+/**
+ * Holder for the images loaded and used by the armadillo_workflow
+ * Also handle color palette
+ * @author Etienne Lord
+ * @since October 2012
+ */
+class workflow_image {
+
+    public HashMap filedata=new HashMap();
+	public String datapath="data/images/";
+	public String filelist="data/images/filelist.txt";
+	public Boolean loaded=false;
+	
+    public workflow_image() {
+        //-- Load PImage for each PNG in dataPath
+        //-- ONLY if not used in library mode...
+         String[] files=loadStrings(filelist);
+		 
+		 if (filedata.isEmpty()) {
+			 //--Load the data
+			//--loadImage or requestImage
+			for (String filename:files) {			
+				filedata.put(filename, loadImage(datapath+filename));
+			}
+			//--debug println("Total images loaded:"+filedata.size());
+			
+		 }
+         loaded=true;    
+    }
+
+    public PImage get(String key) {
+        return (PImage) filedata.get(key);
+    }
+
+}
+

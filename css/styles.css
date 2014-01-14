@@ -1,0 +1,194 @@
+
+
+.SeqName {
+	background-color: #ff0000;
+	font-family: "Courier New";
+}
+.nucA {
+	background-color: #ff0000;
+	font-family: "Courier New";
+	 text-shadow: none;
+	}
+.nucT {
+	background-color: #00ff00;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.nucG {
+	background-color: #0000ff;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.nucC {
+	background-color: #ffff00;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.nucU {
+	background-color: #00ff00;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.nucN {
+	background-color: #ff0000;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.nuc- {
+	background-color: #fffeff;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protG {
+	background-color: #ebebeb;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protP {
+	background-color: #dc9682;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protA {
+	background-color: #c8c8c8;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protV {
+	background-color: #0f820f;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protL {
+	background-color: #0f820f;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protI {
+	background-color: #0f820f;
+	font-family: "Courier New";
+	 text-shadow: none;
+} 
+.protM {
+	background-color: #e6e600;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protC {
+	background-color: #e6e600;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protF {
+	background-color: #3232aa;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protY {
+	background-color: #3232aa;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protW {
+	background-color: #b45ab4;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protH {
+	background-color: #8282d2;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protK {
+	background-color: #145aff;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protR {
+	background-color: #145aff;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protQ {
+	background-color: #00dcdc;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protN {
+	background-color: #00dcdc;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protE {
+	background-color: #e60a0a;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protD {
+	background-color: #e60a0a;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protS {
+	background-color: #fa960a;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.protT {
+	background-color: #fa960a;
+	font-family: "Courier New";
+	 text-shadow: none;
+}
+.paml {
+	background-color: #ffffff;
+	font-family: "Courier New";
+	color: #000000;
+	 text-shadow: none;
+}
+.pamlHit {
+	background-color: #00CC00;
+	font-family: "Courier New";
+	color: #000000;
+	 text-shadow: none;
+
+}
+.pamlHit9900 {
+	border: black;	
+	background-color: #00FF00;   
+	font-family: "Courier New";
+	color: #000000;
+	 text-shadow: none;
+}
+.pamlHit9500 {
+	border: black;	
+	background-color: #CCFFCC;   
+	font-family: "Courier New";
+	color: #000000;
+	 text-shadow: none;
+}
+.pamlHit9000 {
+	background-color: #CCCCCC;   
+	font-family: "Courier New";
+	color: #000000;
+	 text-shadow: none;
+}
+.pamlHit8500 {
+	background-color: #FFFF33;   
+	font-family: "Courier New";
+	color: #000000;
+	 text-shadow: none;
+}
+.pamlHit8000 {
+	background-color: #FF3300;   
+	font-family: "Courier New";
+	color: #FFFFFF;
+	 text-shadow: none;
+}
+.pamlTitle {	
+	background: #FFFFFF;
+	font-size: 12px;
+	font-family: Georgia, "Times New Roman", Times, serif;
+	text-align: justify;
+	color: #000000;
+	 text-shadow: none;
+}

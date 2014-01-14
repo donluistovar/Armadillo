@@ -1,0 +1,224 @@
+/**
+ * Bigger object 
+ */
+class workflow_object_output_big extends workflow_object_output {
+
+    public workflow_object_output_big(outputType, int x, int y) {
+       
+	   if (outputType instanceof String) {
+         properties.setName(outputType);
+         properties.put("colorMode","GREEN");
+         properties.put("defaultColor","GREEN");
+         properties.put("Output"+outputType, "True");
+         properties.put("outputType", outputType);
+         properties.put("Connector1Output","True");
+         properties.put("ObjectType", "Output");
+         properties.put("editorClass", "editors.OutputEditor");
+	   } else {
+			this.properties=outputType;
+	   }
+         Vertex=new pvertex[4];
+         connection=new workflow_connector[2];
+            //-- Object w and h
+            float w=61;
+            float h=21;
+            // -- Make the vertex needed
+            addVertex(x, y);
+            addVertex(x+w,y);
+            addVertex(x+w, y+h);
+            addVertex(x, y+h);
+            // -Create the connector
+            for (int i=0; i<connection.length;i++) {
+              connection[i]=new workflow_connector(this);
+            }
+            // - Calculate their position
+            recalculatePosition();
+             
+    }
+
+
+ public void drawFeature(){
+   if (properties.getBoolean("NoDraw")) return;
+    boolean inside=inside2();
+    strokeWeight(0.1f);
+    noStroke();
+    noFill();
+    beginShape(QUADS);
+    for(int i=0;i<Vertex_count;i++){
+      vertex(Vertex[i].x,Vertex[i].y);
+    }
+    endShape();
+
+    PImage displayImage=null;
+    if (inside||selected) {
+        displayImage=(PImage)filedata.get("link_big_black.png");
+    } else if (properties.getOutputID(properties.get("outputType"))==0) {
+        displayImage=(PImage)filedata.get("link_big_cyan.png");
+    } else {
+         if (properties.get("colorMode").equals("RED"))  displayImage=(PImage)filedata.get("link_big_red.png");
+         if (properties.get("colorMode").equals("BLUE")) displayImage=(PImage)filedata.get("link_big_blue.png");
+         if (properties.get("colorMode").equals("ORANGE")) displayImage=(PImage)filedata.get("link_big_orange.png");
+         if (properties.get("colorMode").equals("GREEN")) displayImage=(PImage)filedata.get("link_big_green.png");
+         if (displayImage==null) displayImage=(PImage)filedata.get("link_big_green.png");
+      
+    }
+    if (displayImage!=null) image(displayImage,this.x-(displayImage.width/2), this.y-2);
+    // - draw connector
+    for (int i=0; i<connection.length;i++) {
+        if (i==Output_RIGHT) connection[i].drawFeature();
+    }
+    // - draw text
+    fill(0);
+    textAlign(CENTER);
+    textFont(smallfont);
+    String name=properties.getName();
+    String name0="";
+    String name1="";
+    if (name.startsWith("Multiple")) {
+        name0="Multiple";
+        name1=name.substring(8);
+    } else {
+        name0=name.substring(0,name.length()/2);
+        name1=name.substring(name.length()/2);
+    }
+    text(name0, (Vertex[1].x-Vertex[0].x)/2+Vertex[0].x, (Vertex[2].y-Vertex[0].y)/2+Vertex[0].y-2);
+    text(name1, (Vertex[1].x-Vertex[0].x)/2+Vertex[0].x, (Vertex[2].y-Vertex[0].y)/2+Vertex[0].y+8);
+    fill(128);
+    textFont(font);
+    //--Detect object over
+    if (inside) {
+        if (time_over==0) {
+            time_over=millis();
+        }
+    } else {
+        time_over=0;
+        description="";
+    }
+     String type=properties.get("outputType");
+     int output_id=properties.getInt("output_"+type.toLowerCase()+"_id");
+     if (inside&&output_id>0&&(millis()-time_over)>10) {
+        fill(0);
+        textFont(font);
+        //Output output=new Output();
+        //output.setType(type);
+        //--This will try to load the description
+        //No: must be done in update dependance
+        if (properties.isSet("Description")) description=properties.get("Description");
+        if (description==null) description="";
+        float w = textWidth(description) + 10;
+        float h = textAscent() + textDescent() + 4;
+        fill (0xff79D1F0);
+        stroke(255);
+        //stroke(0xff79D1F0);
+        rectMode(CORNER);
+        rect (mouseX-w/2, mouseY - h/2, w, h);
+        fill(0);
+        textAlign(CENTER, CENTER);
+        text(description,mouseX,mouseY);
+    }
+  }
+
+  public void drawFeature_buffer(PGraphics buffers){
+   if (properties.getBoolean("NoDraw")) return;
+    boolean inside=inside2();
+    buffers.strokeWeight(0.1f);
+    buffers.noStroke();
+    buffers.noFill();
+    
+	buffers.beginShape(QUADS);
+    for(int i=0;i<Vertex_count;i++){
+      buffers.vertex(Vertex[i].x,Vertex[i].y);
+    }
+    buffers.endShape();
+
+	
+    PImage displayImage=null;
+    if (inside||selected) {
+        displayImage=(PImage)filedata.get("link_big_black.png");
+    } else if (properties.getOutputID(properties.get("outputType"))==0) {
+        displayImage=(PImage)filedata.get("link_big_cyan.png");
+    } else {
+         if (properties.get("colorMode").equals("RED"))  displayImage=(PImage)filedata.get("link_big_red.png");
+         if (properties.get("colorMode").equals("BLUE")) displayImage=(PImage)filedata.get("link_big_blue.png");
+         if (properties.get("colorMode").equals("ORANGE")) displayImage=(PImage)filedata.get("link_big_orange.png");
+         if (properties.get("colorMode").equals("GREEN")) displayImage=(PImage)filedata.get("link_big_green.png");
+         if (displayImage==null) displayImage=(PImage)filedata.get("link_big_green.png");
+      
+    }
+    if (displayImage!=null) buffers.image(displayImage,this.x-(displayImage.width/2), this.y-2);
+    // - draw connector
+    for (int i=0; i<connection.length;i++) {
+        if (i==Output_RIGHT) connection[i].drawFeature_buffer(buffers);
+    }
+    // - draw text
+    buffers.fill(0);
+    buffers.textAlign(CENTER);
+    buffers.textFont(smallfont);
+    String name=properties.getName();
+    String name0="";
+    String name1="";
+    if (name.startsWith("Multiple")) {
+        name0="Multiple";
+        name1=name.substring(8);
+    } else {
+        name0=name.substring(0,name.length()/2);
+        name1=name.substring(name.length()/2);
+    }
+    buffers.text(name0, (Vertex[1].x-Vertex[0].x)/2+Vertex[0].x, (Vertex[2].y-Vertex[0].y)/2+Vertex[0].y-2);
+    buffers.text(name1, (Vertex[1].x-Vertex[0].x)/2+Vertex[0].x, (Vertex[2].y-Vertex[0].y)/2+Vertex[0].y+8);
+    buffers.fill(128);
+    buffers.textFont(font);
+    //--Detect object over
+    if (inside) {
+        if (time_over==0) {
+            time_over=millis();
+        }
+    } else {
+        time_over=0;
+        description="";
+    }
+     String type=properties.get("outputType");
+     int output_id=properties.getInt("output_"+type.toLowerCase()+"_id");
+     // if (inside&&output_id>0&&(millis()-time_over)>10) {
+        // fill(0);
+        // textFont(font);
+        // //Output output=new Output();
+        // //output.setType(type);
+        // //--This will try to load the description
+        // //No: must be done in update dependance
+        // if (properties.isSet("Description")) description=properties.get("Description");
+        // if (description==null) description="";
+        // float w = textWidth(description) + 10;
+        // float h = textAscent() + textDescent() + 4;
+        // fill (0xff79D1F0);
+        // stroke(255);
+        // //stroke(0xff79D1F0);
+        // rectMode(CORNER);
+        // rect (mouseX-w/2, mouseY - h/2, w, h);
+        // fill(0);
+        // textAlign(CENTER, CENTER);
+        // text(description,mouseX,mouseY);
+    // }
+  }
+  
+ /**
+   * Calculate object_connector location
+   */
+  public void recalculatePosition() {
+      properties.put("x", Vertex[0].x); //Thit is the left-top corner
+      properties.put("y", Vertex[0].y);
+      this.x=parseInt(Vertex[0].x+(Vertex[1].x-Vertex[0].x)/2);
+      this.y=parseInt(Vertex[0].y+(Vertex[1].y-Vertex[0].y)/2);
+      //-- Initialise Connector
+    for (int i=0; i<connection.length; i++) {
+       connection[i].parent=this;
+       switch(i) {
+          case Output_LEFT : updateConnector(connection[i],i,this.x-35,this.y+2,null);
+                             break;
+          case Output_RIGHT: updateConnector(connection[i],i,this.x+28,this.y+2,null);
+                             break;
+       }
+    }
+  }
+
+} //--End class workflow_object_output_big

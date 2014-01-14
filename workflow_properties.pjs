@@ -1,0 +1,474 @@
+/*
+ *  Armadillo Workflow Platform v2.0
+ *  A simple pipeline system for phylogenetic analysis
+ *  
+ *  Copyright (C) 2009-2013  Etienne Lord, Mickael Leclercq
+ *
+ *  This program is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ * 
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the 
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+/**
+ * Properties of diff objects
+ * Note: the properties name doesn't need to be absolutly set
+ * Note: The properties_id is return by the database
+ * @author Etienne Lorddel
+ */
+public class workflow_properties {
+
+    ///////////////////////////////////////////////////////////////////////////
+    /// Variables
+
+       private int properties_id=0;                        //Id in the database
+       public String filename="";                         //Properties default filename
+       public Boolean modified=false;       
+       public Boolean debug=true;
+	   public HashMap properties=new HashMap();
+	   
+    ///////////////////////////////////////////////////////////////////////////
+    /// Constant
+
+	public static final String NotSet="Not Set";
+	public static int NextPropertiesID=0;
+  
+   ////////////////////////////////////////////////////////////////////////////
+    /// Constant for properties PORT
+
+    ///////////////////////////////////////////////////////////////////////////
+    /// Constructor
+
+    public workflow_properties() {
+		setProperties_id(getNextPropertiesID()); 
+		//print();
+    }
+
+    public workflow_properties(String filename) {    
+        load(filename);
+    }
+
+
+    //////////////////////////////////////////////////////////////////////////
+    /// Methods
+
+    /**
+     * Load a properties file
+     * Note: The Name of this properties will be set to the key("Name")
+     * 
+     * @param filename
+     * @return true if success
+     */
+    public Boolean load(String filename) {    
+		this.put("filename", filename);
+		String[] strbuf=loadStrings(filename);		
+		for (String stri:strbuf) {
+			if (!stri.startsWith("#")) {
+				String[] st=stri.split('=');
+				put(st[0],st[1]);
+			}		
+		}    
+    }
+	
+	public Boolean deserializeFromString(String str) {    		
+		properties.clear();
+		setProperties_id(getNextPropertiesID()); 
+		String[] strbuf=str.split("\n");
+		for (String stri:strbuf) {
+			if (!stri.startsWith("#")) {
+				String[] st=stri.split('=');
+				put(st[0],st[1]);
+			}		
+		}    
+    }
+
+	public String serializeToString() {         
+		//String st="#Armadillo Workflow v2.0 - Online \n # Etienne Lord 2012\n";		
+		String st="";
+		for (Object key:properties.keySet()) {
+			st+=key+"="+properties.get(key)+"\n";
+			//println(key);
+		}
+		return st;
+    }
+	
+	
+	public String serializeToJSON() {         
+		//String st="#Armadillo Workflow v2.0 - Online \n # Etienne Lord 2012\n";		
+		// String id=properties.get("ObjectID");
+		// if (id==null||id=="Not Set") id=properties.get("Name");
+		// String st="\""+id+"\":{";
+		// int i=properties.keySet().size();
+		// int j=0;
+		// for (Object key:properties.keySet()) {
+			// if (key!="") {				
+				// String value_t=get(key);												
+					// var key_t=key.replace(/\\:/g,":");																
+					// try {						
+						// if (!isNumber(value_t)) {
+							// String value=value_t.replace(/\\:/g,":");
+							// value=value.replace(/"/g,'');	
+							// value=value.replace(/\\/g,"\\");	
+							// if (value_t.toLowerCase()=="true") {
+								// st+="\""+key_t+"\""+":true";
+							// } else 
+							// if (value_t.toLowerCase()=="false") {
+								// st+="\""+key_t+"\""+":false";
+							// } else {
+								// //value=escapeJSON(value);
+								// st+="\""+key_t+"\""+":"+"\""+value+"\"";
+							// }
+						// } else {
+							// if (value_t==""||value_t==undefined) {
+								// st+="\""+key_t+"\""+":null";
+							// } 				
+							// else {
+								// st+="\""+key_t+"\""+":"+value_t;
+							// }
+						// }					
+					// if (j<i-1) st+=" ,";				
+					// } catch(Exception e) {
+						// debug=true;
+						// if (debug) {
+							// println(e+" "+value_t);
+							// println("Error:"+"\""+key_t+"\""+":"+"\""+value+"\"");
+							// }
+					// }												
+			// }		
+			// j++;			
+			// //println(key);
+		// }
+		
+		// st+="}";
+		// return st;
+    }
+	
+	 public String getID() {
+        return properties.get("ObjectID");
+    }
+
+     public void setID(String ID) {
+        properties.put("ObjectID", ID);
+    }
+
+	
+	public void put(Object key, Object data) {
+		if (data instanceof Boolean||typeof data ==="boolean" ) {
+			data=(data?"true":"false");
+		}
+		properties.put(key,data);
+	}
+	
+	public Object getKey(int i) {
+		return properties.get(i);
+	}
+	
+	public String get(Object key) {
+		return getString(key);
+	}
+	
+	public String getString(Object key) {       
+        String value=(String) properties.get(key);
+        //--debug
+		//if (value==null) println(key+":not set");
+		return (value==null?NotSet:value);        
+      }
+      
+     public void remove(Object key) {
+     	properties.remove(key);
+     } 
+	
+	/**
+	 * Return the int value associated with this key.
+	 */
+	public int getInt(Object key) {
+      //--debug println(key+":"+properties.get(key));
+	  int i=(int)properties.get(key);
+      return i;
+    }
+
+	/**
+	 * Return the int value associated with this key.
+	 */
+	public long getLong(Object key) {
+      //--debug println(key+":"+properties.get(key));
+	  long i=(long)properties.get(key);
+      return i;
+    }
+	
+	/**
+	 * Return the Boolean value associated with this key, or false if don't exists.
+	 */
+	public Boolean getBoolean(Object key) {
+       //print("getBoolean:"+properties.get(key)+" "+(Boolean)properties.get(key));
+	   if (!isSet(key)) return false;
+       	   
+	   //Boolean b=(Boolean)properties.get(key);
+	   Boolean b=(Boolean)(properties.get(key).toLowerCase() === 'true');
+       return b;
+    }
+	
+	
+   /**
+     * Return if a key is set
+     * @param key
+     * @return true if set, false otherwise
+     */
+    public Boolean isSet(Object key) {
+        return (properties.get(key)==null?false:true);
+    }
+	
+	
+	public int sizeOfproperties() {
+		return properties.size();
+	}
+	
+	public Object[] keySetproperties() {
+		return properties.keySet();
+	}
+	
+	/////////////////////////////////////////////////////////////////////////
+	/// Input / Output
+	
+	
+	public ArrayList getOutputID(String filter, int port) {
+      ArrayList ids=new ArrayList();
+	  //--Uniform search pattern
+      String search="";
+      String[] m = match(filter, "output_(.*)_id.*");
+	  	  
+	  if (m!=null) {
+           search="output_"+filter+"_id";
+		   if (port!=null) search+=port;
+      } else {
+           search=filter;
+		      if (port!=null) search+=port;
+      }
+      search=search.toLowerCase();	  
+      //--search
+      for (String key:properties.keySet()) {    
+		  String[] found=match(key,search);        
+          if (found!=null) ids.add(getInt(key));
+      }
+      return ids;
+  }
+  
+  /**
+   * Normal fucntion to get the output in a program
+   * @param filter (ex. output_multipletrees_id)
+   * @return
+   */
+  public int getOutputID(String filter) {
+     ArrayList id=getOutputID(filter,null);
+      if (id.size()==0) return 0;
+      return id.get(0);
+  }
+
+	
+	public ArrayList Outputed() {
+		ArrayList tmp=new ArrayList();
+		  for (String key:properties.keySet()) {    
+				  if (key.equalsIgnoreCase("OutputAll")) {
+					  tmp.add("All");
+				  } else
+				  if (key.startsWith("Output")&&this.get(key).equalsIgnoreCase("TRUE")) {
+					  tmp.add(key.substring(6));
+				  } else
+				  if (key.startsWith("Output")&&this.get(key).startsWith("Connector")) {
+					  tmp.add(key.substring(6));
+				  }
+			 }
+		  return tmp;
+	  }
+
+/**
+   * Return the value for this input 
+   * @param filter (ex. Alignment)
+   * @return the value associated in the properties
+   */
+  public String getInput(String filter) {
+      return (get("Input"+filter));
+  }
+
+   /**
+   * Return the value for this output 
+   * @param filter (ex. Alignment)
+   * @return the value associated in the properties
+   */
+  public String getOutput(String filter) {
+      return (get("Output"+filter));
+  }
+	
+	/**
+		* This remove all input from this properties
+   * ex. output_multiplesequences_id0, output_sequence_id0....
+   */
+  public void removeInput() {
+  	//println("Called workflow_properties.removeInput()");
+      ArrayList skeySet=new ArrayList();
+      for (String key:properties.keySet()) {    
+      	String[] m = match(key, "input_(.*)_id.*");
+      	 if (m!=null) {
+      	 	skeySet.add(key);
+      	 }
+      }
+       for (String key:skeySet) {
+          properties.remove(key);
+       }
+  }
+	
+	
+	/////////////////////////////////////////////////////////////////////////
+	/// Specific getter/setter
+	
+	/**
+     * Return this properties ObjectID
+     */
+    public String getID() {
+        return this.get("ObjectID");
+    }
+
+     /**
+      * Set this properties name (screen name)
+      */
+
+    public void setID(String ID) {
+        this.put("ObjectID", ID);
+    }
+
+	
+   /**
+    * Return this properties name
+    */
+	public String getName() {
+        return get("Name");
+    }
+	
+   /**
+    * Set this properties name (screen name)
+    */
+    public void setName(String name) {
+        put("Name", name);
+    }
+
+	
+	/**
+     * Return this properties descrtiption
+     */
+    public String getTooltip() {
+        String desc=this.get("Tooltip");
+        if (desc.equals(NotSet)) desc="";
+        return desc;
+    }
+
+	 /**
+     * Return this properties description
+     */
+    public String getDescription() {
+        String desc=this.get("Description");
+        if (desc.equals(NotSet)) desc="";
+        return desc;
+    }
+	
+	public int getProperties_id() {
+       //--debug println("getProperties_id():"+getInt("properties_id"));
+	   return getInt("properties_id");
+    }
+	
+	public void setProperties_id(int id) {
+       properties.put("properties_id", id);
+    }
+	
+	
+	public void print() {	
+		String st="#Armadillo Workflow v2.0 - Online \n # Etienne Lord 2012\n";				
+		println("============================================================");
+		println("= workflow_properties : "+getName());
+		println("============================================================");
+		for (Object key:properties.keySet()) {
+			st+=key+"="+properties.get(key)+"\n";
+			println(key+"\t=\t"+properties.get(key));
+		}
+		println("============================================================");
+		return st;
+	}
+
+	public String getHtmlProperties() {
+		Strign st="<table data-role='table' id='my-table' data-mode='reflow'>";
+		st+="<thead>";
+		st+="<tr><th>Properties</th><th>Value</th> </tr>";
+		st+="</thead>";
+		st+="<tbody>";		
+		String[] keys=properties.keySet();
+		//sort(keys);
+		for (Object key:keys) {
+			if (key!="") st+="<tr><td><b>"+key+"</b></td><td>"+properties.get(key)+"</td></tr>\n";			
+		}    
+	st+="</tbody>";
+    st+="</table>";
+		return st;
+	}
+	
+	public String getHtmlProperties2() {
+		Strign st="<ul data-role='listview'>";
+			
+		String[] keys=properties.keySet();
+		sort(keys);
+		for (Object key:keys) {
+			if (key!="") st+="<li>"+key+" "+properties.get(key)+"</li>\n";			
+		}    
+	
+    st+="</ul>";
+		return st;
+	}
+	
+	 public int getNextPropertiesID() {
+		NextPropertiesID++;
+		return NextPropertiesID;
+	 }
+
+	   ///////////////////////////////////////////////////////
+	   /// Some numeric functions from :
+	   /// http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer
+	   
+	   public static Boolean isNumber(value) {
+			if ((undefined === value) || (null === value)) {
+				return false;
+			}
+			if (typeof value == 'number') {
+				return true;
+			}
+		return !isNaN(value - 0);
+	   }
+	   
+	   public static Boolean isFloat (n) {
+			return n===+n && n!==(n|0);
+		}
+
+		public static Boolean isInteger (n) {
+			return n===+n && n===(n|0);
+		}
+
+		public String escapeJSON(String value) {		
+				return value
+				  .replace(/[\"]/g, '\\"')
+				  .replace(/[\\]/g, '\\\\')
+				  .replace(/[\/]/g, '\\/')
+				  .replace(/[\b]/g, '\\b')
+				  .replace(/[\f]/g, '\\f')
+				  .replace(/[\n]/g, '\\n')
+				  .replace(/[\r]/g, '\\r')
+				  .replace(/[\t]/g, '\\t');
+			return value;
+		}
+	 
+} //End workflow_properties
+

@@ -1,0 +1,152 @@
+class workflow_object_script_big extends workflow_object {
+
+public workflow_object_script_big(workflow_properties obj) {
+    properties=obj;
+    Vertex=new pvertex[4];
+    connection=new workflow_connector[4];
+    //--Object width and height (to do load from bitmap/properties?)
+    int x2=properties.getInt("x");
+    int y2=properties.getInt("y");
+    float w=249;
+    float h=71;
+    // -- Make the vertex needed
+    addVertex(x2, y2);
+    addVertex(x2+w,y2);
+    addVertex(x2+w,y2+h);
+    addVertex(x2, y2+h);
+    // -Create the connector
+    for (int i=0; i<connection.length;i++) {
+      connection[i]=new workflow_connector(this);
+    }
+    recalculatePosition();
+}
+
+public workflow_object_script_big(workflow_properties obj, int x2, int y2) {
+    properties=obj;
+    Vertex=new pvertex[4];
+    connection=new workflow_connector[4];
+    //--Object width and height (to do load from bitmap/properties?)
+    float w=249;
+    float h=71;
+    // -- Make the vertex needed
+    addVertex(x2, y2);
+    addVertex(x2+w,y2);
+    addVertex(x2+w,y2+h);
+    addVertex(x2, y2+h);
+    // -Create the connector
+    for (int i=0; i<connection.length;i++) {
+      connection[i]=new workflow_connector(this);
+    }
+    recalculatePosition();
+}
+
+
+ public void drawFeature(){
+    if (properties.getBoolean("NoDraw")) return;
+    noStroke();
+    noFill();   
+    strokeWeight(0.1f);
+    PImage displayImage=null;
+    if (inside2()||selected) {
+        displayImage=(PImage)filedata.get("search_black.png");
+    } else {
+              if (properties.get("colorMode").equals("RED")) displayImage=(PImage)filedata.get("search_red.png");
+              if (properties.get("colorMode").equals("BLUE"))displayImage=(PImage)filedata.get("search_blue.png");
+              if (properties.get("colorMode").equals("ORANGE"))displayImage=(PImage)filedata.get("search_orange.png");
+              if (properties.get("colorMode").equals("GREEN"))displayImage=(PImage)filedata.get("search_green.png");
+              if (properties.get("colorMode").equals("CYAN"))displayImage=(PImage)filedata.get("search_cyan.png");
+              if (properties.get("colorMode").equals("PURPLE"))displayImage=(PImage)filedata.get("search_purple.png");
+              if (displayImage==null) displayImage=(PImage)filedata.get("big_red.png");
+    }
+    if (displayImage!=null) image(displayImage,this.x-(displayImage.width/2), this.y);
+    // - draw connector 
+    for (int i=0; i<connection.length;i++) {
+        connection[i].drawFeature();
+    }
+    // - draw text
+    String name=properties.getName();
+    String desc=properties.getDescription();
+    //println(desc);
+	int len=desc.length();
+    int start_y=this.y+5;
+    fill(0);
+    textAlign(CENTER);
+    textFont(font);
+    text(name, this.x, start_y+=10);
+    textFont(smallfont);
+    //desc=desc.replace(/[\\n]/g,"armadillo");
+	//println(t);
+	String[] s=split(desc,'\\n');
+	
+	
+    for (int i=0; i<s.length;i++) {
+        text(s[i], this.x, start_y+=10);
+    }
+
+ }
+
+ public void drawFeature_buffer(PGraphics buffers){
+    if (properties.getBoolean("NoDraw")) return;
+    buffers.noStroke();
+    buffers.noFill();    
+    buffers.strokeWeight(0.1f);
+    PImage displayImage=null;
+    if (inside2()||selected) {
+        displayImage=(PImage)filedata.get("search_black.png");
+    } else {
+              if (properties.get("colorMode").equals("RED")) displayImage=(PImage)filedata.get("search_red.png");
+              if (properties.get("colorMode").equals("BLUE"))displayImage=(PImage)filedata.get("search_blue.png");
+              if (properties.get("colorMode").equals("ORANGE"))displayImage=(PImage)filedata.get("search_orange.png");
+              if (properties.get("colorMode").equals("GREEN"))displayImage=(PImage)filedata.get("search_green.png");
+              if (properties.get("colorMode").equals("CYAN"))displayImage=(PImage)filedata.get("search_cyan.png");
+              if (properties.get("colorMode").equals("PURPLE"))displayImage=(PImage)filedata.get("search_purple.png");
+              if (displayImage==null) displayImage=(PImage)filedata.get("big_red.png");
+    }
+    if (displayImage!=null) buffers.image(displayImage,this.x-(displayImage.width/2), this.y);
+    // - draw connector 
+    for (int i=0; i<connection.length;i++) {
+        connection[i].drawFeature_buffer(buffers);
+    }
+    // - draw text
+    String name=properties.getName();
+    String desc=properties.getDescription();
+    //println(desc);
+	int len=desc.length();
+    int start_y=this.y+5;
+    buffers.fill(0);
+    buffers.textAlign(CENTER);
+    buffers.textFont(font);
+    buffers.text(name, this.x, start_y+=10);
+    buffers.textFont(smallfont);
+    //desc=desc.replace(/[\\n]/g,"armadillo");
+	//println(t);
+	String[] s=split(desc,'\\n');
+	
+	
+    for (int i=0; i<s.length;i++) {
+        buffers.text(s[i], this.x, start_y+=10);
+    }
+
+ }
+ 
+  public void recalculatePosition() {
+      this.x=parseInt(Vertex[0].x+(Vertex[1].x-Vertex[0].x)/2);
+      this.y=parseInt(Vertex[0].y+(Vertex[1].y-Vertex[0].y)/2);
+//      properties.put("x", this.x);
+//      properties.put("y", this.y);
+      //-- Initialise Connector
+    for (int i=0; i<connection.length; i++) {
+       connection[i].parent=this;
+       switch(i) {
+         case UP   : updateConnector(connection[i], i, this.x, this.y-9, null);
+                    break;
+         case DOWN : updateConnector(connection[i], i, this.x, this.y+70, null);
+                    break;
+         case LEFT : updateConnector(connection[i], i, this.x-133, this.y+30, null);
+                    break;
+         case RIGHT: updateConnector(connection[i], i, this.x+125, this.y+30, null);
+                    break;
+       }
+    }
+  }
+} //--End script_big

@@ -1,0 +1,263 @@
+/**
+ * Bigger object
+ */
+public class workflow_object_variable extends workflow_object_output {
+
+      public workflow_object_variable (workflow_properties _properties, int x, int y) {      
+         properties=_properties;
+         Vertex=new pvertex[4];
+         connection=new workflow_connector[2];
+         //--Object width and height (to do load from bitmap/properties?)
+         int x2=x;
+         int y2=y;
+         float w=159;
+         float h=33;
+         // -- Make the vertex needed
+         addVertex(x2, y2);
+         addVertex(x2+w,y2);
+         addVertex(x2+w,y2+h);
+         addVertex(x2, y2+h);
+         // -Create the connector
+         for (int i=0; i<connection.length;i++) {
+           connection[i]=new workflow_connector(this);
+         }
+         recalculatePosition();
+
+    }
+
+
+ public void drawFeature(){
+   //--Draw the object on screen?
+   if (properties.getBoolean("NoDraw")) return;
+   //--Load information
+
+
+   //--Load the flag
+   boolean inside=inside();
+
+   //--Actual draw
+   strokeWeight(0.1f);
+    noStroke();
+    noFill();
+
+    beginShape(QUADS);
+    for(int i=0;i<Vertex_count;i++){
+      vertex(Vertex[i].x,Vertex[i].y);
+    }
+    endShape();
+
+
+
+    PImage displayImage=null;
+     if (inside()||selected) {
+        displayImage=(PImage)filedata.get("big_black.png");
+    } else if (properties.get("Description").equals("Undefined")) {
+        displayImage=(PImage)filedata.get("big_blue.png");
+    } else if (properties.get("Description").equals("For each")) {
+        displayImage=(PImage)filedata.get("big_green.png");
+    }
+    else {
+              if (properties.get("colorMode").equals("RED")) displayImage=(PImage)filedata.get("big_red.png");
+              if (properties.get("colorMode").equals("BLUE"))displayImage=(PImage)filedata.get("big_blue.png");
+              if (properties.get("colorMode").equals("ORANGE"))displayImage=(PImage)filedata.get("big_orange.png");
+              if (properties.get("colorMode").equals("GREEN"))displayImage=(PImage)filedata.get("big_green.png");
+              if (displayImage==null) displayImage=(PImage)filedata.get("big_red.png");
+    }
+    if (displayImage!=null) image(displayImage,this.x-(displayImage.width/2), this.y-2);
+    // - draw connector
+    for (int i=0; i<connection.length;i++) {
+       connection[i].drawFeature();
+    }
+    // - draw text
+    fill(0);
+    textAlign(CENTER);
+    textFont(font);
+    String name=properties.getName();
+    String name1=properties.getDescription();
+    //Clip name
+    name1=(name1.length()>30?name1.substring(0, 30)+"...":name1);
+    text(name, (Vertex[1].x-Vertex[0].x)/2+Vertex[0].x, (Vertex[2].y-Vertex[0].y)/2+Vertex[0].y-5);
+    textFont(smallfont);
+    text(name1, (Vertex[1].x-Vertex[0].x)/2+Vertex[0].x, (Vertex[2].y-Vertex[0].y)/2+Vertex[0].y+8);
+    fill(128);
+    textFont(font);
+    
+    //--Detect object over
+    if (inside) {
+        if (time_over==0) {
+            time_over=System.currentTimeMillis();
+        }
+    } else {
+        time_over=0;
+        description="";
+    }
+    if (description.isEmpty()) {
+        String type=properties.get("outputType");
+         int type_id=properties.getInt("output_"+type.toLowerCase()+"_id");
+         Output out=new Output();
+         out.setType(type);
+
+         if (type_id==0) {
+             description="Undefined";
+             if (properties.isSet("ForObjectID")) {
+                 int count=0;
+                 Object[] o=properties.keySet().toArray();
+                  for (int i=0; i<o.length; i++) {
+                      Object k=o[i];
+                      if (((String)k).startsWith("For_")) count++;
+                  }
+
+//                 for (Object o:properties.keySet()) {
+//                     if (((String)o).startsWith("For_")) count++;
+//                 }
+                 description="For each for "+count+" "+type;
+             }
+             //--Handle For loop here...
+         } else {
+            //description= out.getBiologic().getNameId(type_id);
+             if (properties.isSet("Description")) description=properties.get("Description");
+         }
+    }
+     if (inside&&description.length()>0&&(System.currentTimeMillis()-time_over)>10) {
+        fill(0);
+        textFont(font);
+        float w = textWidth(description) + 10;
+        float h = textAscent() + textDescent() + 4;
+        fill (0xff79D1F0);
+        stroke(255);
+        rectMode(CORNER);
+        rect (mouseX-w/2, mouseY - h/2, w, h);
+        fill(0);
+        textAlign(CENTER, CENTER);
+        text(description,mouseX,mouseY);
+    }
+  }
+
+  public void drawFeature_buffer(PGraphics buffers){
+   //--Draw the object on screen?
+   if (properties.getBoolean("NoDraw")) return;
+   
+   //--Load information
+
+   //--Load the flag
+   boolean inside=inside();
+
+   //--Actual draw
+	buffers.strokeWeight(0.1f);
+    buffers.noStroke();
+    buffers.noFill();
+
+    // buffers.beginShape(QUADS);
+    // for(int i=0;i<Vertex_count;i++){
+      // buffers.vertex(Vertex[i].x,Vertex[i].y);
+    // }
+    // buffers.endShape();
+
+
+
+    PImage displayImage=null;
+     if (inside()||selected) {
+        displayImage=(PImage)filedata.get("big_black.png");
+    } else if (properties.get("Description").equals("Undefined")) {
+        displayImage=(PImage)filedata.get("big_blue.png");
+    } else if (properties.get("Description").equals("For each")) {
+        displayImage=(PImage)filedata.get("big_green.png");
+    }
+    else {
+              if (properties.get("colorMode").equals("RED")) displayImage=(PImage)filedata.get("big_red.png");
+              if (properties.get("colorMode").equals("BLUE"))displayImage=(PImage)filedata.get("big_blue.png");
+              if (properties.get("colorMode").equals("ORANGE"))displayImage=(PImage)filedata.get("big_orange.png");
+              if (properties.get("colorMode").equals("GREEN"))displayImage=(PImage)filedata.get("big_green.png");
+              if (displayImage==null) displayImage=(PImage)filedata.get("big_red.png");
+    }
+    if (displayImage!=null) buffers,image(displayImage,this.x-(displayImage.width/2), this.y-2);
+    // - draw connector
+    for (int i=0; i<connection.length;i++) {
+       connection[i].drawFeature_buffer(buffers);
+    }
+    // - draw text
+    buffers,fill(0);
+   buffers, textAlign(CENTER);
+    buffers,textFont(font);
+    String name=properties.getName();
+    String name1=properties.getDescription();
+    //Clip name
+    name1=(name1.length()>30?name1.substring(0, 30)+"...":name1);
+    buffers,text(name, (Vertex[1].x-Vertex[0].x)/2+Vertex[0].x, (Vertex[2].y-Vertex[0].y)/2+Vertex[0].y-5);
+    buffers,textFont(smallfont);
+    buffers,text(name1, (Vertex[1].x-Vertex[0].x)/2+Vertex[0].x, (Vertex[2].y-Vertex[0].y)/2+Vertex[0].y+8);
+    buffers,fill(128);
+    buffers,textFont(font);
+    
+    //--Detect object over
+    if (inside) {
+        if (time_over==0) {
+            time_over=System.currentTimeMillis();
+        }
+    } else {
+        time_over=0;
+        description="";
+    }
+    if (description.isEmpty()) {
+        String type=properties.get("outputType");
+         int type_id=properties.getInt("output_"+type.toLowerCase()+"_id");
+         Output out=new Output();
+         out.setType(type);
+
+         if (type_id==0) {
+             description="Undefined";
+             if (properties.isSet("ForObjectID")) {
+                 int count=0;
+                 Object[] o=properties.keySet().toArray();
+                  for (int i=0; i<o.length; i++) {
+                      Object k=o[i];
+                      if (((String)k).startsWith("For_")) count++;
+                  }
+
+//                 for (Object o:properties.keySet()) {
+//                     if (((String)o).startsWith("For_")) count++;
+//                 }
+                 description="For each for "+count+" "+type;
+             }
+             //--Handle For loop here...
+         } else {
+            //description= out.getBiologic().getNameId(type_id);
+             if (properties.isSet("Description")) description=properties.get("Description");
+         }
+    }
+     // if (inside&&description.length()>0&&(System.currentTimeMillis()-time_over)>10) {
+        // fill(0);
+        // textFont(font);
+        // float w = textWidth(description) + 10;
+        // float h = textAscent() + textDescent() + 4;
+        // fill (0xff79D1F0);
+        // stroke(255);
+        // rectMode(CORNER);
+        // rect (mouseX-w/2, mouseY - h/2, w, h);
+        // fill(0);
+        // textAlign(CENTER, CENTER);
+        // text(description,mouseX,mouseY);
+    // }
+  }
+  
+ /**
+   * Calculate object_connector location
+   */
+  public void recalculatePosition() {
+      properties.put("x", Vertex[0].x); //Thit is the left-top corner
+      properties.put("y", Vertex[0].y);
+      this.x=PApplet.parseInt(Vertex[0].x+(Vertex[1].x-Vertex[0].x)/2);
+      this.y=PApplet.parseInt(Vertex[0].y+(Vertex[1].y-Vertex[0].y)/2);
+      //-- Initialise Connector
+
+    for (int i=0; i<connection.length; i++) {
+       connection[i].parent=this;
+       switch(i) {
+         case Output_LEFT : updateConnector(connection[i], i, this.x-88, this.y+10, null);
+                    break;
+         case Output_RIGHT: updateConnector(connection[i], i, this.x+79, this.y+10, null);
+                    break;
+       }
+    }
+    }
+}

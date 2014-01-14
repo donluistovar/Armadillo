@@ -1,0 +1,497 @@
+/**
+ * This represent a Edge (connection) between to workflow_connector
+ * In reality, we use this object to draw an Arrow
+ * @author Etienne Lord
+ * @since October 2012
+ */
+class workflow_connector_edge {
+    /////////////////////////////////////////////////////////////////////////////////
+    /// Variables
+    public workflow_connector source=null;   // Source
+    public workflow_connector dest=null;     // Destination
+    String desc="";                          // Edge description
+    init col = 0;                           // Color (TO DO : PUT SOME COLOR IN CONFIG)
+    public Boolean displayEdge=false;        // Do we display edge
+    public Boolean notDeletabled=false;      // Can we deleted it?
+    public color hashcode=0;             // hashcode used for arrow selection
+	public static int hashcount=0;
+    public Boolean selected=false;     // Selected?         
+    //////////////////////////////////////////////////////////////////////////////
+    /// Database info
+    public workflow_properties properties=new workflow_properties();
+    public int connectors_id=0;
+    
+    /////////////////////////////////////////////////////////////////////////////////
+    /// Constructor
+
+    /**
+     * Note: from the original Processing 1.2.1 source code
+     */
+    public final int armadillo_color(int c) {       
+      
+        return 0xff000000 | (c << 16) | (c << 8) | c;
+     
+    }
+    
+    public workflow_connector_edge(workflow_connector _source,workflow_connector _dest, String _desc, Boolean notDeletabled) {
+   //-- Warning, check must be made before to check if source!=dest;
+     this.source=_source;
+     this.dest=_dest;
+     this.desc=_desc;
+     this.dest.destination=true;
+     this.source.selected=true;
+     this.dest.selected=true;
+	 this.notDeletabled=(Boolean)notDeletabled;
+     //--Changed October 2011
+     //hashcode=color(getHashcode());
+     //int tmp=color(getHashcode());	
+	hashcode=color(hashcount++);
+	//--debug println(hashcount+" "+hex(color(hashcount))+" "+hex(hashcode));
+    
+     properties.setName("connector_"+hex(hashcode));
+     properties.put("source", _source.number);
+     properties.put("destination", _dest.number);
+     properties.put("notDeletabled", notDeletabled);	
+     properties.put("displayEdge", displayEdge);
+   }
+
+   public void drawFeature() {
+     if (properties.getBoolean("NoDraw")) return;
+     if (source!=null&&dest!=null) {
+        // -- Get source and destination
+        workflow_connector tmp_source=(workflow_connector)source;
+        workflow_connector tmp_dest=(workflow_connector)dest;
+        //-- draw buffer Arrow
+        //-- Note: we check if parent are moving to increase redraw time
+        //--Note: we don't redraw if the workflow is in auto_update...	
+		//--dbug auto_update always false -À October 2012
+		Boolean auto_update=false;
+		Boolean movingFlag=false;
+        //if (!movingFlag&&!isNotDeletabled()&&!auto_update) 
+		drawBufferArrow(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4);
+        //--draw Arrow -- Handle inside and other condition
+        //-- TO DO Simplify this logic choice?        
+		if (selected) {
+           if (!notDeletabled) {
+               drawBigArrow(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4, color(222,43,54), color(222,43,54));
+           } else {
+               drawArrow(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4);
+           }
+        } else {
+			if (inside2()) {			
+				//println("inside "+properties.getName()+" "+isNotDeletabled());
+				//println(notDeletabled+" "+this.notDeletabled);
+				if (this.notDeletabled==false) {
+				   //println("inside - deletable  "+properties.getName()+" cannot be deleted("+isNotDeletabled()+")");
+				   drawBigArrow(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4, color(222,43,54), color(222,43,54));
+			   } else {
+					//println("inside - not deletable "+properties.getName()+" cannot be deleted("+isNotDeletabled()+")");
+				   drawArrow(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4);
+			   }
+			} else {
+			  drawArrow(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4);
+			}
+		}
+        //--Write 
+        if (selected) {
+            noFill();
+            strokeWeight(1.0f);
+            stroke(128);
+            //image((PImage)filedata.get("big_close.png"), tmp_source.x+(tmp_dest.x-tmp_source.x)/2+20,tmp_source.y+(tmp_dest.y-tmp_source.y)/2+20);
+//            int w=(int)abs(tmp_source.x-tmp_dest.x);
+//            int h=(int)abs(tmp_source.y-tmp_dest.y);
+//            rect(tmp_source.x+4,tmp_source.y+4,w+4, h+4);
+        }
+
+        //-- Write Edge information
+        textAlign(CENTER);
+        fill(0);
+        if (this.displayEdge) text(desc,tmp_source.x+(tmp_dest.x-tmp_source.x)/2,tmp_source.y+(tmp_dest.y-tmp_source.y)/2);
+      }
+     
+   }
+
+   
+   public void drawFeature_buffer(PGraphics buffers) {
+     if (properties.getBoolean("NoDraw")) return;
+     if (source!=null&&dest!=null) {
+        // -- Get source and destination
+        workflow_connector tmp_source=(workflow_connector)source;
+        workflow_connector tmp_dest=(workflow_connector)dest;
+        //-- draw buffer Arrow
+        //-- Note: we check if parent are moving to increase redraw time
+        //--Note: we don't redraw if the workflow is in auto_update...	
+		//--dbug auto_update always false -À October 2012
+		Boolean auto_update=false;
+		Boolean movingFlag=false;
+        //if (!movingFlag&&!isNotDeletabled()&&!auto_update) 
+		drawBufferArrow(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4);
+        //--draw Arrow -- Handle inside and other condition
+        //-- TO DO Simplify this logic choice?        
+		if (selected) {
+           if (!notDeletabled) {
+               drawBigArrow_buffer(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4, color(222,43,54), color(222,43,54),buffers);
+           } else {
+               drawArrow_buffer(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4,buffers);
+           }
+        } else {
+			if (inside2()) {							
+				if (this.notDeletabled==false) {				   
+				   drawBigArrow_buffer(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4, color(222,43,54), color(222,43,54),buffers);
+			   } else {					
+				   drawArrow_buffer(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4,buffers);
+			   }
+			} else {
+			  drawArrow_buffer(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4,buffers);
+			}
+		}
+        //--Write 
+        if (selected) {
+            buffers.noFill();
+            buffers.strokeWeight(1.0f);
+            buffers.stroke(128);
+        }
+
+        //-- Write Edge information
+        buffers.textAlign(CENTER);
+       buffers. fill(0);
+        if (this.displayEdge) buffers.text(desc,tmp_source.x+(tmp_dest.x-tmp_source.x)/2,tmp_source.y+(tmp_dest.y-tmp_source.y)/2);
+      }
+     
+   }
+   
+   public void drawSimpleFeature() {
+
+     if (source!=null&&dest!=null) {
+        // -- Get source and destination
+        workflow_connector tmp_source=(workflow_connector)source;
+        workflow_connector tmp_dest=(workflow_connector)dest;
+        //-- draw buffer Arrow
+        //-- Note: we check if parent are moving to increase redraw time
+        drawArrow(tmp_source.x+4, tmp_source.y+4, tmp_dest.x+4, tmp_dest.y+4);  
+        if (selected) {
+            noFill();
+            strokeWeight(1.0f);
+            stroke(128);
+        }
+        
+        //-- Write Edge information
+        textAlign(CENTER);
+        fill(0);
+        //text(desc,tmp_source.x+(tmp_dest.x-tmp_source.x)/2,tmp_source.y+(tmp_dest.y-tmp_source.y)/2);
+      }
+     
+   }
+
+  public workflow_properties getProperties() {
+      return properties;
+  }
+
+
+
+public void drawArrow(float x1, float y1, float x2, float y2) {
+     drawArrow_p(x1,y1,x2,y2,col, col);
+}
+
+public void drawArrow_buffer(float x1, float y1, float x2, float y2, PGraphics buffers) {
+     drawArrow_p_buffer(x1,y1,x2,y2,col, col, buffers);
+}
+
+public void drawArrow_p(float x1, float y1, float x2, float y2, int lineColor, int fillColor) {
+    stroke(lineColor); //Line color
+    strokeWeight(2.0f);
+    noFill();
+    //--Calculate angle for a proximal bezier point for Arrow direction
+    //float dist_x=abs(x2-x1);
+    //float dist_y=abs(y2-y1);
+    float px=0, py=0;
+    //dist_x>dist_y&&
+    if (x2>=x1) {
+        bezier(x1,y1,x1+50,y1,x2-50,y2,x2,y2);
+        px = bezierPoint(x1,x1+50, x2-50, x2, 0.90f);
+        py = bezierPoint(y1, y1, y2, y2, 0.90f);
+    } else
+    if (y2>y1) {
+        bezier(x1,y1,x1,y1+50,x2,y2-50,x2,y2);
+        px = bezierPoint(x1,x1, x2, x2, 0.90f);
+        py = bezierPoint(y1, y1+50, y2-50, y2, 0.90f);
+    } else
+   if (x1>x2) {
+        bezier(x1,y1,x1-50,y1,x2+50,y2,x2,y2);
+        px = bezierPoint(x1,x1-50, x2+50, x2, 0.90f);
+        py = bezierPoint(y1, y1, y2, y2, 0.90f);
+    } else
+    if (y1>y2) {
+        bezier(x1,y1,x1,y1-50,x2,y2+50,x2,y2);
+        px = bezierPoint(x1,x1, x2, x2, 0.90f);
+        py = bezierPoint(y1, y1-50, y2-50, y2, 0.90f);
+    }
+    if (isNotDeletabled()==false) {
+    float angle=atan2(y2-py,x2-px);   
+    stroke(lineColor); //Line color
+    fill(fillColor);   //fill color
+    strokeWeight(2.0f);
+    pushMatrix();
+    translate(x2,y2);
+    rotate(angle);
+    beginShape();
+      vertex(-12,-4);//Far Outside UP
+      vertex(0,0);   //Middle point
+      vertex(-12,4); //Far Outside Bottom
+      vertex(-10,-1); //Indide Middle point
+    endShape(CLOSE);
+    popMatrix();
+    }
+}
+
+public void drawArrow_p_buffer(float x1, float y1, float x2, float y2, int lineColor, int fillColor, PGraphics buffers) {
+    buffers.stroke(lineColor); //Line color
+    buffers.strokeWeight(2.0f);
+    buffers.noFill();
+    //--Calculate angle for a proximal bezier point for Arrow direction
+    //float dist_x=abs(x2-x1);
+    //float dist_y=abs(y2-y1);
+    float px=0, py=0;
+    //dist_x>dist_y&&
+    if (x2>=x1) {
+        buffers.bezier(x1,y1,x1+50,y1,x2-50,y2,x2,y2);
+        px = bezierPoint(x1,x1+50, x2-50, x2, 0.90f);
+        py =bezierPoint(y1, y1, y2, y2, 0.90f);
+    } else
+    if (y2>y1) {
+        buffers.bezier(x1,y1,x1,y1+50,x2,y2-50,x2,y2);
+        px = bezierPoint(x1,x1, x2, x2, 0.90f);
+        py = bezierPoint(y1, y1+50, y2-50, y2, 0.90f);
+    } else
+   if (x1>x2) {
+        buffers.bezier(x1,y1,x1-50,y1,x2+50,y2,x2,y2);
+        px = bezierPoint(x1,x1-50, x2+50, x2, 0.90f);
+        py = bezierPoint(y1, y1, y2, y2, 0.90f);
+    } else
+    if (y1>y2) {
+        buffers.bezier(x1,y1,x1,y1-50,x2,y2+50,x2,y2);
+        px = bezierPoint(x1,x1, x2, x2, 0.90f);
+        py = bezierPoint(y1, y1-50, y2-50, y2, 0.90f);
+    }
+    if (isNotDeletabled()==false) {
+    float angle=atan2(y2-py,x2-px);    
+    buffers.stroke(lineColor); //Line color
+    buffers.fill(fillColor);   //fill color
+    buffers.strokeWeight(2.0f);
+    buffers.pushMatrix();
+    buffers.translate(x2,y2);
+    buffers.rotate(angle);
+    buffers.beginShape();
+      buffers.vertex(-12,-4);//Far Outside UP
+      buffers.vertex(0,0);   //Middle point
+      buffers.vertex(-12,4); //Far Outside Bottom
+      buffers.vertex(-10,-1); //Indide Middle point
+    buffers.endShape(CLOSE);
+    buffers.popMatrix();
+    }
+}
+
+/**
+ * Draw a selection arrow to the back_buffer
+ * Warning, it is bigger than the real arrow for easier selection
+ * Mimick draw big Arrow
+ * @param x1
+ * @param y1
+ * @param x2
+ * @param y2
+ */
+private void  drawBufferArrow(float x1, float y1, float x2, float y2) {
+     
+    //--Code for selection of Arrow using a back_buffer
+     bufConnectorEdge.stroke(hashcode); //Line color
+     bufConnectorEdge.fill(hashcode);   //fill color
+     bufConnectorEdge.strokeWeight(5.0f);
+    
+     //bufConnectorEdge.bezier(x1,y1,x1+50,y1,x2-50,y2,x2,y2);
+     //--Calculate angle for a proximal bezier point for Arrow direction
+    
+    float px=0, py=0;
+    if (x2>=x1) {
+        bufConnectorEdge.bezier(x1,y1,x1+50,y1,x2-50,y2,x2,y2);
+        px = bezierPoint(x1,x1+50, x2-50, x2, 0.90f);
+        py = bezierPoint(y1, y1, y2, y2, 0.90f);
+    } else
+    if (y2>y1) {
+        bufConnectorEdge.bezier(x1,y1,x1,y1+50,x2,y2-50,x2,y2);
+        px = bezierPoint(x1,x1, x2, x2, 0.90f);
+        py = bezierPoint(y1, y1+50, y2-50, y2, 0.90f);
+    } else
+   if (x1>x2) {
+        bufConnectorEdge.bezier(x1,y1,x1-50,y1,x2+50,y2,x2,y2);
+        px = bezierPoint(x1,x1-50, x2+50, x2, 0.90f);
+        py = bezierPoint(y1, y1, y2, y2, 0.90f);
+    } else
+    if (y1>y2) {
+        bufConnectorEdge.bezier(x1,y1,x1,y1-50,x2,y2+50,x2,y2);
+        px = bezierPoint(x1,x1, x2, x2, 0.90f);
+        py = bezierPoint(y1, y1-50, y2-50, y2, 0.90f);
+    } 
+         float angle=atan2(y2-py,x2-px);
+         bufConnectorEdge.fill(hashcode);   //fill color
+         bufConnectorEdge.strokeWeight(5.0f);
+         bufConnectorEdge.pushMatrix();
+         bufConnectorEdge.translate(x2,y2);
+         bufConnectorEdge.rotate(angle);
+         bufConnectorEdge.beginShape();
+         bufConnectorEdge.vertex(-15,-5);//Far Outside UP
+         bufConnectorEdge.vertex(0,0);   //Middle point
+         bufConnectorEdge.vertex(-15,5); //Far Outside Bottom
+         bufConnectorEdge.vertex(-12,-1); //Indide Middle point
+         bufConnectorEdge.endShape(CLOSE);
+         bufConnectorEdge.popMatrix();
+    
+}
+
+public void drawBigArrow(float x1, float y1, float x2, float y2, int lineColor, int fillColor) {
+    stroke(lineColor); //Line color
+    noFill();    
+    strokeWeight(5.0f);
+
+    
+    //--Calculate angle for a proximal bezier point for Arrow direction
+//    float dist_x=abs(x2-x1);
+//    float dist_y=abs(y2-y1);
+    float px=0, py=0;
+     if (x2>=x1) {
+        bezier(x1,y1,x1+50,y1,x2-50,y2,x2,y2);
+        px = bezierPoint(x1,x1+50, x2-50, x2, 0.90f);
+        py = bezierPoint(y1, y1, y2, y2, 0.90f);
+    } else
+    if (y2>y1) {
+        bezier(x1,y1,x1,y1+50,x2,y2-50,x2,y2);
+        px = bezierPoint(x1,x1, x2, x2, 0.90f);
+        py = bezierPoint(y1, y1+50, y2-50, y2, 0.90f);
+    } else
+   if (x1>x2) {
+        bezier(x1,y1,x1-50,y1,x2+50,y2,x2,y2);
+        px = bezierPoint(x1,x1-50, x2+50, x2, 0.90f);
+        py = bezierPoint(y1, y1, y2, y2, 0.90f);
+    } else
+    if (y1>y2) {
+        bezier(x1,y1,x1,y1-50,x2,y2+50,x2,y2);
+        px = bezierPoint(x1,x1, x2, x2, 0.90f);
+        py = bezierPoint(y1, y1-50, y2-50, y2, 0.90f);
+    }
+    float angle=atan2(y2-py,x2-px);
+    fill(fillColor);   //fill color
+    pushMatrix();
+    translate(x2,y2);
+    rotate(angle);
+    beginShape();
+      vertex(-15,-5);//Far Outside UP
+      vertex(0,0);   //Middle point
+      vertex(-15,5); //Far Outside Bottom
+      vertex(-12,-1); //Indide Middle point
+    endShape(CLOSE);
+    popMatrix();
+}
+
+
+public void drawBigArrow_buffer(float x1, float y1, float x2, float y2, int lineColor, int fillColor, PGraphics buffers) {
+    buffers.stroke(lineColor); //Line color
+    buffers.noFill();    
+    buffers.strokeWeight(5.0f);
+
+    
+    //--Calculate angle for a proximal bezier point for Arrow direction
+   float dist_x=abs(x2-x1);
+   float dist_y=abs(y2-y1);
+    float px=0, py=0;
+      if (x2>=x1) {
+         buffers.bezier(x1,y1,x1+50,y1,x2-50,y2,x2,y2);
+         px = bezierPoint(x1,x1+50, x2-50, x2, 0.90f);
+         py = bezierPoint(y1, y1, y2, y2, 0.90f);
+   } else
+     if (y2>y1) {
+         buffers.bezier(x1,y1,x1,y1+50,x2,y2-50,x2,y2);
+         px = bezierPoint(x1,x1, x2, x2, 0.90f);
+         py = bezierPoint(y1, y1+50, y2-50, y2, 0.90f);
+     } else
+    if (x1>x2) {
+        buffers.bezier(x1,y1,x1-50,y1,x2+50,y2,x2,y2);
+         px = bezierPoint(x1,x1-50, x2+50, x2, 0.90f);
+         py = bezierPoint(y1, y1, y2, y2, 0.90f);
+    } else
+     if (y1>y2) {
+         buffers.bezier(x1,y1,x1,y1-50,x2,y2+50,x2,y2);
+         px = bezierPoint(x1,x1, x2, x2, 0.90f);
+         py = bezierPoint(y1, y1-50, y2-50, y2, 0.90f);
+    }
+     float angle=atan2(y2-py,x2-px);
+    buffers.fill(fillColor);   //fill color
+    buffers.pushMatrix();
+    buffers.translate(x2,y2);
+    buffers.rotate(angle);
+    buffers.beginShape();
+      buffers.vertex(-15,-5);//Far Outside UP
+      buffers.vertex(0,0);   //Middle point
+      buffers.vertex(-15,5); //Far Outside Bottom
+      buffers.vertex(-12,-1); //Indide Middle point
+    buffers.endShape(CLOSE);
+    buffers.popMatrix();
+}
+
+public Boolean inside2() {
+    if (debug) {
+        color c=bufConnectorEdge.get(mouseX, mouseY);
+		if (bufConnectorEdge.get(mouseX, mouseY)==hashcode) println("Color in buffer:"+hex(c)+" Color for connector:"+hex(hashcode)+" "+(bufConnectorEdge.get(mouseX, mouseY)==hashcode));   
+    }
+    return (Boolean)(bufConnectorEdge.get(mouseX, mouseY)==hashcode);
+}
+
+        /**
+         * @param desc the desc to set
+         */
+        public void setDesc(String _desc) {
+            desc = _desc;
+        }
+
+        /**
+         * @return the color
+         */
+        public int getColor() {
+            return col;
+        }
+
+        /**
+         * @param color the color to set
+         */
+        public void setColor(int _col) {
+            col = _col;
+        }
+
+
+        public workflow_object getSourceParent() {
+            return source.parent;
+        }
+
+        public workflow_object getDestinationParent() {
+            return dest.parent;
+        }
+
+        /**
+         * @return the notDeletabled
+         */
+        public Boolean isNotDeletabled() {
+            return notDeletabled;
+        }
+
+        /**
+         * @param notDeletabled the notDeletabled to set
+         */
+        public void setNotDeletabled(Boolean _notDeletabled) {
+            this.notDeletabled = (Boolean)_notDeletabled;
+			//println("Setting notDeletabled"+notDeletabled);
+            properties.put("notDeletabled", _notDeletabled);
+        }
+		
+		public void setSelected(Boolean _selected) {
+			this.selected = (Boolean) _selected;
+		}
+
+} //End class

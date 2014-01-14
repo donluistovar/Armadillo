@@ -1,0 +1,126 @@
+<div id=\"curseur\" class=\"infobulle\"></div>";	
+		<form enctype='multipart/form-data' name='FormHGT' method='POST' action='index.php?action=hgt' >
+			<table border=$border width='85%' align='center'>
+				<tr><td width='100%' ><table width='100%' align='center' border=$border>
+					<tr align='center'>
+//						<td valign='top' align='center'><span class='normalTexte'>Paste your species tree in the <a href='javascript:pasteSample2HGT()'>Newick</a> format: </span><br></td>";
+					<tr><td align=center><b>HGT-Detection</b> infers a scenario of horizontal gene transfers for the given<br> pair of species and gene trees.<br><br></td></tr>
+						<td valign='top' align='center'><span class='normalTexte'>Paste your species tree in the <a href='http://evolution.genetics.washington.edu/phylip/newicktree.html'>Newick</a> format: </span><br></td>
+					</tr>
+					<input type='hidden' name='project' value='trex'>
+					<input type='hidden' name='page' value='index.php'>
+					<input type='hidden' name='debug' value='yes'>
+					<input type='hidden' name='actionTrex' value='hgt'>
+					<input type='hidden' name='actionBackup' value='hgt'>
+					<input type='hidden' name='CalculExecute' value='0'>
+					<input type='hidden' name='tree' value='species'>
+					<input type='hidden' name='voirArbre' value='1'>
+					<tr><td><textarea rows='10' name='dataInputSpeciesHGT' style='width:100%' onchange='javascript:manageSelectRoot(\"species\");'>
+					echo $dataInputSpeciesHGT; </textarea>					</td></tr>
+					<tr><td align='center'>
+					<table class='blue' width='100%' border=0>
+		 				<tr>
+							<td align='center'>Species tree file<input type='radio' name='DataOptionSpecies' value='file' onClick='inputTypeChangedSpecies(0)'>
+							<input type='radio' name='DataOptionSpecies' value='pasted' onClick='inputTypeChangedSpecies(1)' checked>Pasted</a>
+							<input name='userfileSpecies' type='file' size=20 disabled></td>
+		 				</tr>
+					</table>
+					</td></tr>
+					<tr align='center'>
+	//					<td valign='top' align='center'><br><span class='normalTexte'>Paste your gene tree in the <a href='javascript:pasteSample2HGT()'>Newick</a> format: </span><br></td>
+						<td valign='top' align='center'><span class='normalTexte'><br>Paste your gene tree in the <a href='http://evolution.genetics.washington.edu/phylip/newicktree.html'>Newick</a> format: </span><br></td>
+//						<td valign='top' align='center'><br><span class='normalTexte'>Paste your gene tree in the <a href='javascript:pasteSample2HGT()'>Newick</a> or <a href='javascript:pasteSample1HGT()'>Phylip</a> format: </span><br></td>
+					</tr>
+				</td></tr>
+					<tr><td><textarea rows='10' name='dataInputGeneHGT' style='width:100%' onchange='javascript:manageSelectRoot(\"gene\");'>
+					echo $dataInputGeneHGT; </textarea>
+					</td></tr>
+				<tr>
+					<tr><td align='center'>
+						<table class='blue' width='100%' border=0>
+		 					<tr>
+		      				<td lign='center'>Gene tree file<input type='radio' name='DataOptionGene' value='file' onClick='inputTypeChangedGene(0)'>
+								<input type='radio' name='DataOptionGene' value='pasted' onClick='inputTypeChangedGene(1)' checked>Pasted</a>
+								<input name='userfileGene' type='file' size=20 disabled></td>
+		 					</tr>
+						</table>
+					</td></tr>
+					<tr><td align='center' colspan='2'><br>
+						<input class='button' type='submit' value='Compute' name='go' onClick='return validerInputHGT();' $state>&nbsp;&nbsp;
+						<b><input class='button' type='submit' value='Compute on cluster (more than 15 species)' name='cluster' onClick = 'return validerInputHGT();' $clusterState>&nbsp;&nbsp;</b>
+						<input class='button' type='reset' value='Reset' name='RAZ'>&nbsp;&nbsp;
+						<input class='button' type='button' value='Clear' name='clear' onClick ='javascript: dataInputGeneHGT.value = \"\"; dataInputSpeciesHGT.value = \"\";';>&nbsp;&nbsp
+						<input class='button' type='button' value='Stop' name='stop' OnClick='javascript:onStopButton();' disabled>";
+//						<input class='button' type='button' value='Stop' name='stop' OnClick='javascript:location.href=\"index.php?action=hgt\";' >";
+					</td></tr>";
+					<tr><td align='center'>";
+						<span class='normalTexte'> Data sets : <a href='javascript:pasteMatteExample();'> Matte-Taillez et al. (2002, gene rpl12e, 14 species)</a>, <br><a href='javascript:pasteDelwicheExample();'> Delwiche and Palmer (1996, gene rbcL, 40 species)</a>,<br> <a href='javascript:pasteWoeseExample();'>Woese et al. (2000, gene pheRS, 32 species)</a><br> <a href='javascript:pasteWoeseExampleBoot();'>Woese et al. (2000, gene pheRS, 32 species + 100 replicated trees for bootstrap)</a>";
+	//					<span class='normalTexte'> Try these examples : <a href='javascript:pasteDelwicheExample();'> Delwiche and Palmer (1996)</a> &nbsp; <a href='javascript:pasteWoeseExample();'>Woese et al. (2000)</a> &nbsp; <a href='javascript:pasteWoeseExample();'>Woese et al. (2000)</a>";
+					</td></tr>";
+				</table></td></tr>";
+		
+				<tr><td><br></td></tr>";
+		
+		  <tr><td><br><b>Notification</b><td></tr>";
+		$mail = varPostSession('mail','');
+			<tr bgcolor='#336699'>";
+				<td><table border='$border' width='100%' bgcolor='$bgcolor'><tr>";
+					<td width='60%'><b>Email address</b> (required field with bootstrap option; the results will be also sent to you by email)</td><td><input type=text name='mail' style='width:100%' value=$mail></td>";
+				</tr></table></td>";
+			</tr>";
+		
+		  <tr>";                                                                                                                      
+				<td><br><b>HGT-Detection options</b></td>";
+		  </tr>";
+				<tr bgcolor='#336699'>";
+					<td><table border='$border' width='100%' bgcolor='$bgcolor'><tr>";
+						<td width='60%' ><b>Compute HGT bootstrap </b><img src='../images/info.png' onmouseover=\"montre('<span bgcolor=blue>HGT bootstrap is computed taking into account the robustness of the gene tree and all possible minimum-cost HGT scenarios. The root of the gene tree replicates can be unspecified.</span>');\" onmouseout=\"cache();\" width='17' ><br>(paste the gene tree replicates after the gene tree)</td><td><input type=checkbox name='bootstrap' "; if($bootstrap=='yes') checked=true"; ></td></tr></td>";
+					</tr></table></td>";
+				</tr>";
+		
+				<tr bgcolor='#336699'>
+					<td><table border='$border' width='100%' bgcolor='$bgcolor'><tr>
+						<td width='60%' ><b>Select the root of the species tree </b><br>(if the root is not specified in the Newick string and the checkbox is not checked, the tree will be rooted by midpoint)</td><td><input type=checkbox name='rootSpecies' "; if($rootSpecies=='on') checked=true";  onclick='javascript:selectRoot(\"species\");'></td></tr></td>
+					</tr></table></td>
+				</tr>
+		
+				<tr  bgcolor='#336699'>
+					<td><table border='$border' width='100%' bgcolor='$bgcolor'><tr>
+						<td width='60%' ><b>Select the root of the gene tree </b><br>(if the root is not specified in the Newick string and the checkbox is not checked, the tree will be rooted by midpoint)</td><td><input type=checkbox name='rootGene' "; if($rootGene=='on') checked=true";  onclick='javascript:selectRoot(\"gene\");'></td></tr></td>
+					</tr></table></td>
+				</tr>
+		
+		$mode = varPostSession('mode',"multicheck");
+				<tr  bgcolor='#336699'>
+					<td><table border='$border' width='100%' bgcolor='$bgcolor'><tr>
+						<td width='60%' ><b>HGT detection mode</b></td>
+						<td><SELECT name=mode>
+							<OPTION value='multicheck' "; echo ($mode=='multicheck')?"selected":""; >Several HGTs by iteration</OPTION>";
+							<OPTION value='monocheck'  "; echo ($mode=='monocheck')?"selected":"";  >One HGT by iteration</OPTION>";
+						</SELECT></td>
+					</tr></table></td>
+				</tr>
+		
+		$optimization = varPostSession('optimization','bd');
+				<tr  bgcolor='#336699'>
+					<td><table border='$border' width='100%' bgcolor='$bgcolor'><tr>
+						<td width='60%' ><b>Optimization criterion</b></td>
+						<td><SELECT name=optimization>
+							<OPTION value='bd' "; echo ($optimization=='bd')?"selected":""; > Bipartition dissimilarity</OPTION>
+							<OPTION value='rf' "; echo ($optimization=='rf')?"selected":""; > Robinson and Foulds distance</OPTION>
+							<OPTION value='ls' "; echo ($optimization=='ls')?"selected":""; > Least-squares</OPTION>
+						</SELECT></td>
+					</tr></table></td>
+				</tr>
+	
+
+		<tr>
+			<td><br><a href=\"download/hgt-detection.msi\">Windows version of HGT-Detection</a>
+			<br><a href=\"download/hgt-detection_3.22.zip\">UNIX/Linux version of HGT-Detection</a></td>
+		</tr>
+
+		<tr>
+			<td><br><b>Citation</b><br><a href=\"http://www.info2.uqam.ca/~makarenkov_v/makarenv/Artcile_SB_2010.pdf\" target='_blank'>Boc, A., Philippe, H. and Makarenkov, V. (2010), Inferring and validating horizontal gene transfer events using bipartition dissimilarity, <i>Systematic Biology</i>, 59: 195-211</a></td>
+		</tr>		
+			</table>
+		</form>

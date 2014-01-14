@@ -1,0 +1,340 @@
+class workflow_object_if extends workflow_object {
+
+public workflow_object_if(workflow_properties obj_properties) { 
+  properties=obj_properties;
+  resetColorMode();
+  Vertex=new pvertex[3];
+  connection=new workflow_connector[3]; //0, LEFT; 1, UP; 2, DOWN; 3, RIGHT (TO DO CHECK CONVENTION)
+      // -- Random position
+    float x1 = properties.getInt("x");
+    float y1 = properties.getInt("y");
+    // -- Make the vertex needed
+    if (properties.getBoolean("modeSide")) {
+        addVertex(x1+40, y1);
+        addVertex(x1+40,y1+51);
+        addVertex(x1, y1+25);
+    } else {
+        addVertex(x1+25, y1);
+        addVertex(x1+50,y1+42);
+        addVertex(x1, y1+42);
+    }
+    // -Create the connector
+    for (int i=0; i<connection.length;i++) {
+      connection[i]=new workflow_connector(this);
+      connection[i].conditional=true;
+    }
+    // - Calculate their position
+    recalculatePosition();
+}
+
+public workflow_object_if(workflow_properties obj_properties, int x1, int y1) {
+  
+  properties=obj_properties;
+  Vertex=new pvertex[3];
+  connection=new workflow_connector[3]; //0, LEFT; 1, UP; 2, DOWN; 3, RIGHT (TO DO CHECK CONVENTION)
+    // -- Make the vertex needed
+    if (properties.getBoolean("modeSide")) {
+        addVertex(x1+40, y1);
+        addVertex(x1+40,y1+51);
+        addVertex(x1, y1+25);
+    } else {
+        addVertex(x1+25, y1);
+        addVertex(x1+50,y1+42);
+        addVertex(x1, y1+42);
+    }
+    // -Create the connector
+    for (int i=0; i<connection.length;i++) {
+      connection[i]=new workflow_connector(this);
+      //connection[i].conditional=true;
+    }
+    // - Calculate their position
+    recalculatePosition();
+}
+       
+      public void drawSimpleFeature() {
+              // - Inside of object
+
+    //-- Draw shape this draw a very basic shape in case we don't have the image
+    //-- Note also used for the inside procedure...
+    strokeWeight(1);
+
+     if (inside()||selected) {
+           fill(0xff54B5E8);        
+         stroke(0);
+        } else {
+          fill(0xffE87ADB);        
+         stroke(0);
+
+        }
+        stroke(255);
+    beginShape(TRIANGLES);
+    for(int i=0;i<Vertex_count;i++){
+      vertex(Vertex[i].x,Vertex[i].y);
+    }
+    endShape();
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// Draw SIDE
+
+    if (properties.getBoolean("modeSide")) {
+
+            // - draw text
+        fill(0);
+        textAlign(CENTER, CENTER);
+        textFont(font);
+        text(properties.getName(), this.x+7, this.y);
+        text(properties.getDescription(), this.x, this.y+35);
+        fill(128);
+        text("true",this.x+40, this.y-10);
+        text("false",this.x+40, this.y+10);
+        fill(0);
+        if (properties.isSet("Order")) text(properties.get("Order"),this.x, this.y+35);
+    ////////////////////////////////////////////////////////////////////////////
+    /// Draw UP (default)
+    } else {
+        fill(0);
+        textAlign(CENTER, CENTER);
+        textFont(font);
+        text(properties.getName(), this.x, this.y+24);
+        text(properties.getDescription(), this.x+35, this.y+24);
+        fill(128);
+        text("true",this.x-45, this.y+42);
+        text("false",this.x+45, this.y+42);
+          fill(0);
+        if (properties.isSet("Order")) text(properties.get("Order"),this.x, this.y+35);
+    }
+
+    // - draw connector
+    for (int i=0; i<connection.length;i++) {
+        connection[i].drawFeature();
+    }
+    if (config.getBoolean("displayConnector")) {
+        fill(0);
+        for (int i=0; i<connection.length;i++) {
+         //CASE 1. ModeSide?
+         if (properties.getBoolean("modeSide")) {
+          switch(i) {
+            case UP:   text(str(i),connection[i].x-5, connection[i].y-5); break; //TRUE
+            case DOWN: text(str(i),connection[i].x-5, connection[i].y+15); break; //FALSE
+            case LEFT: text(str(i),connection[i].x-5, connection[i].y+5); break; //CONDITION
+            }
+         //CASE 2. No...
+         } else {
+             switch(i) {
+                case UP:   text(str(i),connection[i].x-5, connection[i].y+15); break; //TRUE
+                case DOWN: text(str(i),connection[i].x-5, connection[i].y+15); break;//FALSE
+                case LEFT: text(str(i),connection[i].x-5, connection[i].y+5); break; //Condition
+            }
+         }
+        }
+    }
+        }
+
+        
+ public void drawFeature(){
+    // - Inside of object
+
+    //-- Draw shape this draw a very basic shape in case we don't have the image
+    //-- Note also used for the inside procedure...
+    strokeWeight(0.1f);
+    noFill();
+    noStroke();
+    //-- Debug : Uncomment to see shape
+    // fill(0);
+    // stroke(0);
+//    beginShape(TRIANGLES);
+//    for(int i=0;i<Vertex_count;i++){
+//      vertex(Vertex[i].x,Vertex[i].y);
+//    }
+//    endShape();
+    PImage displayImage=null;
+
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// Draw SIDE
+
+    if (properties.getBoolean("modeSide")) {
+        if (inside()||selected) {
+            displayImage=(PImage)filedata.get("ifSIDE_black.png");
+        } else {
+         
+             if (properties.get("colorMode").equals("RED"))    displayImage=(PImage)filedata.get("ifSIDE_red.png");
+              if (properties.get("colorMode").equals("BLUE"))   displayImage=(PImage)filedata.get("ifSIDE_blue.png");
+              if (properties.get("colorMode").equals("ORANGE")) displayImage=(PImage)filedata.get("ifSIDE_orange.png");
+              if (properties.get("colorMode").equals("GREEN")) displayImage=(PImage)filedata.get("ifSIDE_green.png");
+              if (properties.get("colorMode").equals("PURPLE")) displayImage=(PImage)filedata.get("ifSIDE_purple.png");
+             if (displayImage==null) displayImage=(PImage)filedata.get("ifSIDE_red.png");
+          
+        }
+            if (displayImage!=null) image(displayImage,this.x-18, this.y-24);
+            // - draw text
+        fill(0);
+        textAlign(CENTER, CENTER);
+        textFont(font);
+        text(properties.getName(), this.x+7, this.y);
+        text(properties.getDescription(), this.x, this.y+35);
+        fill(128);
+       
+        text("true",this.x+40, this.y-10);
+        text("false",this.x+40, this.y+10);
+        if (properties.isSet("IfStatus")) {
+            fill(0);            
+            if (properties.getBoolean("IfStatus")) {
+               text("true",this.x+40, this.y-10);
+            }  else {
+                text("false",this.x+40, this.y+10);
+            }
+        }
+
+    ////////////////////////////////////////////////////////////////////////////
+    /// Draw UP (default)
+    } else {
+        if (inside()||selected) {
+            displayImage=(PImage)filedata.get("ifUP_black.png");
+        } else {
+            if (properties.get("colorMode").equals("RED"))displayImage=(PImage)filedata.get("ifUP_red.png");
+            if (properties.get("colorMode").equals("BLUE"))displayImage=(PImage)filedata.get("ifUP_blue.png");
+            if (properties.get("colorMode").equals("ORANGE"))displayImage=(PImage)filedata.get("ifUP_orange.png");
+            if (properties.get("colorMode").equals("GREEN"))displayImage=(PImage)filedata.get("ifUP_green.png");
+            if (properties.get("colorMode").equals("PURPLE"))displayImage=(PImage)filedata.get("ifUP_purple.png");
+            if (displayImage==null) displayImage=(PImage)filedata.get("ifUP_red.png"); 
+        }
+            if (displayImage!=null) image(displayImage,this.x-25, this.y+2);
+            // - draw text
+        fill(0);
+        textAlign(CENTER, CENTER);
+        textFont(font);
+        text(properties.getName(), this.x, this.y+24);
+        text(properties.getDescription(), this.x+35, this.y+24);
+        fill(128);
+        text("true",this.x-45, this.y+42);
+        text("false",this.x+45, this.y+42);
+        if (properties.isSet("IfStatus")) {
+            fill(0);           
+            if (properties.getBoolean("IfStatus")) {
+               text("true",this.x-45, this.y+42);
+            }  else {
+                 text("false",this.x+45, this.y+42);
+            }
+        }
+    }
+    // - draw connector
+    for (int i=0; i<connection.length;i++) {
+        connection[i].drawFeature();
+    }
+    if (config.getBoolean("displayConnector")) {
+        fill(0);
+        for (int i=0; i<connection.length;i++) {
+         //CASE 1. ModeSide?
+         if (properties.getBoolean("modeSide")) {
+          switch(i) {
+            case UP:   text(str(i),connection[i].x-5, connection[i].y-5); break; //TRUE
+            case DOWN: text(str(i),connection[i].x-5, connection[i].y+15); break; //FALSE
+            case LEFT: text(str(i),connection[i].x-5, connection[i].y+5); break; //CONDITION
+            }
+         //CASE 2. No...
+         } else {
+             switch(i) {
+                case UP:   text(str(i),connection[i].x-5, connection[i].y+15); break; //TRUE
+                case DOWN: text(str(i),connection[i].x-5, connection[i].y+15); break;//FALSE
+                case LEFT: text(str(i),connection[i].x-5, connection[i].y+5); break; //Condition
+            }
+         }
+        }
+    }
+    int statuscode=properties.getInt("Status");
+    switch(statuscode) {
+        case RunProgram.status_error:
+           displayImage=(PImage)filedata.get("small_warning.png");
+           image(displayImage,this.x-40, this.y-50);
+           break;
+        case RunProgram.status_done:
+           displayImage=(PImage)filedata.get("backet_ok.png");
+           image(displayImage,this.x-40, this.y-50);
+           break;
+         case RunProgram.status_nothing:
+           break;
+         case RunProgram.status_runningclassnotfound:
+           displayImage=(PImage)filedata.get("small_warning.png");
+           image(displayImage,this.x-40, this.y-50);
+           break;
+         case RunProgram.status_programnotfound:
+           displayImage=(PImage)filedata.get("small_warning.png");
+           image(displayImage,this.x-40, this.y-50);
+            break;
+         case RunProgram.status_BadRequirements:
+            displayImage=(PImage)filedata.get("small_warning.png");
+            image(displayImage,this.x-40, this.y-50);
+            break;
+        case RunProgram.status_idle:
+            displayImage=(PImage)filedata.get("pause.png");
+            image(displayImage,this.x-20, this.y-20);
+            break;
+         case RunProgram.status_running:
+            displayImage=(PImage)filedata.get("play.png");
+           image(displayImage,this.x-20, this.y-20);
+           break;
+        } //--End switch(status_code)
+ }
+
+
+  public void recalculatePosition() {          
+      if (properties.getBoolean("modeSide")) {
+
+      //--Calculate middle
+      this.x=PApplet.parseInt((Vertex[1].x-Vertex[2].x)/2+Vertex[2].x);
+      this.y=PApplet.parseInt(Vertex[0].y+25);
+      //-- Initialise Connector
+        for (int i=0; i<3; i++) {
+           //connection[i].parent=this;
+           //connection[i].conditional=true;
+           switch(i) {
+             case LEFT :updateConnector(connection[i], i, this.x-30,this.y-5, null);
+                        //connection[i].x=this.x-30;connection[i].y=this.y-5;break; //Condition
+                        break;
+               case UP   :updateConnector(connection[i], i, this.x+30,this.y-25, null);
+                         //connection[i].x=this.x+30;connection[i].y=this.y-25;
+                         //connection[i].output=true;
+                         break;   //TRUE
+             case DOWN : updateConnector(connection[i], i, this.x+30,this.y+20, null);
+                         //connection[i].x=this.x+30;connection[i].y=this.y+20;
+                         //connection[i].output=true;
+                         break;   //FALSE
+           }
+        }
+      } else {
+          this.x=PApplet.parseInt(Vertex[0].x);
+          this.y=PApplet.parseInt(Vertex[0].y);
+           for (int i=0; i<3; i++) {
+           connection[i].parent=this;
+           switch(i) {
+             case LEFT :updateConnector(connection[i], i, this.x-3,this.y-10, null);
+                        //connection[i].x=this.x-3;connection[i].y=this.y-10;break; //Condition
+                        break;
+             case UP   : updateConnector(connection[i], i, this.x-30,this.y+42, null);
+                         //connection[i].x=this.x-30;connection[i].y=this.y+42;
+                         //connection[i].output=true;
+                         break;   //TRUE
+             case DOWN : updateConnector(connection[i], i, this.x+20,this.y+42, null);
+                         //connection[i].x=this.x+20;connection[i].y=this.y+42;
+                         //connection[i].output=true;
+                         break;   //FALSE
+           }
+        }
+      }
+   
+  } //End recalculate position
+
+  
+        public workflow_connector returnNearestConnector() {
+            return connection[LEFT];
+        }
+
+  
+        public workflow_connector returnNearestConnector(workflow_connector source) {
+            return connection[LEFT];
+        }
+
+
+
+}
