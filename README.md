@@ -24,6 +24,16 @@ a) Install easyphp, xamp, etc. and clone this git content into an accessible dir
 
 b) Navigate to this new url (this will create the usagers directory)
 
+NOTICE
+==============
+
+*** This software use the following libraries: ***
+
+* processingjs-1.4.1 (http://processingjs.org)
+* jquery-1.9.1  (http://jquery.com/)
+* angularjs-1.2 (http://angularjs.org/)
+* bootstrap     (http://getbootstrap.com/)
+
 
 Etienne Lord
 UQAM
