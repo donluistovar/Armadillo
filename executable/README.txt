@@ -4,3 +4,6 @@
 
 A) This directory contains the definition (menu) for some
    executables. (TO DO)
+   
+B) It also contains the Armadillo executable and dependencies.
+

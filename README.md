@@ -27,6 +27,12 @@ b) Navigate to this new url (this will create the usagers directory)
 NOTICE
 ==============
 
+*** Included softwares ***
+
+ (TO DO)
+
+
+
 *** This software use the following libraries: ***
 
 * processingjs-1.4.1 (http://processingjs.org)
@@ -34,6 +40,14 @@ NOTICE
 * angularjs-1.2 (http://angularjs.org/)
 * bootstrap     (http://getbootstrap.com/)
 
+  Armadillo
+  
+  Rserve      (http://rforge.net/Rserve/)
+  Rscript     (https://rforge.net/rscript/)
+  
+  
+  
+  
 
 Etienne Lord
 UQAM
