@@ -1,0 +1,6 @@
+-------------------------------------------------
+        Armadillo Online Server 2.0 
+-------------------------------------------------
+
+A) This directory contains the definition (menu) for some
+   executables. (TO DO)
