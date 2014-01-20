@@ -7,3 +7,4 @@ A) This directory contains the definition (menu) for some
    
 B) It also contains the Armadillo executable and dependencies.
 
+C) We should create an install.sh which will be up to date (TO DO)
