@@ -8,7 +8,7 @@ Note: This is a first draft, not cleaned version. DO NOT USE!
 REQUIREMENTS
 ==============
 
-- php
+- a unix php environment
 - javascript
 
 
@@ -23,6 +23,17 @@ TESTING
 a) Install easyphp, xamp, etc. and clone this git content into an accessible directory e.g. armadillo_workflow
 
 b) Navigate to this new url (this will create the usagers directory)
+
+TO DO 
+=============
+
+A) Automatic setup of R and Rserve
+B) Vagrant file for setup
+C) Use of Pandoc (?)
+D) Upgrade interface
+E) View matrix code in matrix.php (input/output matrix)
+F) Find a calendar function 
+
 
 NOTICE
 ==============
