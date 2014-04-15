@@ -1,0 +1,107 @@
+<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+<script src="js/angular.min.js"></script>
+<script src="js/jquery.handsontable.full.js"></script>
+<link rel="stylesheet" media="screen" href="css/jquery.handsontable.full.css">
+
+<style type="text/css">
+body {background: white; margin: 20px;}
+h2 {margin: 20px 0;}
+</style>
+
+
+<script>
+$(document).ready(function () {
+
+  function createBigData() {
+    var rows = []
+      , i
+      , j;
+  
+    for (i = 0; i < 100000; i++) {
+      var row = [];
+      for (j = 0; j < 6; j++) {
+        row.push(Handsontable.helper.spreadsheetColumnLabel(j) + i);
+      }
+      rows.push(row);
+    }
+  
+    return rows;
+  }
+  
+  /*
+   Container looks like this:
+  
+   <div id="example1" style="overflow: scroll"></div>
+   */
+  
+  var maxed = false
+    , resizeTimeout
+    , availableWidth
+    , availableHeight
+    , $window = $(window)
+    , $example1 = $('#example1');
+  
+  var calculateSize = function () {
+    var offset = $example1.offset();
+    availableWidth = $window.width() - offset.left + $window.scrollLeft();
+    availableHeight = $window.height() - offset.top + $window.scrollTop();
+  };
+  $window.on('resize', calculateSize);
+  
+  $example1.handsontable({
+    data: createBigData(),
+    colWidths: [55, 80, 80, 80, 80, 80, 80], //can also be a number or a function
+    rowHeaders: true,
+    colHeaders: true,
+    minSpareRows: 1,
+    stretchH: 'all',
+    contextMenu: true,
+    width: function () {
+      if (maxed && availableWidth === void 0) {
+        calculateSize();
+      }
+      return maxed ? availableWidth : 400;
+    },
+    height: function () {
+      if (maxed && availableHeight === void 0) {
+        calculateSize();
+      }
+      return maxed ? availableHeight : 300;
+    }
+  });
+  
+  $('.maximize').on('click', function () {
+    maxed = !maxed;
+    $example1.handsontable('render');
+  });
+  
+  
+  function bindDumpButton() {
+      $('body').on('click', 'button[name=dump]', function () {
+        var dump = $(this).data('dump');
+        var $container = $(dump);
+        console.log('data of ' + dump, $container.handsontable('getData'));
+      });
+    }
+  bindDumpButton();
+
+});
+</script>
+
+
+<h2>Vertical and horizontal scrollbars</h2>
+
+<p>If you want scrollbars, just set container width, height and <code>overflow: scroll</code> in CSS.</p>
+
+<p>
+  <button class="maximize">Maximize HOT table</button>
+</p>
+
+<div id="example1" style="overflow: scroll" class="handsontable"></div>
+
+<p>
+  <button name="dump" data-dump="#example1" title="Prints current data source to Firebug/Chrome Dev Tools">Dump
+    data to console
+  </button>
+</p>
