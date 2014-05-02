@@ -90,7 +90,7 @@
 						/*
 							Load current user files
 						*/
-						$http.get('file_upload.php?action=listfiles')
+						$http.get('index.php?action=listfiles')
 								.then( function(res) {
 								//console.log(res);
 									$scope.user_files=res.data;
@@ -113,6 +113,14 @@
 						});
 					}
 					
+					$scope.execute=function(file) {
+						console.log("Executing "+file.filename);
+						$http.get('file_upload.php?action=run_workflow&filename='+file.filename).then( function(res) {
+								console.log(res.data);
+								location.reload();
+								
+						});
+					}
 					
 					
 					

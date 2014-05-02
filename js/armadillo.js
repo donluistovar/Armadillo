@@ -705,7 +705,7 @@
 					
 			$.mobile.ajaxEnabled = false;
 
-			
+			//loadWorkflow("workflow.db",0);
 			//$.mobile.defaultPageTransition = 'none';
 			//$.mobile.transitionFallbacks='none';
 						//double_buffer();	
@@ -713,8 +713,7 @@
   				//showBubble('First time?','#mainHelp');  				
   				//--verifyState  				
 				//-->This load the workflow from db
-  				//getWorkflowState();
-				
+  				getWorkflowState();				
   				//get_webinfo();
   					//setTimeout( function(){ $('#error_dialog').popup('close') }, 100 );
   					

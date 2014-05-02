@@ -1,6 +1,6 @@
 
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en" xmlns:ng="http://angularjs.org" ng-app="myApp"> 
     <head>
         <meta charset="utf-8">
         <meta http-equiv="Content-type" content="text/html;charset=UTF-8">          
@@ -9,6 +9,8 @@
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
 		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+		<script type="text/javascript" src="js/angular.min.js"></script>
+		<script type="text/javascript" src="js/controler/mainCtrl.js"></script>
 		<!-- Import angular and bootsnip..
 		<link rel="stylesheet" href="css/jasny-bootstrap.css" />
 		<script type="text/javascript"  src="js/jasny-bootstrap.js"></script>. -->
@@ -27,10 +29,14 @@
 		
         <script src="js/processing-1.4.1.js"></script>
         <script src="js/armadillo.js"></script>
+			
+		<script type="text/javascript">
+			var myApp = angular.module('myApp',[]);			
+		</script>	
 		
     </head>
     
-    <body>    
+    <body  ng-controller='MainCtrl'>    
         <style>
             canvas {margin:  0px;padding: 0px;background-color: white;display: block;}
 			 /* .workflow_wrapper { position: relative;} */
@@ -52,137 +58,14 @@
         </style>
         <div data-role="page" id="one">
 			<!-- Side panel -->
-			<div data-role="panel" id="mypanel">
-
+			<div data-role="panel" id="mypanel">	
+				<div data-role="content" class="jqm-content ui-corner-bottom">
 				
-					
 				
-		<div data-role="content" class="jqm-content ui-corner-bottom">
-	
-		<ul data-role="listview" data-inset="true" data-theme="d" data-divider-theme="a">
-		<li data-role="list-divider">Multiple sequence alignment options</li>				
-			<table width='100%'>									
-				<tr>
-					<td width='50%'>Gap Opening (0-100)</td>				
-					<td width='50%'><input type="range" name="MultipleAlignmentGop" id="MultipleAlignmentGop" value="1" min="0" max="100" data-mini="true" data-highlight="true" data-theme="b" data-track-theme="d"></td>													
-				</tr>
-				<tr>
-					<td width='50%'>Gap Extention (0-100)</td>				
-					<td width='50%'><input type="range" name="MultipleAlignmentGep" id="MultipleAlignmentGep" value="1" min="0" max="100" data-mini="true" data-highlight="true" data-theme="b" data-track-theme="d"></td>													
-				</tr>			
-			<tr>
-				<td >Protein weight matrix</td>
-				<td >
-					<select name="matrix" id="select-choice-mini" data-mini="true" data-inline="true">					
-						<option name='blosum' value='blosum' >BLOSUM series</option>
-						<option name='pam' value='pam'  >PAM series</option>
-						<option name='gonnet' value='gonnet'   >Gonnet series</option>
-						<option name='id' value='id'  >Identity matrix</option>
-						</select>
-				</td>
-				<td >DNA weight matrix</td>
-				<td >
-					<select name="dnamatrix" id="select-choice-mini" data-mini="true" data-inline="true">													
-						<option name='iub' value='iub'  >IUB</option>
-						<option name='clustalw' value='clustalw'   >ClustalW</option>
-					</select>
-				</td>
-		  </tr>
-		  <tr>
-				<td>Pairwise alignments</td>
-				<td  align='left'>
-						<!-- <input type='radio' value='0' name='quicktree' id='alignment_type1' checked="checked">
-						<label for="alignment_type1">Slow</label>
-						<input type='radio' value='1' name='quicktree' id='alignment_type2' >
-						<label for="alignment_type2">Fast</label> -->
-							<select name="PairwiseAlignmentFast" id="PairwiseAlignmentFast" data-role="slider" data-mini="true">
-								<option value="0">Slow</option>
-								<option value="1">Fast</option>
-							</select> 
-				</td>
-				<td > Use Negative Matrix</td>                   
-				<td align='left'>
-					<select name="slider-flip-m" id="slider-flip-m" data-role="slider" data-mini="true">
-						<option name=1 value='OFF'>OFF</option>
-						<option name=2 value='ON' >ON</option>
-					</select>
-				</td>
-		  </tr>	
-		  </table>
-		  </li>
-		  </ul>
-		<div id ='slow' style='display:none'>
-		<ul data-role="listview" data-inset="true" data-theme="d" data-divider-theme="e">
-		   <li data-role="list-divider">Slow Pairwise Alignment parameter</li>			
-		  <table width='100%'>
-			<tr>
-				<td width='50%'>Gap opening penalty (0-100)</td>				
-				<td width='50%'><input type="range" name="pwgapopen" id="pwgapopen" value="1" min="0" max="100" data-mini="true" data-highlight="true" data-theme="b" data-track-theme="d"></td>									
-			</tr>
-			<tr>
-				<td  width='50%'>Gap extension penalty (0-100)</td>
-				<td width='50%'><input type="range" name="pwgapext" id="pwgapext" value="1" min="0" max="100" data-mini="true" data-highlight="true" data-theme="b" data-track-theme="d"></td>									
-				</tr>
-			<tr>					
-				<td >DNA weight matrix</td>
-				<td >
-				<select name="MultipleAlignmentDnaTransition" id="select-choice-mini" data-mini="true" data-inline="true">																						
-						<option name='iub' value='iub'   >IUB</option>
-						<option name='clustalw' value='clustalw'   >ClustalW</option>
-					</select>
-				</td>
-		   </tr>
-		   <tr>		
-		 		<td >Protein weight matrix</td>
-				<td >
-				<select name="pwmatrix" id="select-choice-mini" data-mini="true" data-inline="true">																											
-						<option name='blosum' value='blosum'   >BLOSUM series</option>
-						<option name='pam' value='pam'   >PAM series</option>
-						<option name='gonnet' value='gonnet'   >Gonnet series</option>
-						<option name='id' value='id'   >Identity matrix</option>
-					</select>
-				</td>
-		  </tr>
-		  </table>		 
-		 </ul>
-		</div>
-		 <div id ='fast' style=''>
-		 <ul data-role="listview" data-inset="true" data-theme="d" data-divider-theme="e">
-		   <li data-role="list-divider">Fast Pairwise Alignment parameters</li>
-		    <table width='100%'>
-			<tr>
-				<td width='50%'>Gap Penalty (1-500)</td>				
-				<td width='50%'><input type="range" name="pairgap" id="pairgap" value="1" min="1" max="500" data-mini="true" data-highlight="true" data-theme="b" data-track-theme="d"></td>									
-			</tr>	
-				<td width='30%'>K-Tuple Size (1-2)</td>		
-				<td><select name="ktuple" id="ktuple" data-role="slider" data-mini="true" data-theme="d">
-					<option value="1">1</option>
-								<option value="2">2</option>
-							</select> 
-				</td>			
-			</tr>
-			<tr>				
-				<td width='50%'>Top Diagonals (1-50)</td>
-				<td width='50%' align=left><input type="range" name="topdiags" id="topdiags" value="1" min="1" max="50" data-mini="true" data-highlight="true" data-theme="b" data-track-theme="d"></td>
-			</tr>
-			<tr>
-				<td width='50%'>Windows Size (1-50)</td>
-				<td width='50%' align=left><input type="range" name="window" id="window" value="1" min="1" max="50" data-mini="true" data-highlight="true" data-theme="b" data-track-theme="d"></td>
-			</tr>
-		  </table>
-		  		  </ul>
-		  </div>		
-
-
-				</div> <!-- end data-role -->
-			
-
-
-
-			
-			
-					<!-- panel content goes here -->
+				</div>
 			</div><!-- /panel -->
+		
+		
 		
 		
             <div data-role="header" style="padding:0px" data-theme="b">
@@ -401,14 +284,15 @@
                     <h3 class="ui-title">Load a workflow</h3>
 						
 						<form method="POST" data-ajax="false" action="index.php?action=upload"  enctype="multipart/form-data">							
-							<!-- <div class="fileinput fileinput-new" data-provides="fileinput">
+							<div class="fileinput fileinput-new" data-provides="fileinput">
 								  <div class="input-group">
 									<div class="form-control uneditable-input span3" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
 									<span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input data-role="none" type="file" name="fileupload" id="fileupload"></span>
 									<a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
 								  </div>
-								</div>	-->
-								<input id="file_upload5" name="file_upload5" type="file" multiple="false">
+								</div>	
+								<!-- <input id="file_upload5" name="file_upload5" type="file" multiple="false"> -->
+								
 								<!-- <div class="fileinput fileinput-new" data-provides="fileinput">						  
 										 <div id="image_fr" class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 300px;"></div>
 										 
@@ -418,8 +302,8 @@
 										  </div>
 								</div>	-->	
 								
-								 <!-- <input type="submit" class="btn btn-default" value="Load"> -->
-								 <button class="btn btn-large btn-primary" data-role='none'>Create publicite</button>
+								 <input type="submit" class="btn btn-default" value="Load"> 
+								 <!-- <button class="btn btn-large btn-primary" data-role='none'>Create publicite</button> -->
 								<!-- <a href="javascript:loadWorkflow();" data-role="button" data-inline="true" data-transition="flow" data-theme="b" style='text-align:center;'>Load</a> --> 						
 								<!-- <p style='text-align:center;'><a href="javascript:saveWorkflow();" data-role="button" data-inline="true"  data-theme="b" style='align:center'>Save</a> </p> -->
 						</form>

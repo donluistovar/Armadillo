@@ -74,7 +74,13 @@
 
 			return (substr($haystack, -$length) === $needle);
 		}
-	
+		
+		function file_get_contents_utf8($fn) {
+		 $content = file_get_contents($fn);
+		  return mb_convert_encoding($content, 'UTF-8',
+			  mb_detect_encoding($content, 'UTF-8, ISO-8859-1', true));
+		}
+		
 	//<!----------------------------------------------------//
 	// Load a file 
 	//----------------------------------------------------->	
@@ -125,23 +131,35 @@
 	
 	//--Get the state of the workflow
 	Function get_workflow_state() {
-		$rep="usagers/".session_id();	
-		$workflow_id=$rep.'/'.'workflow.db';
-		$state=$rep.'/'.'state.txt';
-		
-		$cmd="java -jar Armadillo.jar webstate $workflow_id >$state"; 
-		//echo $cmd;
-		$retour = 0;
-		system($cmd,$retour);
-		
-		//-- Reading the output			
-		if ($retour==0) {
-			$data=loadFile($state);
-			$status=explode('\t',$data);
-			return $status[0];
-		} else {
-			return "internal error";
+		//--Current
+		$workflow_id="";
+		if (!file_exists("usagers/".session_id()."/current_workflow.txt")) {
+			return "no workflow";
+		}		
+		$workflow_id=file_get_contents_utf8("usagers/".session_id()."/current_workflow.txt");
+		if (!file_exists($workflow_id)) {
+			return "no workflow";
 		}
+		//--Workflows
+		if (endsWith($workflow_id,".db")) {
+			$state=$rep.'/'.'state.txt';
+		
+				$cmd="java -jar Armadillo.jar webstate $workflow_id >$state"; 
+				//echo $cmd;
+				$retour = 0;
+				system($cmd,$retour);		
+				//-- Reading the output			
+				if ($retour==0) {
+					$data=loadFile($state);
+					$status=explode('\t',$data);
+					return $status[0];
+				} else {
+					return "internal error";
+				}
+		} else {
+			// Workflow (txt);
+			return "workflow_definition";
+		}		
 	}
 	
 	//--Load the first workflow into Armadillo
@@ -149,7 +167,11 @@
 		$rep="usagers/".session_id();	
 		$workflow_id=$rep.'/'.'workflow.db';
 		$state=$rep.'/'.'state.txt';
-		
+		//--Save to the current workflow
+		$fp=fopen("usagers/".session_id()."/current_workflow.txt", 'w');
+		fputs($fp, $_FILES['fileupload']["name"]);
+		fclose($fp);
+		//--Create the workflow
 		$cmd="java -jar Armadillo.jar webcreate $workflow_id $workflow_file>$state"; 
 		//echo $cmd;
 		$retour = 0;

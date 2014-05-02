@@ -726,7 +726,7 @@ public class workflow_object {
                                         fill(0xff0E15C1);
                                         status="Running";
                                         displayImage=(PImage)filedata.get("play.png");
-                                        if (displayImage!=null) image(displayImage,this.x+45, this.y-4);
+                                        //if (displayImage!=null) image(displayImage,this.x+45, this.y-4);
                                     break;
         }
         textAlign(CENTER);
@@ -1149,7 +1149,7 @@ public class workflow_object {
                         if (nbInput==2) displayImage=(PImage)filedata.get("workflow_red_double.png");
         }
     } //--End else
-    if (displayImage!=null) image(displayImage,this.x-(displayImage.width/2), this.y);
+    //if (displayImage!=null) image(displayImage,this.x-(displayImage.width/2), this.y);
     // - draw connector
     for (int i=0; i<connection.length;i++) {
         connection[i].drawFeature();

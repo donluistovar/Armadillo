@@ -13,6 +13,10 @@ include_once('helper.php');
 		echo "<script>var debug=true;</script>";		
 		}
 
+		// 
+		// The "User space" is define as usagers/".session_id()
+		//
+		
 ///////////////////////////////////////////////////////////////////////////////
 /// No cache
 ///
@@ -29,13 +33,41 @@ if(isset($_REQUEST['action'])){
 		//--Look for privilege here
 		$operation = $_REQUEST['action'];			
 		if ($operation=="upload") {		
-				phpinfo();
+				//echo phpinfo();
 				echo "test";
 				echo variable_to_html($_POST);
-				echo variable_to_html($_FILE);
+				echo variable_to_html($_FILES);
 				echo variable_to_html($_REQUEST);
 				echo variable_to_html($_GET);
-				exit();
+				//--Do something with the file and load the new workflow...
+				if (isset($_FILES['fileupload'])&&$_FILES['fileupload']['error']==0) {
+					
+				
+					$filename="usagers/".session_id()."/".$_FILES['fileupload']["name"];			
+				
+                    move_uploaded_file($_FILES["fileupload"]["tmp_name"],$filename);					
+						//--Set as current workflow
+						$fp=fopen("usagers/".session_id()."/current_workflow.txt", 'w');
+						fputs($fp, $_FILES['fileupload']["name"]);
+						fclose($fp);
+							
+						if (endsWith($_FILES['fileupload']["name"],".db")) {
+							$workflow="usagers/".session_id()."/workflow.db";
+							$cmd="cp $filename $workflow";
+							system($cmd,$val);
+						}
+						//loadWorkflow($filename,$workflow_id);
+						
+						//$cmd="cp test.db $workflow_id";
+						//$rep="usagers/".session_id();	
+						//$workflow_id=$rep.'/'.'workflow.db';
+						
+						//system($cmd,$val);
+					
+					
+				}
+				//exit();
+				
 		}
 		
 }
@@ -50,10 +82,16 @@ if (isset($_REQUEST['id'])) {
 		//debug echo "$val $rep";
 		//--If workflow don't exist, create the default workflow
 		$state=get_workflow_state();
+		
+		//--We need to load the workflow from a list...
+		
+		//echo "<script>console.log($state);</script>";
+		
 		if ($state=="no workflow") {
-			
-			$cmd="cp test.db $workflow_id";
-			system($cmd,$val);
+			echo "no workflow";
+			//exit();
+			//$cmd="cp test.db $workflow_id";
+			//system($cmd,$val);
 			//--Etienne Lord - create a unique workflow from file
 			//create_workflow('data/create_new.workflow');
 		}	
