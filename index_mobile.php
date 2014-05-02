@@ -400,15 +400,26 @@
 					<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
                     <h3 class="ui-title">Load a workflow</h3>
 						
-						<form method="POST" data-ajax="false" id="upload_file" action="index.php?action=upload"  enctype="multipart/form-data">							
-							<div class="fileinput fileinput-new" data-provides="fileinput">
+						<form method="POST" data-ajax="false" action="index.php?action=upload"  enctype="multipart/form-data">							
+							<!-- <div class="fileinput fileinput-new" data-provides="fileinput">
 								  <div class="input-group">
 									<div class="form-control uneditable-input span3" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
 									<span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input data-role="none" type="file" name="fileupload" id="fileupload"></span>
 									<a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
 								  </div>
-								</div>	
-								 <input type="submit" class="btn btn-default" value="Load">
+								</div>	-->
+								<input id="file_upload5" name="file_upload5" type="file" multiple="false">
+								<!-- <div class="fileinput fileinput-new" data-provides="fileinput">						  
+										 <div id="image_fr" class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 300px;"></div>
+										 
+										  <div>
+											<span class="btn btn-default btn-file"><span class="fileinput-new">Select français </span><span class="fileinput-exists">Change</span><input type="file" name="file_fr" data-role="none"></span>
+											<a target="_self"  class="btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+										  </div>
+								</div>	-->	
+								
+								 <!-- <input type="submit" class="btn btn-default" value="Load"> -->
+								 <button class="btn btn-large btn-primary" data-role='none'>Create publicite</button>
 								<!-- <a href="javascript:loadWorkflow();" data-role="button" data-inline="true" data-transition="flow" data-theme="b" style='text-align:center;'>Load</a> --> 						
 								<!-- <p style='text-align:center;'><a href="javascript:saveWorkflow();" data-role="button" data-inline="true"  data-theme="b" style='align:center'>Save</a> </p> -->
 						</form>

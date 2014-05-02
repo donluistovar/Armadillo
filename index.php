@@ -24,15 +24,12 @@ echo '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalid
 /// Gestion de session
 ///
 
-if (isset($_FILE)) {
-	echo variable_to_html($_FILE);
-	exit();
-}
 
 if(isset($_REQUEST['action'])){
 		//--Look for privilege here
 		$operation = $_REQUEST['action'];			
-		if ($operation=="upload") {				
+		if ($operation=="upload") {		
+				phpinfo();
 				echo "test";
 				echo variable_to_html($_POST);
 				echo variable_to_html($_FILE);
