@@ -299,7 +299,7 @@
 								
 								<div data-role="collapsible" data-collapsed-icon="arrow-r" data-expanded-icon="arrow-d" id='uploadData'>	
 									<h3>Upload new data file (maximum file size is 20 mb)</h3>
-									<form><input id="file_upload" name="file_upload" type="file" multiple="true"></form>	
+									<!-- <form><input id="file_upload" name="file_upload" type="file" multiple="true"></form> -->
 								</div>		
 											
 									<p style='text-align:center;'>	
@@ -321,7 +321,7 @@
 						<h3 class="ui-title" style='text-align:center;'>Select the files to insert into the workflow.<br>Note the maximum file size is (20 mb).</h3>
 						  <form>
         					<!-- <input type="file" name="file_upload" id="file_upload" data-ajax="false" /><br>  -->
-							 <input id="file_upload" name="file_upload" type="file" multiple="true">	
+							 <!-- <input id="file_upload" name="file_upload" type="file" multiple="true">	-->
 						</form>
 								<div id="insert" data-role='fieldcontain'>
         						
@@ -400,7 +400,7 @@
 					<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
                     <h3 class="ui-title">Load a workflow</h3>
 						
-						<form target='_self' enctype='multipart/form-data' action="index.php?action=upload">							
+						<form target="_self" method="POST" data-ajax="false" id="upload_file" action="index.php?action=upload" enctype="multipart/form-data">							
 							<div class="fileinput fileinput-new" data-provides="fileinput">
 								  <div class="input-group">
 									<div class="form-control uneditable-input span3" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>

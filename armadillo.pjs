@@ -156,14 +156,14 @@ public void draw() {
 	
   if (workflow==null) {
 	workflow =new Workflow();    
-	//workflow.loadWorkflow("data/HGT_workflow.txt");	
-	//workflow.loadWorkflow("data/workflow_figure9.txt");	
-	//workflow.loadWorkflow("data/foreach.workflow");
+	//workflow.loadWorkflow("sample/HGT_workflow.txt");	
+	//workflow.loadWorkflow("sample/workflow_figure9.txt");	
+	//workflow.loadWorkflow("sample/foreach.workflow");
 	workflow.loadWorkflow("sample/all.txt");
-	//workflow.loadWorkflow("data/foreach_if");
-	//workflow.loadWorkflow("data/conditionnal_sequence_workflow.workflow"); //--Test pan
-	//workflow.loadWorkflow("data/create_new.workflow");
-	// if (!workflow.loadWorkflow("data/foreach.workflow")) {
+	//workflow.loadWorkflow("sample/foreach_if");
+	//workflow.loadWorkflow("sample/conditionnal_sequence_workflow.workflow"); //--Test pan
+	//workflow.loadWorkflow("sample/create_new.workflow");
+	// if (!workflow.loadWorkflow("sample/foreach.workflow")) {
 	   // showPopup("Unable to load foreach.workflow");
 	// }
 	
