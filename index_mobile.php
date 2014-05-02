@@ -18,7 +18,7 @@
 		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.0.1-p7/css/bootstrap-theme.min.css">
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.0.1-p7/js/bootstrap.min.js"></script>		
-		
+	
 		<!-- <script src="json2.js"></script> -->    
 		<!-- session_id & debug-->
 		<script>var session_id='<?php echo session_id(); ?>';</script>
@@ -400,11 +400,11 @@
 					<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
                     <h3 class="ui-title">Load a workflow</h3>
 						
-						<form target="_self" method="POST" data-ajax="false" id="upload_file" action="index.php?action=upload" enctype="multipart/form-data">							
+						<form method="POST" data-ajax="false" id="upload_file" action="index.php?action=upload"  enctype="multipart/form-data">							
 							<div class="fileinput fileinput-new" data-provides="fileinput">
 								  <div class="input-group">
 									<div class="form-control uneditable-input span3" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
-									<span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input data-role="none" type="file" name="file_upload" id="file_upload"></span>
+									<span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input data-role="none" type="file" name="fileupload" id="fileupload"></span>
 									<a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
 								  </div>
 								</div>	

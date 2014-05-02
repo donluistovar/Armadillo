@@ -702,6 +702,9 @@
 			});
 					
 			$(document).ready(function() {  
+					
+			$.mobile.ajaxEnabled = false;
+
 			
 			//$.mobile.defaultPageTransition = 'none';
 			//$.mobile.transitionFallbacks='none';
