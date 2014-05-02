@@ -159,7 +159,7 @@ public void draw() {
 	//workflow.loadWorkflow("data/HGT_workflow.txt");	
 	//workflow.loadWorkflow("data/workflow_figure9.txt");	
 	//workflow.loadWorkflow("data/foreach.workflow");
-	workflow.loadWorkflow("data/all.txt");
+	workflow.loadWorkflow("sample/all.txt");
 	//workflow.loadWorkflow("data/foreach_if");
 	//workflow.loadWorkflow("data/conditionnal_sequence_workflow.workflow"); //--Test pan
 	//workflow.loadWorkflow("data/create_new.workflow");
@@ -632,7 +632,8 @@ public void setName(String name) {
  * editSelected() ) so the user know what is selected 
  */	
 public String return_workflow_thumb() {
-	return workflow_thumb.save();
+	if (workflow_thumb!=null) return workflow_thumb.save();
+	return "";
 }
 
 public void mouseReleased() {     	  

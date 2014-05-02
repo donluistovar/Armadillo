@@ -406,59 +406,73 @@ public class workflow_object {
 					fill(0);					
 	  }
    
-    if (displayImage!=null) image(displayImage,this.x-(displayImage.width/2), this.y);
+   // if (displayImage!=null) image(displayImage,this.x-(displayImage.width/2), this.y);
+ fill(170); //--shadow
+    stroke(170);
+    rect(this.x-(156/2),this.y+5,156,83,0,0,15,15);
+    fill(color_object);
+    stroke(color_border);
+    strokeWeight(1.2f);
+    rect(this.x-(160/2),this.y,160,85,15,15,15,15);
+    fill(255);
+
+    //--Draw the input x+65, y+65
+    if (nbInput==1) arc(x-(160/2), y+61, 16, 12, -HALF_PI, HALF_PI);
+    if (nbInput==2) {
+        arc(x-(160/2), y+61, 16, 12, -HALF_PI, HALF_PI);
+        arc(x-(160/2), y+42, 16, 12, -HALF_PI, HALF_PI);
+    }
+    //--Draw the output
+    arc(x+(160/2)+1, y+61, 19, 13, HALF_PI+0.02f, TWO_PI-HALF_PI-0.01f);
+    
+   strokeWeight(0.1f);
     // - draw connector
     for (int i=0; i<connection.length;i++) {
         connection[i].drawFeature();
     }
     // - draw text
     fill(0);
-    textFont(bigfont);
+    textFont(font);
     textAlign(CENTER);
-    String name=properties.getName();    
-    text(name, this.x, this.y+11);
+    String name=properties.getName();
+    if (properties.isSet("ForObjectID")) {
+        name="(For each) "+name;
+    }
+    text(name, this.x, this.y+10);
     fill(128);
 //    --Note description now in tooltip
 //    text(properties.getDescription(), this.x,this.y+20);
     textFont(smallfont);
-    textAlign(LEFT);
-    text("Input", x-75, y+21);
-    textAlign(RIGHT);
-    text("Output", x+58, y+21);
-    fill(0);	
+    textAlign(PApplet.LEFT);
+    text("Input", x-65, y+19);
+    textAlign(PApplet.RIGHT);
+    text("Output", x+65, y+19);
+    fill(0);
     //--Output OUTPUT
     int nb_output=connection[OUTPUT].getOutput().size();
     if (properties.isSet("Connector0")) {
-       	textAlign(RIGHT);
-		String name=properties.get("Connector0");
-		  if (name.equals("MultipleSequences")) name="Sequences";
-		  text(name, x+65, y+65);
+        text(properties.get("Connector0"), x+65, y+65);
     } else
     if (connection[OUTPUT].isOutputAll()) {
         text("All", x+65, y+65);
     } else if (nb_output>4) {
-        text("Many", x+55, y+65);
+        text("Many", x+65, y+65);
     }
     else {
         int start_y=(nb_output==4?60:65)-(10*nb_output)/2;
         for (int j=0; j<nb_output;j++) {
-			textAlign(RIGHT);
-			String name=connection[OUTPUT].getOutput().get(j);
-			if (name.equals("MultipleSequences")) name="Sequences";
-            text(name,x-(name.length*2)+60, y+start_y+(j*10));
+            text(connection[OUTPUT].getOutput().get(j),x+65, y+start_y+(j*10));
         }
     }
     //--CASE 1: One input Input 1
-    textAlign(LEFT);
+    textAlign(PApplet.LEFT);
     if (nbInput==1)
     {
         int nb_input=connection[INPUT1].getInput().size();
         int start_y=65-(10*nb_input)/2;
         
         if (properties.isSet("Connector2")) {
-			String name=properties.get("Connector2");
-            if (name.equals("MultipleSequences")) name="Sequences";
-			text(name, x-65, y+65);
+            text(properties.get("Connector2"), x-65, y+65);
         } else
         if (connection[INPUT1].isInputAll()) {
            text("All", x-65, y+65);
@@ -467,10 +481,7 @@ public class workflow_object {
         }
         else {
              for (int j=0; j<nb_input;j++) {
-                String name=connection[INPUT1].getInput().get(j);
-                if (name.equals("MultipleSequences")) { name="Sequences";}
-                text(name,x-65, y+start_y+(j*10));
-                textFont(smallfont);				
+                text(connection[INPUT1].getInput().get(j),x-65, y+start_y+(j*10));
              }
         }
         //text(connection[INPUT1].getInput().get(0),x-60, y+65);
@@ -482,9 +493,7 @@ public class workflow_object {
         int start_y1=65-(10*nb_input1)/2;
         int start_y2=45-(10*nb_input2)/2;
         if (properties.isSet("Connector2")) {
-			String name=properties.get("Connector2");
-			if (name.equals("MultipleSequences")) { name="Sequences";}
-            text(name, x-65, y+65);
+            text(properties.get("Connector2"), x-65, y+65);
         } else
         if (connection[INPUT1].isInputAll()) {
             text("All",x-65, y+65);
@@ -492,16 +501,11 @@ public class workflow_object {
             text("Many",x-65, y+65);
         }
         else for (int j=0; j<nb_input1;j++) {
-				String name=connection[INPUT1].getInput().get(j);
-                if (name.equals("MultipleSequences")) { name="Sequences";}
-                 text(name,x-65, y+start_y1+(j*10));
-				console.log(name);
-        }
-		
+                    text(connection[INPUT1].getInput().get(j),x-65, y+start_y1+(j*10));
+                }
+
         if (properties.isSet("Connector3")) {
-			String name=properties.get("Connector3");
-			if (name.equals("MultipleSequences")) { name="Sequences";}
-            text(name, x-65, y+45);
+            text(properties.get("Connector3"), x-65, y+45);
         } else
         if (connection[INPUT2].isInputAll()) {
             text("All",x-65, y+45);
@@ -510,11 +514,122 @@ public class workflow_object {
         }
         else
             for (int j=0; j<nb_input2;j++) {
-                String name=connection[INPUT2].getInput().get(j);
-				if (name.equals("MultipleSequences")) { name="Sequences";}
-				text(name,x-65, y+start_y2+(j*10));
+                text(connection[INPUT2].getInput().get(j),x-65, y+start_y2+(j*10));
             }
     } //--End connection >1
+   
+
+
+
+
+   // // - draw connector
+    // for (int i=0; i<connection.length;i++) {
+        // connection[i].drawFeature();
+    // }
+    // // - draw text
+    // fill(0);
+    // textFont(bigfont);
+    // textAlign(CENTER);
+    // String name=properties.getName();    
+    // text(name, this.x, this.y+11);
+    // fill(128);
+// //    --Note description now in tooltip
+// //    text(properties.getDescription(), this.x,this.y+20);
+    // textFont(smallfont);
+    // textAlign(LEFT);
+    // text("Input", x-75, y+21);
+    // textAlign(RIGHT);
+    // text("Output", x+58, y+21);
+    // fill(0);	
+    // //--Output OUTPUT
+    // int nb_output=connection[OUTPUT].getOutput().size();
+    // if (properties.isSet("Connector0")) {
+       	// textAlign(RIGHT);
+		// String name=properties.get("Connector0");
+		  // if (name.equals("MultipleSequences")) name="Sequences";
+		  // text(name, x+65, y+65);
+    // } else
+    // if (connection[OUTPUT].isOutputAll()) {
+        // text("All", x+65, y+65);
+    // } else if (nb_output>4) {
+        // text("Many", x+55, y+65);
+    // }
+    // else {
+        // int start_y=(nb_output==4?60:65)-(10*nb_output)/2;
+        // for (int j=0; j<nb_output;j++) {
+			// textAlign(RIGHT);
+			// String name=connection[OUTPUT].getOutput().get(j);
+			// if (name.equals("MultipleSequences")) name="Sequences";
+            // text(name,x-(name.length*2)+60, y+start_y+(j*10));
+        // }
+    // }
+    // //--CASE 1: One input Input 1
+    // textAlign(LEFT);
+    // if (nbInput==1)
+    // {
+        // int nb_input=connection[INPUT1].getInput().size();
+        // int start_y=65-(10*nb_input)/2;
+        
+        // if (properties.isSet("Connector2")) {
+			// String name=properties.get("Connector2");
+            // if (name.equals("MultipleSequences")) name="Sequences";
+			// text(name, x-65, y+65);
+        // } else
+        // if (connection[INPUT1].isInputAll()) {
+           // text("All", x-65, y+65);
+        // } else if (nb_input>5) {
+           // text("Many", x-65, y+65);
+        // }
+        // else {
+             // for (int j=0; j<nb_input;j++) {
+                // String name=connection[INPUT1].getInput().get(j);
+                // if (name.equals("MultipleSequences")) { name="Sequences";}
+                // text(name,x-65, y+start_y+(j*10));
+                // textFont(smallfont);				
+             // }
+        // }
+        // //text(connection[INPUT1].getInput().get(0),x-60, y+65);
+    // } //--End connection==1
+    // //--CASE 2: More than 1 input
+    // if (nbInput>1) {
+        // int nb_input1=connection[INPUT1].getInput().size();
+        // int nb_input2=connection[INPUT2].getInput().size();
+        // int start_y1=65-(10*nb_input1)/2;
+        // int start_y2=45-(10*nb_input2)/2;
+        // if (properties.isSet("Connector2")) {
+			// String name=properties.get("Connector2");
+			// if (name.equals("MultipleSequences")) { name="Sequences";}
+            // text(name, x-65, y+65);
+        // } else
+        // if (connection[INPUT1].isInputAll()) {
+            // text("All",x-65, y+65);
+        // } else if (nb_input1>2) {
+            // text("Many",x-65, y+65);
+        // }
+        // else for (int j=0; j<nb_input1;j++) {
+				// String name=connection[INPUT1].getInput().get(j);
+                // if (name.equals("MultipleSequences")) { name="Sequences";}
+                 // text(name,x-65, y+start_y1+(j*10));
+				// console.log(name);
+        // }
+		
+        // if (properties.isSet("Connector3")) {
+			// String name=properties.get("Connector3");
+			// if (name.equals("MultipleSequences")) { name="Sequences";}
+            // text(name, x-65, y+45);
+        // } else
+        // if (connection[INPUT2].isInputAll()) {
+            // text("All",x-65, y+45);
+        // } else if (nb_input2>2) {
+            // text("Many",x-65, y+45);
+        // }
+        // else
+            // for (int j=0; j<nb_input2;j++) {
+                // String name=connection[INPUT2].getInput().get(j);
+				// if (name.equals("MultipleSequences")) { name="Sequences";}
+				// text(name,x-65, y+start_y2+(j*10));
+            // }
+    // } //--End connection >1
 
     
     //--Draw a progress box

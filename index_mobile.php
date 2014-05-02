@@ -9,11 +9,21 @@
 		<link rel="stylesheet" href="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css" />
 		<script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
 		<script src="http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js"></script>
+		<!-- Import angular and bootsnip..
+		<link rel="stylesheet" href="css/jasny-bootstrap.css" />
+		<script type="text/javascript"  src="js/jasny-bootstrap.js"></script>. -->
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.0.1-p7/css/bootstrap.min.css">
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.0.1-p7/css/bootstrap-theme.min.css">
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="//cdnjs.cloudflare.com/ajax/libs/jasny-bootstrap/3.0.1-p7/js/bootstrap.min.js"></script>		
 		
 		<!-- <script src="json2.js"></script> -->    
 		<!-- session_id & debug-->
 		<script>var session_id='<?php echo session_id(); ?>';</script>
-        <?php if (isset($_REQUEST['debug'])) echo '<script> var debug=true;</script>'; ?>
+        <?php //if (isset($_REQUEST['debug'])) 
+		echo '<script> var debug=true;</script>'; ?>
 		
         <script src="js/processing-1.4.1.js"></script>
         <script src="js/armadillo.js"></script>
@@ -177,7 +187,7 @@
 		
             <div data-role="header" style="padding:0px" data-theme="b">
                 <a href="#help" id='mainHelp' data-role="button" data-icon="info" data-transition="fade">Help</a>
-                <a href="javascript:showSaveLoad();" data-rel="popup" data-role="button" data-transition="fade">Save | Load | Share!</a> 
+                <a href="javascript:showSaveLoad();" data-rel="popup" data-role="button" data-transition="fade">Workflow</a> 
                 <h1>Armadillo Workflow Server <i>v2.0</i></h1>
             </div><!-- /header -->
             
@@ -381,24 +391,32 @@
                 <div data-role="popup" id="popupSaveLoad" data-position-to="window" data-overlay-theme="a" data-theme="c" style="max-width:400px;min-width:400px;" class="ui-corner-all">
                     <div data-role="header" data-theme="a" class="ui-corner-top">
 						<a href="#help" data-role="button" data-inline="true" data-icon="info" data-transition="fade" data-theme="b">Help</a>
-							<div id='popupHeader'><h2>Save | Load | Share</h2></div>
+							<div id='popupHeader'><h2>Workflow options</h2></div>
                         <a href="#" data-rel="back" data-role="button" data-theme="a" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Close</a>
                     </div>
 					
 					<p style='text-align:center;'><label for="basic"><b>Workflow name</b></label>
 					<input type="text" name="name" id="basic" value="" data-mini="true" /></p>					
 					<div data-role="content" data-theme="d" class="ui-corner-bottom ui-content">
-                    <h3 class="ui-title">Load a workflow from file (sqlite3 database)</h3>
-						  <form enctype='multipart/form-data'>
-        					<input type="file" name="file_upload2" id="file_upload2" /> <br>						
-								<p style='text-align:center;'><a href="javascript:uploadWorkflow();" data-role="button" data-inline="true"  data-theme="c" style='align:center'>Load</a> </p>
-							</form>
+                    <h3 class="ui-title">Load a workflow</h3>
+						
+						<form target='_self' enctype='multipart/form-data' action="index.php?action=upload">							
+							<div class="fileinput fileinput-new" data-provides="fileinput">
+								  <div class="input-group">
+									<div class="form-control uneditable-input span3" data-trigger="fileinput"><i class="glyphicon glyphicon-file fileinput-exists"></i> <span class="fileinput-filename"></span></div>
+									<span class="input-group-addon btn btn-default btn-file"><span class="fileinput-new">Select file</span><span class="fileinput-exists">Change</span><input data-role="none" type="file" name="file_upload" id="file_upload"></span>
+									<a href="#" class="input-group-addon btn btn-default fileinput-exists" data-dismiss="fileinput">Remove</a>
+								  </div>
+								</div>	
+								 <input type="submit" class="btn btn-default" value="Load">
+								<!-- <a href="javascript:loadWorkflow();" data-role="button" data-inline="true" data-transition="flow" data-theme="b" style='text-align:center;'>Load</a> --> 						
+								<!-- <p style='text-align:center;'><a href="javascript:saveWorkflow();" data-role="button" data-inline="true"  data-theme="b" style='align:center'>Save</a> </p> -->
+						</form>
 							
-							
-						<h3 class="ui-title">Download the workflow and results</h3>   		
-						<p style='text-align:center;'><a href="javascript:saveWorkflow();;" data-role="button" data-inline="true"  data-theme="b" style='align:center'>Save</a> </p>
-						<label for="basic"><b>Share or conserve this workflow</b></label>
-						<input type="text" name="name" id="basic" value="<?php echo "trex.labunix.uqam.ca/".session_id(); ?>" data-mini="true" />   
+						<!-- <h3 class="ui-title">Download the workflow and results</h3>   		-->
+						<!-- <p style='text-align:center;'><a href="javascript:saveWorkflow();" data-role="button" data-inline="true"  data-theme="b" style='align:center'>Save</a> </p>-->
+						<!-- <label for="basic"><b>Share or conserve this workflow</b></label> -->
+						<!-- <input type="text" name="name" id="basic" value=<?php //echo "trex.labunix.uqam.ca/".session_id(); ?>" data-mini="true" /> -->  
                     </div>
                 </div>
                 
@@ -452,9 +470,9 @@
             <div data-role="footer" class="ui-bar" data-position="fixed" data-theme="b" align=center >
                 <div data-role="controlgroup" data-type="horizontal">
 					<!-- Saved workflow -->
-					<select name="select-choice-1" id="select-choice-1" data-native-menu="false" tabindex="-1" data-icon='arrow-u' title='Select the current workflow'>
-						<option value="0">Current workflow</option>			
-					</select>
+					<!--<select name="select-choice-1" id="select-choice-1" data-native-menu="false" tabindex="-1" data-icon='arrow-u' title='Select the current workflow'>
+						 <option value="0">Current workflow</option>		
+					</select>-->	
 					<a href="javascript:results();" data-role="button" data-icon="star" id='ResultsButton' title='Get the results associated with this workflow'>Results</a>
                     <a href="javascript:location.reload();" data-role="button" data-icon="refresh" title='Refresh the current workflow from server'>Reload</a>                  
   				   <a href="javascript:editSelected();" data-role="button" data-icon="star" id='EditButton' title='Edit the properties of the selected object'>Edit</a>
@@ -463,7 +481,7 @@
 					<?php if ($debug) echo "<a href=\"javascript:(function(){var script=document.createElement('script');script.src='http://github.com/mrdoob/stats.js/raw/master/build/stats.min.js';document.body.appendChild(script);script=document.createElement('script');script.innerHTML='var interval=setInterval(function(){if(typeof Stats==\'function\'){clearInterval(interval);var stats=new Stats();stats.domElement.style.position=\'fixed\';stats.domElement.style.left=\'0px\';stats.domElement.style.top=\'0px\';stats.domElement.style.zIndex=\'10000\';document.body.appendChild(stats.domElement);setInterval(function(){stats.update();},1000/60);}},100);';document.body.appendChild(script);})();\"  data-rel='popup' data-role='button' data-icon='plus' id='statsButton' title='Show stats'>Stats</a>";?>		
 					<!-- <a href="#popupDeleteAll" data-rel="popup" data-role="button" data-icon="delete" id='DeleteAllButton' title='Remove all objects in the workflow'>Clear All</a> -->
                     <!-- <a href="#popupResetState" data-rel="popup" data-role="button" data-icon="refresh" id='ResetButton' title='Reset the workflow execution status'>Reset Workflow state</a> -->
-                     <a href="#mypanel"  data-rel="panel" data-role="button" data-icon="plus" id='openPanel' title='Insert/Upload new data into the workflow'>OpenPanel</a>
+                     <a href="#mypanel"  data-rel="panel" data-role="button" data-icon="plus" id='openPanel' title='Insert/Upload new data into the workflow'>Data</a>
 					<a href="#popupInsertData"  data-rel="popup" data-role="button" data-icon="plus" id='InsertDataButton' title='Insert/Upload new data into the workflow'>Insert Data</a>
                     <a href="#popupInsertProgram" data-rel="popup" data-role="button" data-icon="plus" id='InsertProgramButton' title='Insert new program into the workflow'>Insert Program </a>
                     <a href="#newickstring" data-role="button" data-icon="arrow-r" data-transition="fade" data-iconpos="right" id='RunButton' title='Execute the current workflow'>Run</a>

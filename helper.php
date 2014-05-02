@@ -3,7 +3,7 @@
  *  Armadillo Workflow Platform v2.0 - Online
  *  A simple pipeline system for phylogenetic analysis
  *  
- *  Copyright (C) 2009-2012  Etienne Lord
+ *  Copyright (C) 2009-2014  Etienne Lord
  *
  *  This program is free software: you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by

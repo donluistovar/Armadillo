@@ -40,6 +40,7 @@
 				 }				 
 				 if(!bound&&!initialized) setTimeout(bindJavascript, 250);
 			   }
+			   
 			   bindJavascript();			   
 			   
 			   function testLocalStorage()  
@@ -429,7 +430,7 @@
 						// }
 					// });
 					// setTimeout( function(){ $( '#popupInsertDataUpload' ).popup( 'open' ) }, 100 );					
-				// }
+				 }
 				
 				
 				function addData(type,filename,parent) {
@@ -504,19 +505,19 @@
 				}
 				
 				function uploadFile(type, filename) {					
-					$('#chooseUpload #file_upload').uploadifive('upload');					
+					//$('#chooseUpload #file_upload').uploadifive('upload');					
 				}
 				
 				function uploadFile2(type, filename) {										
-					$('#popupInsertDataUpload #file_upload').uploadifive('upload');					
+					//$('#popupInsertDataUpload #file_upload').uploadifive('upload');					
 				}
 				
 				function uploadWorkflow() {
-					$('#file_upload2').uploadifive('upload');					
+					//$('#file_upload2').uploadifive('upload');					
 				}
 
 				function uploadData(type, filename) {
-					$('#file_upload3').uploadifive('upload');
+					//$('#file_upload3').uploadifive('upload');
 					
 				}
 				
@@ -572,40 +573,40 @@
 				
 				
 				//--Upload workflow	
-				$('#file_upload2').uploadify({
-						'removeCompleted' : true,
-						'multi'    : false,
-						'cancelImage':'images/uploadify-cancel.png',
-						'swf'      : 'uploadify/uploadify.swf',
-						'uploader' : 'uploadify/uploadify.php',
-						'checkExisting' : 'uploadify/check-exists.php',
-						'debug'    : true,
-						'wmode'          : 'transparent',
-						'fileSizeLimit' : '100MB',
-						'auto':false,
-						'formData':	{ 'type' : 'Workflow', 'object_id':'0', 'session_id':session_id},
-						'method'   : 'post',						
-						'onSelectError' : function() {							
-						},
-						'onCancel' : function(file) {
-							//alert('The file ' + file.name + ' was cancelled.');
-						},
-						'onUploadSuccess' : function(file, data, response) {													
-							var obj = jQuery.parseJSON(data);
+				// $('#file_upload2').uploadify({
+						// 'removeCompleted' : true,
+						// 'multi'    : false,
+						// 'cancelImage':'images/uploadify-cancel.png',
+						// 'swf'      : 'uploadify/uploadify.swf',
+						// 'uploader' : 'uploadify/uploadify.php',
+						// 'checkExisting' : 'uploadify/check-exists.php',
+						// 'debug'    : true,
+						// 'wmode'          : 'transparent',
+						// 'fileSizeLimit' : '100MB',
+						// 'auto':false,
+						// 'formData':	{ 'type' : 'Workflow', 'object_id':'0', 'session_id':session_id},
+						// 'method'   : 'post',						
+						// 'onSelectError' : function() {							
+						// },
+						// 'onCancel' : function(file) {
+							// //alert('The file ' + file.name + ' was cancelled.');
+						// },
+						// 'onUploadSuccess' : function(file, data, response) {													
+							// var obj = jQuery.parseJSON(data);
 						
-							//--load workflow
-							setTimeout( function(){ loadWorkflow(obj.name); }, 100 );			
+							// //--load workflow
+							// setTimeout( function(){ loadWorkflow(obj.name); }, 100 );			
 													
-							},
-						'onUploadError' : function(file, errorCode, errorMsg, errorString) {
+							// },
+						// 'onUploadError' : function(file, errorCode, errorMsg, errorString) {
 							
-						},
-						'onCheck'      : function(file, exists) {
-							if (exists) {
-								alert('The file ' + file.name + ' exists on the server.');
-							}
-						}
-					});
+						// },
+						// 'onCheck'      : function(file, exists) {
+							// if (exists) {
+								// alert('The file ' + file.name + ' exists on the server.');
+							// }
+						// }
+					// });
 				
 				// <form method="POST" enctype="multipart/form-data" action="fup.cgi">
 // File to upload: <input type="file" name="upfile"><br>
@@ -615,45 +616,45 @@
 // </form>
 				
 				//--Upload data
-				$('#file_upload3').uploadifive({
-						'removeCompleted' : true,
-						'multi'    : false,
-						'cancelImage':'images/uploadify-cancel.png',						
-						'uploadScript' : 'uploadify/uploadify.php',
-						'checkExisting' : 'uploadify/check-exists.php',
-						'buttonText'   :'SELECT',
-						'debug'    : false,
-						'wmode'          : 'transparent',
-						'fileSizeLimit' : '100MB',
-						'queueSizeLimit' : 1,
-						'queueID':'upload_queue',
-						'auto':false,
-						'formData':	{ 'type' : 'Alignement', 'object_id':'0', 'session_id':session_id},
-						'method'   : 'post',						
-						'onSelectError' : function() {							
-						},
-						'onCancel' : function(file) {
-							//alert('The file ' + file.name + ' was cancelled.');
-						},
-						'onUploadSuccess' : function(file, data, response) {													
-							var obj = jQuery.parseJSON(data);						
-							//--load workflow
-							alert(obj.armadillo_filename);
-							var obj_id=$('#popupInsertDataUpload option:selected').text();
-							$("#popupInsertDataUpload").popup('close');
-							//console.log(obj_id);
-							pjs.addData(obj.type,obj.name,obj_id);
-						},
-						'onUploadError' : function(file, errorCode, errorMsg, errorString) {
-							alert('error:'+errorCode);
-						},
-						'onAddQueueItem' : function(file) {							
-							$('#chooseData #textarea').addClass('ui-disabled');	
-						},
-						'onCancel': function() {
-							$('#chooseData #textarea').removeClass('ui-disabled');	
-						}
-					});
+				// $('#file_upload3').uploadifive({
+						// 'removeCompleted' : true,
+						// 'multi'    : false,
+						// 'cancelImage':'images/uploadify-cancel.png',						
+						// 'uploadScript' : 'uploadify/uploadify.php',
+						// 'checkExisting' : 'uploadify/check-exists.php',
+						// 'buttonText'   :'SELECT',
+						// 'debug'    : false,
+						// 'wmode'          : 'transparent',
+						// 'fileSizeLimit' : '100MB',
+						// 'queueSizeLimit' : 1,
+						// 'queueID':'upload_queue',
+						// 'auto':false,
+						// 'formData':	{ 'type' : 'Alignement', 'object_id':'0', 'session_id':session_id},
+						// 'method'   : 'post',						
+						// 'onSelectError' : function() {							
+						// },
+						// 'onCancel' : function(file) {
+							// //alert('The file ' + file.name + ' was cancelled.');
+						// },
+						// 'onUploadSuccess' : function(file, data, response) {													
+							// var obj = jQuery.parseJSON(data);						
+							// //--load workflow
+							// alert(obj.armadillo_filename);
+							// var obj_id=$('#popupInsertDataUpload option:selected').text();
+							// $("#popupInsertDataUpload").popup('close');
+							// //console.log(obj_id);
+							// pjs.addData(obj.type,obj.name,obj_id);
+						// },
+						// 'onUploadError' : function(file, errorCode, errorMsg, errorString) {
+							// alert('error:'+errorCode);
+						// },
+						// 'onAddQueueItem' : function(file) {							
+							// $('#chooseData #textarea').addClass('ui-disabled');	
+						// },
+						// 'onCancel': function() {
+							// $('#chooseData #textarea').removeClass('ui-disabled');	
+						// }
+					// });
 				
 				//--Disable some buttons if not selected
 				$('#EditButton').addClass('ui-disabled');
@@ -666,7 +667,7 @@
 				$("#select-choice-1").bind( "change", function(event, ui) {
 					var workflow_id=$("#select-choice-1").val();
 						 	upload_data={'workflow_id':workflow_id, 'workflow':'workflow.db'};
-							showPopup("Londing workflow");
+							showPopup("Loading workflow");
 						 $.ajax({
 							  type: "POST",
 							  data:upload_data,		
@@ -722,5 +723,4 @@
 				
 			});
 			
-
 			

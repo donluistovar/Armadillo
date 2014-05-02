@@ -23,6 +23,22 @@ echo '<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalid
 ///////////////////////////////////////////////////////////////////////////////
 /// Gestion de session
 ///
+
+if(isset($_REQUEST['file_upload'])){
+		//--Look for privilege here
+		//$operation = $_REQUEST['action'];			
+		//if ($operation=="upload") {				
+				echo "test";
+				echo variable_to_html($_POST);
+				echo variable_to_html($_FILE);
+				echo variable_to_html($_REQUEST);
+				echo variable_to_html($_GET);
+				exit();
+		//}
+		
+}
+
+
 if (isset($_REQUEST['id'])) {
 	
 	} else {
@@ -43,6 +59,32 @@ if (isset($_REQUEST['id'])) {
 			//echo "Warning. Unable to create <b>user session</b> ";
 		}
 }
+
+if (isset($_REQUEST['listfiles'])) {		
+			error_reporting(E_ALL);
+			$tmp=array();
+			//--Use the client id
+							
+			 if ($handle = opendir("usagers/".session_id()."/")) {
+				 $total=0;
+				 $totalsize=0;
+				
+				while (false !== ($entry = readdir($handle))) {
+					if ($entry != "." && $entry != "..") {
+						$size=filesize("usagers/".session_id()."/".$entry);
+						$total++;
+						$totalsize+=$size;
+						$path_parts = pathinfo($entry);
+						array_push($tmp, array('filename'=>$path_parts['basename'],'extension'=>$path_parts['extension'], 'link'=>"usagers/".session_id()."/".$entry));
+						//echo "$entry <br>";
+					}
+				}
+				array_push($tmp, array('filename'=>'total', 'size'=>$totalsize));
+				closedir($handle);
+			 }
+			echo json_encode($tmp);
+			exit();
+		 }
 
 	include("index_mobile.php");
 	
